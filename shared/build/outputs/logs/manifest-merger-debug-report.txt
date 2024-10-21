@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml:2:13-83
-INJECTED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml:2:13-83
+ADDED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml:2:13-83
+INJECTED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml:2:13-83
 	package
-		INJECTED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml
+		INJECTED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml
 	xmlns:android
-		ADDED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml:2:23-81
+		ADDED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml:2:23-81
 uses-sdk
-INJECTED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml reason: use-sdk injection requested
-INJECTED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml
-INJECTED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml
+INJECTED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml reason: use-sdk injection requested
+INJECTED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml
+INJECTED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml
+		INJECTED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\nm\StudioProjects\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest6554636375613530772.xml
+		INJECTED from C:\Users\mariaflores-rivera\Documents\Csc 199\SweeteaApp\shared\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest7196467254242367529.xml

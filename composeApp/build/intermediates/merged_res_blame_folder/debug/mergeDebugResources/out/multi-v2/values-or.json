@@ -1,44 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-41:/values-or/values-or.xml",
+            "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-57:/values-or/values-or.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a37ba849613ce0fedb28abbc6f6a883b\\transformed\\foundation-release\\res\\values-or\\values-or.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,140",
-                        "endColumns": "84,87",
-                        "endOffsets": "135,223"
-                    },
-                    "to": {
-                        "startLines": "27,28",
-                        "startColumns": "4,4",
-                        "startOffsets": "2392,2477",
-                        "endColumns": "84,87",
-                        "endOffsets": "2472,2560"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a9bf4b38c017dd83ae3b388ef0108006\\transformed\\ui-release\\res\\values-or\\values-or.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,202,289,381,481,567,644,742,830,917,987,1057,1135,1217,1287,1370,1437",
-                        "endColumns": "96,86,91,99,85,76,97,87,86,69,69,77,81,69,82,66,118",
-                        "endOffsets": "197,284,376,476,562,639,737,825,912,982,1052,1130,1212,1282,1365,1432,1551"
-                    },
-                    "to": {
-                        "startLines": "9,10,11,12,13,14,15,16,17,18,19,20,21,22,24,25,26",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "840,937,1024,1116,1216,1302,1379,1477,1565,1652,1722,1792,1870,1952,2123,2206,2273",
-                        "endColumns": "96,86,91,99,85,76,97,87,86,69,69,77,81,69,82,66,118",
-                        "endOffsets": "932,1019,1111,1211,1297,1374,1472,1560,1647,1717,1787,1865,1947,2017,2201,2268,2387"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a51faf70dd8593086d4a8aecb13d26e0\\transformed\\core-1.13.0\\res\\values-or\\values-or.xml",
+                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\0d357da614c3c9118a8c829279029198\\transformed\\core-1.13.1\\res\\values-or\\values-or.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -47,11 +13,62 @@
                         "endOffsets": "153,255,358,463,564,666,785,886"
                     },
                     "to": {
-                        "startLines": "2,3,4,5,6,7,8,23",
+                        "startLines": "29,30,31,32,33,34,35,52",
                         "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,208,310,413,518,619,721,2022",
+                        "startOffsets": "2857,2960,3062,3165,3270,3371,3473,4952",
                         "endColumns": "102,101,102,104,100,101,118,100",
-                        "endOffsets": "203,305,408,513,614,716,835,2118"
+                        "endOffsets": "2955,3057,3160,3265,3366,3468,3587,5048"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\4d299cfc55d32a0e75634083501dcda2\\transformed\\appcompat-1.7.0\\res\\values-or\\values-or.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,216,326,433,519,623,743,822,903,994,1087,1188,1283,1383,1476,1571,1667,1758,1848,1937,2047,2151,2257,2368,2470,2588,2751,2857",
+                        "endColumns": "110,109,106,85,103,119,78,80,90,92,100,94,99,92,94,95,90,89,88,109,103,105,110,101,117,162,105,89",
+                        "endOffsets": "211,321,428,514,618,738,817,898,989,1082,1183,1278,1378,1471,1566,1662,1753,1843,1932,2042,2146,2252,2363,2465,2583,2746,2852,2942"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,47",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,216,326,433,519,623,743,822,903,994,1087,1188,1283,1383,1476,1571,1667,1758,1848,1937,2047,2151,2257,2368,2470,2588,2751,4564",
+                        "endColumns": "110,109,106,85,103,119,78,80,90,92,100,94,99,92,94,95,90,89,88,109,103,105,110,101,117,162,105,89",
+                        "endOffsets": "211,321,428,514,618,738,817,898,989,1082,1183,1278,1378,1471,1566,1662,1753,1843,1932,2042,2146,2252,2363,2465,2583,2746,2852,4649"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\4fad708636a6e3d41192f0c29a9ff65f\\transformed\\foundation-release\\res\\values-or\\values-or.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,140",
+                        "endColumns": "84,87",
+                        "endOffsets": "135,223"
+                    },
+                    "to": {
+                        "startLines": "56,57",
+                        "startColumns": "4,4",
+                        "startOffsets": "5322,5407",
+                        "endColumns": "84,87",
+                        "endOffsets": "5402,5490"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\5fa152eaab634a40d43e4ddc161a2c23\\transformed\\ui-release\\res\\values-or\\values-or.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,202,289,381,481,567,644,742,830,917,995,1077,1147,1222,1299,1375,1458,1525",
+                        "endColumns": "96,86,91,99,85,76,97,87,86,77,81,69,74,76,75,82,66,118",
+                        "endOffsets": "197,284,376,476,562,639,737,825,912,990,1072,1142,1217,1294,1370,1453,1520,1639"
+                    },
+                    "to": {
+                        "startLines": "36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,53,54,55",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "3592,3689,3776,3868,3968,4054,4131,4229,4317,4404,4482,4654,4724,4799,4876,5053,5136,5203",
+                        "endColumns": "96,86,91,99,85,76,97,87,86,77,81,69,74,76,75,82,66,118",
+                        "endOffsets": "3684,3771,3863,3963,4049,4126,4224,4312,4399,4477,4559,4719,4794,4871,4947,5131,5198,5317"
                     }
                 }
             ]

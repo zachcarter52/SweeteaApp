@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="accountpage_route">Account</string>
     <string name="app_name">Sweetea</string>
+    <string name="homepage_route">Home</string>
+    <string name="menupage_route">Menu</string>
+    <string name="rewardpage_route">Rewards</string>
 </resources>
