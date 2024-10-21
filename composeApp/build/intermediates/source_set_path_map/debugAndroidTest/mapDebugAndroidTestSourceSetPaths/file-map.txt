@@ -1,0 +1,4 @@
+org.example.sweetea.test.composeApp-androidTest-0 C:\Users\nm\StudioProjects\SweeteaApp\composeApp\build\generated\res\resValues\androidTest\debug
+org.example.sweetea.test.composeApp-mergeDebugAndroidTestResources-1 C:\Users\nm\StudioProjects\SweeteaApp\composeApp\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+org.example.sweetea.test.composeApp-mergeDebugAndroidTestResources-2 C:\Users\nm\StudioProjects\SweeteaApp\composeApp\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+org.example.sweetea.test.composeApp-debugAndroidTest-3 C:\Users\nm\StudioProjects\SweeteaApp\composeApp\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
