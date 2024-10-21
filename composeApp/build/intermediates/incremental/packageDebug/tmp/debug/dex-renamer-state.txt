@@ -1,10 +1,10 @@
-#Fri Oct 11 19:23:54 PDT 2024
-base.0=/Users/zachcarter/StudioProjects/SweeteaApp/composeApp/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
-base.1=/Users/zachcarter/StudioProjects/SweeteaApp/composeApp/build/intermediates/dex/debug/mergeLibDexDebug/8/classes.dex
-base.2=/Users/zachcarter/StudioProjects/SweeteaApp/composeApp/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
-base.3=/Users/zachcarter/StudioProjects/SweeteaApp/composeApp/build/intermediates/dex/debug/mergeProjectDexDebug/10/classes.dex
-base.4=/Users/zachcarter/StudioProjects/SweeteaApp/composeApp/build/intermediates/dex/debug/mergeProjectDexDebug/8/classes.dex
-base.5=/Users/zachcarter/StudioProjects/SweeteaApp/composeApp/build/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
+#Sun Oct 20 17:52:03 PDT 2024
+base.0=C\:\\Users\\nm\\StudioProjects\\SweeteaApp\\composeApp\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=C\:\\Users\\nm\\StudioProjects\\SweeteaApp\\composeApp\\build\\intermediates\\dex\\debug\\mergeLibDexDebug\\8\\classes.dex
+base.2=C\:\\Users\\nm\\StudioProjects\\SweeteaApp\\composeApp\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.3=C\:\\Users\\nm\\StudioProjects\\SweeteaApp\\composeApp\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex
+base.4=C\:\\Users\\nm\\StudioProjects\\SweeteaApp\\composeApp\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\8\\classes.dex
+base.5=C\:\\Users\\nm\\StudioProjects\\SweeteaApp\\composeApp\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
 path.0=classes.dex
 path.1=8/classes.dex
 path.2=0/classes.dex

@@ -4,7 +4,24 @@
             "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-41:/values-uz/values-uz.xml",
             "map": [
                 {
-                    "source": "/Users/zachcarter/.gradle/caches/8.9/transforms/85434ed1b2b4b9a57b146f1b6053f783/transformed/foundation-release/res/values-uz/values-uz.xml",
+                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a51faf70dd8593086d4a8aecb13d26e0\\transformed\\core-1.13.0\\res\\values-uz\\values-uz.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,157,259,360,460,568,672,791",
+                        "endColumns": "101,101,100,99,107,103,118,100",
+                        "endOffsets": "152,254,355,455,563,667,786,887"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,23",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,207,309,410,510,618,722,2054",
+                        "endColumns": "101,101,100,99,107,103,118,100",
+                        "endOffsets": "202,304,405,505,613,717,836,2150"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a37ba849613ce0fedb28abbc6f6a883b\\transformed\\foundation-release\\res\\values-uz\\values-uz.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
@@ -21,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "/Users/zachcarter/.gradle/caches/8.9/transforms/8c689a8761e9b8d4715e36b179a6583d/transformed/ui-release/res/values-uz/values-uz.xml",
+                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a9bf4b38c017dd83ae3b388ef0108006\\transformed\\ui-release\\res\\values-uz\\values-uz.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -35,23 +52,6 @@
                         "startOffsets": "841,940,1025,1129,1236,1332,1415,1505,1598,1681,1749,1816,1897,1980,2155,2238,2306",
                         "endColumns": "98,84,103,106,95,82,89,92,82,67,66,80,82,73,82,67,116",
                         "endOffsets": "935,1020,1124,1231,1327,1410,1500,1593,1676,1744,1811,1892,1975,2049,2233,2301,2418"
-                    }
-                },
-                {
-                    "source": "/Users/zachcarter/.gradle/caches/8.9/transforms/2b5c6c68e8720881b3e5f2c5d84d5dfe/transformed/core-1.13.0/res/values-uz/values-uz.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,157,259,360,460,568,672,791",
-                        "endColumns": "101,101,100,99,107,103,118,100",
-                        "endOffsets": "152,254,355,455,563,667,786,887"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,23",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,207,309,410,510,618,722,2054",
-                        "endColumns": "101,101,100,99,107,103,118,100",
-                        "endOffsets": "202,304,405,505,613,717,836,2150"
                     }
                 }
             ]

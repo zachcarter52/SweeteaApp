@@ -40,6 +40,10 @@
         "source": "org.example.sweetea.composeApp-androidMain-45:/mipmap-xhdpi/ic_launcher.png"
     },
     {
+        "merged": "org.example.sweetea.composeApp-debug-43:/drawable_sweetealogo_homepage.png.flat",
+        "source": "org.example.sweetea.composeApp-androidMain-45:/drawable/sweetealogo_homepage.png"
+    },
+    {
         "merged": "org.example.sweetea.composeApp-debug-43:/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "org.example.sweetea.composeApp-androidMain-45:/mipmap-xxhdpi/ic_launcher.png"
     },

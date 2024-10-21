@@ -4,7 +4,7 @@
             "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-41:/values-sl/values-sl.xml",
             "map": [
                 {
-                    "source": "/Users/zachcarter/.gradle/caches/8.9/transforms/2b5c6c68e8720881b3e5f2c5d84d5dfe/transformed/core-1.13.0/res/values-sl/values-sl.xml",
+                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a51faf70dd8593086d4a8aecb13d26e0\\transformed\\core-1.13.0\\res\\values-sl\\values-sl.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -21,24 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Users/zachcarter/.gradle/caches/8.9/transforms/85434ed1b2b4b9a57b146f1b6053f783/transformed/foundation-release/res/values-sl/values-sl.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,145",
-                        "endColumns": "89,90",
-                        "endOffsets": "140,231"
-                    },
-                    "to": {
-                        "startLines": "27,28",
-                        "startColumns": "4,4",
-                        "startOffsets": "2376,2466",
-                        "endColumns": "89,90",
-                        "endOffsets": "2461,2552"
-                    }
-                },
-                {
-                    "source": "/Users/zachcarter/.gradle/caches/8.9/transforms/8c689a8761e9b8d4715e36b179a6583d/transformed/ui-release/res/values-sl/values-sl.xml",
+                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a9bf4b38c017dd83ae3b388ef0108006\\transformed\\ui-release\\res\\values-sl\\values-sl.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -52,6 +35,23 @@
                         "startOffsets": "828,923,1004,1100,1198,1283,1360,1447,1539,1621,1694,1766,1848,1934,2107,2185,2255",
                         "endColumns": "94,80,95,97,84,76,86,91,81,72,71,81,85,71,77,69,120",
                         "endOffsets": "918,999,1095,1193,1278,1355,1442,1534,1616,1689,1761,1843,1929,2001,2180,2250,2371"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\nm\\.gradle\\caches\\8.9\\transforms\\a37ba849613ce0fedb28abbc6f6a883b\\transformed\\foundation-release\\res\\values-sl\\values-sl.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,145",
+                        "endColumns": "89,90",
+                        "endOffsets": "140,231"
+                    },
+                    "to": {
+                        "startLines": "27,28",
+                        "startColumns": "4,4",
+                        "startOffsets": "2376,2466",
+                        "endColumns": "89,90",
+                        "endOffsets": "2461,2552"
                     }
                 }
             ]
