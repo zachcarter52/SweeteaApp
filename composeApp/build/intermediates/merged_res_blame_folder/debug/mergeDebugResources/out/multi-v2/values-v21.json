@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-57:/values-v21/values-v21.xml",
+            "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-58:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\4d299cfc55d32a0e75634083501dcda2\\transformed\\appcompat-1.7.0\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\e0e7a0663c4e4adaca9bffc311590928\\transformed\\appcompat-1.7.0\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,19,20,21,22,24,26,27,28,29,30,32,34,36,38,40,42,43,48,50,52,53,54,56,58,59,60,61,62,63,106,109,152,155,158,160,162,164,167,171,174,175,176,179,180,181,182,183,184,187,188,190,192,194,196,200,202,203,204,205,207,211,213,215,216,217,218,219,220,222,223,224,234,235,236,248",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\0d357da614c3c9118a8c829279029198\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\d451fa73b3123b0ebc1f4d551b5c9e0f\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

@@ -49,6 +49,15 @@ kotlin {
 }
 
 android {
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.1"
+    }
+
     namespace = "org.example.sweetea"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
@@ -76,10 +85,20 @@ android {
 }
 
 dependencies {
+
+    /*implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.3.1")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.4.0-alpha03")*/
+
     implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.navigation.runtime.ktx)
     debugImplementation(compose.uiTooling)
+    val nav_version = "2.8.3"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
     implementation("androidx.compose.ui:ui:1.7.4")
-    implementation("androidx.navigation:navigation-compose:2.8.3")
     implementation("androidx.appcompat:appcompat:1.7.0")
 }
 

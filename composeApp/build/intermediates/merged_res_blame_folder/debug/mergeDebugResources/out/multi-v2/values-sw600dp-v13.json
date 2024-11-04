@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-57:/values-sw600dp-v13/values-sw600dp-v13.xml",
+            "outputFile": "org.example.sweetea.composeApp-mergeDebugResources-58:/values-sw600dp-v13/values-sw600dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\4d299cfc55d32a0e75634083501dcda2\\transformed\\appcompat-1.7.0\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+                    "source": "C:\\Users\\mariaflores-rivera\\.gradle\\caches\\8.9\\transforms\\e0e7a0663c4e4adaca9bffc311590928\\transformed\\appcompat-1.7.0\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
