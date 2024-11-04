@@ -1,5 +1,6 @@
 [versions]
-agp = "8.7.1"
+agp = "8.7.2"
+amplifyframeworkAwsAuthCognito = "2.16.0"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -11,13 +12,29 @@ androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.2"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
+authCognito = "2.0.0"
+authenticator = "1.2.0"
+awsAuthCognito = "1.28.4"
+awsAuthCognitoVersion = "1.28.4'"
 compose-plugin = "1.6.11"
+core = "2.16.0"
+desugar_jdk_libs = "2.1.2"
 junit = "4.13.2"
 kotlin = "2.0.20"
 ktor = "2.3.12"
 logback = "1.5.8"
+navigationCompose = "2.8.3"
 
 [libraries]
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+auth-cognito = { module = "com.amplifyframework:auth-cognito", version.ref = "authCognito" }
+authenticator = { module = "com.amplifyframework.ui:authenticator", version.ref = "authenticator" }
+aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognito" }
+aws-auth-cognito-v1284 = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognitoVersion" }
+aws-auth-cognito-v2160 = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplifyframeworkAwsAuthCognito" }
+core = { module = "com.amplifyframework:core", version.ref = "awsAuthCognito" }
+core-v2160 = { module = "com.amplifyframework:core", version.ref = "core" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

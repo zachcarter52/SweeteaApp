@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.utils.IMPLEMENTATION
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -70,6 +71,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -77,5 +79,22 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+
+    //Amazon Cognito / Amplify dependencies
+    implementation(libs.core.v2160) //amplify library
+    implementation(libs.aws.auth.cognito.v2160)  //cognito library
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
+    //Jetpack Compose dependencies
+    implementation("androidx.compose.ui:ui:1.7.5") // Jetpack Compose UI
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.5") // Preview support
+    implementation("androidx.compose.material:material:1.7.5") // Material Design components
+    implementation("androidx.activity:activity-compose:1.9.3") // Integration with Activities
+    implementation(libs.androidx.navigation.compose)
+
+
+
+
+
 }
 
