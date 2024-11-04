@@ -23,6 +23,7 @@ out/
 # Gradle files
 .gradle
 .gradle/
+/*/.gradle/
 build/
 
 # Signing files
@@ -38,6 +39,7 @@ proguard/
 *.log
 
 # Android Studio
+*/build/
 /*/build/
 /*/local.properties
 /*/out
@@ -95,6 +97,7 @@ obj/
 .idea/gradle.xml
 .idea/jarRepositories.xml
 .idea/navEditor.xml
+.idea/kotlinc.xml
 
 # Legacy Eclipse project files
 .classpath
@@ -134,3 +137,5 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio
+# Do not add Private Constants to the public github
+/shared/src/commonMain/kotlin/org/example/sweetea/PrivateConstants.kt
