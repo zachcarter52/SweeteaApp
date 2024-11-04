@@ -32,5 +32,3 @@ fun AccountPage(navController: NavHostController ,modifier: Modifier=Modifier){
         }
     }
 }
-
-
