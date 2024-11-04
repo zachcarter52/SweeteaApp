@@ -65,8 +65,7 @@ fun SweeteaApp( modifier: Modifier=Modifier){
         Scaffold(
             bottomBar = { AppBottomBar(navController) }
         ) {
-            padding -> HomeScreen(Modifier.padding(padding))
-            SweetTeaNavHost(
+            padding -> SweetTeaNavHost(
                 navController = navController,
                 modifier = Modifier.padding(padding)
             )
@@ -75,52 +74,24 @@ fun SweeteaApp( modifier: Modifier=Modifier){
 
 }
 
-@Preview
-@Composable
-fun HomeScreen(modifier: Modifier=Modifier) {
-    var clicked by remember { mutableStateOf(false) }
-    val logo = painterResource(id = R.drawable.sweetealogo_homepage)
-
-    //Calculates top padding based on screen height.
-    //Change the floating point value in calculatedPadding to change the image placement.
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
-    val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
-    Row(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = logo,
-                contentDescription = "App Logo",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(Alignment.Center)
-                    .padding(top = calculatedPadding)
-            )
-
-        }
-        Column(modifier = modifier) {
-            ElevatedButton(onClick = {clicked = !clicked}) {
-                Text("Events")
-            }
-        }
-    }
-
-}
 
 //navhost function of Navigation
 @Composable
 fun SweetTeaNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ){
     NavHost(
         navController = navController,
         startDestination = Account.route,
         modifier = modifier
     ) {
-        composable(route = Account.route){
-            AccountPage(navController)
+        Destinations.forEach{
+            destination -> composable(
+                route = destination.route
+            ) {
+                destination.content(modifier)
+            }
         }
     }
 }
@@ -133,6 +104,25 @@ fun NavHostController.navigateSingleTopTo(route:String) =
 @Composable
 private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Modifier){
     NavigationBar(modifier = modifier) {
+        Destinations.forEach{
+            destination -> NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = destination.icon,
+                        contentDescription = null
+                    )
+                },
+                label = {
+                    Text(destination.label)
+                },
+                selected = false,
+                onClick = {
+                    navController.navigateSingleTopTo(destination.route)
+                    destination.onClick!!()
+                }
+            )
+        }
+        /*
         NavigationBarItem(
             icon = {
                 Icon(
@@ -187,6 +177,7 @@ private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Mo
                 navController.navigateSingleTopTo(Account.route)
             }
         )
+         */
     }
 }
 
