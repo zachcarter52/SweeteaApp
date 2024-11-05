@@ -29,6 +29,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -83,7 +84,7 @@ fun SweetTeaNavHost(
 ){
     NavHost(
         navController = navController,
-        startDestination = Account.route,
+        startDestination = Destinations[0].route,
         modifier = modifier
     ) {
         Destinations.forEach{
@@ -103,9 +104,10 @@ fun NavHostController.navigateSingleTopTo(route:String) =
 
 @Composable
 private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Modifier){
+    var selected by remember { mutableIntStateOf(0) }
     NavigationBar(modifier = modifier) {
-        Destinations.forEach{
-            destination -> NavigationBarItem(
+        Destinations.forEachIndexed(){
+            index, destination -> NavigationBarItem(
                 icon = {
                     Icon(
                         imageVector = destination.icon,
@@ -113,71 +115,16 @@ private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Mo
                     )
                 },
                 label = {
-                    Text(destination.label)
+                    CourierPrimeText(destination.label)
                 },
-                selected = false,
+                selected = selected == index,
                 onClick = {
                     navController.navigateSingleTopTo(destination.route)
+                    selected = index
                     destination.onClick!!()
                 }
             )
         }
-        /*
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Home")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Menu")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Reward")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Account")
-            },
-            selected = false,
-            onClick = {
-                navController.navigateSingleTopTo(Account.route)
-            }
-        )
-         */
     }
 }
 

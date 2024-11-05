@@ -51,7 +51,7 @@ fun SocialMedia(){
                         icon,
                         contentDescription = "",
                     )
-                    Text(
+                    CourierPrimeText(
                         text = cardText[index],
                         fontSize = 20.sp
                     )
