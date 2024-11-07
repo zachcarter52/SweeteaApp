@@ -33,7 +33,7 @@ kotlin {
         
         androidMain.dependencies {
             implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
+            implementation(compose.uiTooling)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.material3.android)
@@ -41,9 +41,16 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.compose.ui)
-            implementation(compose.uiTooling)
+            //Jetpack Compose dependencies
+            implementation(libs.androidx.compose.ui.tooling.preview) // Preview support
+            implementation(libs.androidx.compose.material) // Material Design components
+            implementation(libs.androidx.activity.compose) // Integration with Activities
+            implementation(libs.androidx.navigation.compose)
         }
         commonMain.dependencies {
+            //Amazon Cognito / Amplify dependencies
+            implementation(libs.core.v2160) //amplify library
+            implementation(libs.aws.auth.cognito.v2160)  //cognito library
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -94,22 +101,6 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-
-    //Amazon Cognito / Amplify dependencies
-    implementation(libs.core.v2160) //amplify library
-    implementation(libs.aws.auth.cognito.v2160)  //cognito library
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
-
-    //Jetpack Compose dependencies
-    implementation("androidx.compose.ui:ui:1.7.5") // Jetpack Compose UI
-    implementation("androidx.compose.ui:ui-tooling-preview:1.7.5") // Preview support
-    implementation("androidx.compose.material:material:1.7.5") // Material Design components
-    implementation("androidx.activity:activity-compose:1.9.3") // Integration with Activities
-    implementation(libs.androidx.navigation.compose)
-
-
-
-
-
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
 
