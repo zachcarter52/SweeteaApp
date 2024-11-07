@@ -15,20 +15,20 @@ androidx-compose-material = "1.7.5"
 androidx-test-junit = "1.2.1"
 authCognito = "2.0.0"
 authenticator = "1.2.0"
-awsAuthCognito = "1.28.4"
-awsAuthCognitoVersion = "1.28.4'"
 compose-plugin = "1.6.11"
-core = "2.16.0"
+amplify-core = "2.24.0"
 desugar_jdk_libs = "2.1.2"
 junit = "4.13.2"
 kotlin = "2.0.21"
 ktor = "3.0.1"
+ktor-tests = "2.3.12"
 logback = "1.5.8"
 navigationCompose = "2.8.3"
 composeMaterial = "1.4.0"
 material3Android = "1.3.1"
 navigationRuntimeKtx = "2.8.3"
 composeUI = "1.7.5"
+aws-kotlin = "1.3.31"
 
 
 [libraries]
@@ -40,17 +40,17 @@ junit = { module = "junit:junit", version.ref = "junit" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 auth-cognito = { module = "com.amplifyframework:auth-cognito", version.ref = "authCognito" }
 authenticator = { module = "com.amplifyframework.ui:authenticator", version.ref = "authenticator" }
-aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognito" }
-aws-auth-cognito-v1284 = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognitoVersion" }
-aws-auth-cognito-v2160 = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplifyframeworkAwsAuthCognito" }
-core = { module = "com.amplifyframework:core", version.ref = "awsAuthCognito" }
-core-v2160 = { module = "com.amplifyframework:core", version.ref = "core" }
+aws-http = { module = "aws.sdk.kotlin:aws-http-jvm", version.ref = "aws-kotlin"}
+aws-amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify-core" }
+aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "amplify-core" }
+aws-cognitoidentity = { module = "aws.sdk.kotlin:cognitoidentity", version.ref = "aws-kotlin"}
+
 
 #androidx
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
-androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
-androidx-compose-material = { module= "androidx.wear.material:material", version.ref = "androidx-compose-material" }
+#androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
+androidx-compose-material = { module= "androidx.compose.material:material", version.ref = "androidx-compose-material" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "composeUI"}
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeUI"}
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
@@ -67,7 +67,7 @@ androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "andro
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
-ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
+ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor-tests" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import android.util.Log
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,20 +19,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.amplifyframework.auth.AuthUserAttributeKey
-import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.core.Amplify
 
 @Composable
-fun LoginScreen() {
+fun LoginPage(modifier: Modifier, navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
     verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
     horizontalAlignment = Alignment.CenterHorizontally,
-    modifier = Modifier.fillMaxSize()
+    modifier = modifier.fillMaxSize()
     )
 
     {
@@ -54,7 +53,9 @@ fun LoginScreen() {
             Text("Sign In")
         }
 
-        TextButton(onClick = { }) {
+        TextButton(onClick = {
+            navController.navigate("signup")
+        }) {
             Text("Don't have an account? Sign Up")
         }
 
@@ -67,7 +68,7 @@ fun LoginScreen() {
 }
 
 @Composable
-fun SignupScreen() {
+fun SignupPage(modifier: Modifier, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -98,14 +99,14 @@ fun SignupScreen() {
             Text("Sign Up")
         }
 
-        TextButton(onClick = { }) {
+        TextButton(onClick = { navController.navigate("login") }) {
             Text("Already have an account? Log in")
         }
     }
 }
 
 @Composable
-fun VerificationScreen() {
+fun VerificationPage() {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,

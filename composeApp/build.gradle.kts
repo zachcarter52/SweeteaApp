@@ -46,11 +46,11 @@ kotlin {
             implementation(libs.androidx.compose.material) // Material Design components
             implementation(libs.androidx.activity.compose) // Integration with Activities
             implementation(libs.androidx.navigation.compose)
+            //Amazon Cognito / Amplify dependencies
+            implementation(libs.aws.amplify.core) //amplify library
+            implementation(libs.aws.auth.cognito)  //cognito library
         }
         commonMain.dependencies {
-            //Amazon Cognito / Amplify dependencies
-            implementation(libs.core.v2160) //amplify library
-            implementation(libs.aws.auth.cognito.v2160)  //cognito library
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
