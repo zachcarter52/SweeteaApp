@@ -34,6 +34,14 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.material3.android)
+            implementation(libs.androidx.navigation.runtime.ktx)
+            implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.appcompat)
+            implementation(libs.androidx.compose.ui)
+            implementation(compose.uiTooling)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -42,14 +50,21 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
         }
     }
 }
 
 android {
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.1"
+    }
+
     namespace = "org.example.sweetea"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
