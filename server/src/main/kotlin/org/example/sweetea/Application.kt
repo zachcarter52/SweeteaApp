@@ -1,20 +1,23 @@
 package org.example.sweetea
 
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.engine.embeddedServer
+import org.example.sweetea.database.configureDatabases
+import org.example.sweetea.plugins.configureRouting
+import org.example.sweetea.plugins.configureSecurity
+import org.example.sweetea.plugins.configureSerialization
+import io.ktor.server.netty.*;
+import org.example.sweetea.Constants
 
-fun main() {
-    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
+fun main(args: Array<String>) {
+    embeddedServer(Netty, port = Constants.SERVER_PORT, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
+    //io.ktor.server.netty.EngineMain.main(args)
 }
 
 fun Application.module() {
-    routing {
-        get("/") {
-            call.respondText("Ktor: ${Greeting().greet()}")
-        }
-    }
+    configureSecurity()
+    configureSerialization()
+    configureDatabases()
+    configureRouting()
 }
