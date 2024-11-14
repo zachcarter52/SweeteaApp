@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.mutableIntStateOf
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
@@ -51,8 +52,10 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import org.example.sweetea.ui.theme.AppTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +69,6 @@ class MainActivity : ComponentActivity() {
             //LoginScreen()
             //VerificationScreen()
         }
-
         // Initialize Amplify / Cognito
         try {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
@@ -82,9 +84,36 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SweeteaApp(modifier: Modifier=Modifier){
-    MaterialTheme{
+    AppTheme(
+        dynamicColor = false
+    ){
         val navController = rememberNavController()
+
+        //val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+        //var out by remember{mutableStateOf("")}
+
+        /*when(navBackStackEntry?.destination?.route){
+
+            else -> {
+                TopBarState()
+            }
+        }*/
+
         Scaffold(
+            topBar = {
+                AppHeader(modifier)
+                /*Text(
+                    text = run {
+                        val navEntry = navBackStackEntry?.destination?.route
+                        if (navEntry != null) {
+                            out = navEntry
+                        }
+                        out
+                    }
+
+                )*/
+            },
             bottomBar = { AppBottomBar(navController) }
         ) {
             padding ->
@@ -107,7 +136,6 @@ fun SweetTeaNavHost(
     NavHost(
         navController = navController,
         startDestination = BaseDestinations[0].route,
-        modifier = modifier
     ) {
         BaseDestinations.forEach {
             destination ->
@@ -127,7 +155,6 @@ fun SweetTeaNavHost(
                             subpage.page(modifier, navController)
                         }
                     }
-
                 }
             }
         }
@@ -160,6 +187,7 @@ private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Mo
                     navController.navigateSingleTopTo(destination.route)
                     selectedItem = index
                     destination.onClick!!()
+
                 }
             ) }
 

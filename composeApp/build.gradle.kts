@@ -41,6 +41,7 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.compose.ui)
+            implementation(libs.androidx.compose.ui.text.googlefonts)
             //Jetpack Compose dependencies
             implementation(libs.androidx.compose.ui.tooling.preview) // Preview support
             implementation(libs.androidx.compose.material) // Material Design components
