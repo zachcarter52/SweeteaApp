@@ -41,8 +41,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.AmplifyConfiguration
@@ -135,6 +139,12 @@ fun SweetTeaNavHost(
     NavHost(
         navController = navController,
         startDestination = BaseDestinations[0].route,
+        enterTransition = {
+            slideInHorizontally()
+        },
+        exitTransition = {
+            slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth})
+        }
     ) {
         BaseDestinations.forEach {
             destination ->
@@ -160,10 +170,19 @@ fun SweetTeaNavHost(
     }
 }
 
-fun NavHostController.navigateSingleTopTo(route:String) =
+fun NavHostController.navigateSingleTopTo(route:String) {
+    val navController = this
     this.navigate(route){
+        //Clear the navigation stack
+        popUpTo(navController.graph.findStartDestination().id){
+            saveState = true
+        }
+        //Only one copy of each destination is allowed
         launchSingleTop = true
+        //Preserve the state between navigation
+        restoreState = true
     }
+}
 
 @Composable
 private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Modifier){

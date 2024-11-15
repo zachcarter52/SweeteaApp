@@ -70,6 +70,7 @@ object Rewards : Destination(
     route = "rewards",
     pageRoute = "rewardspage",
     page = {modifier, navController -> RewardsPage(modifier, navController) },
+    hideLocation = true
 )
 
 object Account : Destination(
