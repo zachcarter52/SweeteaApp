@@ -56,6 +56,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import org.example.sweetea.ui.theme.AppTheme
+import org.example.sweetea.Destination
 
 
 class MainActivity : ComponentActivity() {
@@ -89,30 +90,28 @@ fun SweeteaApp(modifier: Modifier=Modifier){
     ){
         val navController = rememberNavController()
 
-        //val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-        //var out by remember{mutableStateOf("")}
+        var currentRoute by remember{mutableStateOf("")}
 
-        /*when(navBackStackEntry?.destination?.route){
-
-            else -> {
-                TopBarState()
-            }
-        }*/
+        val navRoute = navBackStackEntry?.destination?.route
+        if(navRoute != null){
+            currentRoute = navRoute
+        }
 
         Scaffold(
             topBar = {
-                AppHeader(modifier)
-                /*Text(
-                    text = run {
-                        val navEntry = navBackStackEntry?.destination?.route
-                        if (navEntry != null) {
-                            out = navEntry
-                        }
-                        out
-                    }
-
-                )*/
+                val currentDest = DestMap(currentRoute)
+                if(currentDest != null){
+                    AppHeader(
+                        modifier,
+                        currentDest.topBarHeaderText,
+                        currentDest.hideLocation,
+                        currentDest.hideTopBarHeader
+                    )
+                } else {
+                    AppHeader(modifier)
+                }
             },
             bottomBar = { AppBottomBar(navController) }
         ) {
@@ -192,61 +191,5 @@ private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Mo
             ) }
 
         }
-        /*
-
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Home")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Menu")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Reward")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Account")
-            },
-            selected = false,
-            onClick = {
-                navController.navigateSingleTopTo(Account.route)
-            }
-        )*/
 }
 

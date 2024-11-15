@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,40 +19,52 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun AppHeader(
     modifier: Modifier = Modifier,
-    content: @Composable (() -> Unit)? = {},
+    headerText: @Composable (() -> Unit)? = null,
+    hideLocation: Boolean? = false,
+    hideTopBarHeader: Boolean? = false,
+    content: @Composable (() -> Unit)? = null,
 ) {
-    val logo = if (!isSystemInDarkTheme()){
-        painterResource(id = R.drawable.sweetealogo_homepage_light)
-    } else {
-        painterResource(id = R.drawable.sweetealogo_homepage_dark)
-    }
-    Column(modifier = modifier.fillMaxWidth(1f)) {
-        Row(
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text(
-                text = buildAnnotatedString {
-                    append("location: ")
-                    withStyle(
-                        style = SpanStyle(color = MaterialTheme.colorScheme.primary)
-                    ) {
-                        append("4010 Foothills Blvd #101, Roseville, CA 95747")
-                    }
-                },
-                fontSize = 10.sp,
-                modifier = Modifier.fillMaxWidth(0.6f),
-            )
+    if(hideTopBarHeader != null && !hideTopBarHeader){
+        Column(modifier = modifier.fillMaxWidth(1f)) {
+            Row(
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(
+                    text = if(hideLocation != null && !hideLocation) {buildAnnotatedString {
+                        append("location: ")
+                        withStyle(
+                            style = SpanStyle(color = MaterialTheme.colorScheme.primary)
+                        ) {
+                            append("4010 Foothills Blvd #101, Roseville, CA 95747")
+                        }
+                    }} else {
+                        buildAnnotatedString{}
+                    },
+                    fontSize = 10.sp,
+                    modifier = Modifier.fillMaxWidth(0.6f),
+                )
+            }
+
+            Box(
+                modifier = Modifier.height(38.dp)
+            ){
+                if(headerText != null){
+                    headerText()
+                } else {
+                    Text(
+                        text = "Hi, <username>",
+                        fontSize = 34.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
-        Text(
-            text = "Hi, <username>",
-            fontSize = 34.sp,
-            fontWeight = FontWeight.Bold
-        )
     }
-    content!!()
+    if(content != null) content()
 }
