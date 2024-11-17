@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 @Composable
 fun RewardsPage(modifier: Modifier, navController: NavController){
     Column(
-        Modifier.fillMaxSize()
+        modifier = modifier
     ){
         Text("Rewards Page")
     }

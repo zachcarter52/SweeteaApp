@@ -7,7 +7,9 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -41,10 +43,17 @@ fun AppHeader(
     hideTopBarHeader: Boolean? = false,
     content: @Composable (() -> Unit)? = null,
 ) {
+    val enterTransistion = {
+        slideInHorizontally()
+    }
+    val exitTransition = {
+        slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth}) +
+                fadeOut()
+    }
     AnimatedVisibility(
         visible = hideTopBarHeader != null && !hideTopBarHeader,
-        enter = expandVertically(),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        enter = enterTransistion() + slideInHorizontally(),
+        exit = exitTransition() + slideOutHorizontally(),
     ) {
         Column(modifier = modifier.fillMaxWidth(1f)) {
             Row(
@@ -54,8 +63,8 @@ fun AppHeader(
                 val density = LocalDensity.current
                 AnimatedVisibility(
                     visible = !hideLocation,
-                    enter = expandVertically(),
-                    exit = slideOutVertically() + shrinkVertically() + fadeOut()
+                    enter = enterTransistion(),
+                    exit = exitTransition(),
                 ) {
                     Text(
                         text = buildAnnotatedString {
@@ -74,7 +83,8 @@ fun AppHeader(
             }
 
             Row(
-                modifier = Modifier.height(38.dp)
+                modifier = Modifier.height(38.dp),
+                verticalAlignment = Alignment.Bottom
             ){
                 if(headerText != null){
                     headerText()

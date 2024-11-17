@@ -89,11 +89,13 @@ object Account : Destination(
 object Login : BasicDestination(
     route = "login",
     page = { modifier, navController -> LoginPage(modifier, navController) },
+    hideTopBarHeader = true,
 )
 
 object SignUp : BasicDestination(
     route = "signup",
     page = { modifier, navController -> SignupPage(modifier, navController) },
+    hideTopBarHeader = true,
 )
 
 val BaseDestinations = listOf(

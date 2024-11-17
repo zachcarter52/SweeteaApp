@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
@@ -140,7 +141,8 @@ fun SweetTeaNavHost(
             slideInHorizontally()
         },
         exitTransition = {
-            slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth})
+            slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth}) +
+                    fadeOut()
         }
     ) {
         BaseDestinations.forEach {
