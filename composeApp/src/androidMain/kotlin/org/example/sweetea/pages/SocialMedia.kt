@@ -1,4 +1,4 @@
-package org.example.sweetea.pages
+package org.example.sweetea
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

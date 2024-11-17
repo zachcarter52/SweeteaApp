@@ -58,6 +58,12 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            /*
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+            */
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
         }
     }
