@@ -1,16 +1,22 @@
 R_DEF: Internal format may change without notice
 local
+color sweeteabear_background
 drawable account_settings_svgrepo_com
 drawable achievement_reward_winner_svgrepo_com
 drawable calendar_day_svgrepo_com
 drawable home_svgrepo_com
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable sweeteabear
 drawable sweetealogo_homepage
 mipmap ic_launcher
 mipmap ic_launcher_round
+mipmap sweeteabear
+mipmap sweeteabear_foreground
+mipmap sweeteabear_round
 string accountpage_route
 string app_name
 string homepage_route
 string menupage_route
 string rewardpage_route
+style Theme.App.Starting
