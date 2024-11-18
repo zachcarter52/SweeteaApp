@@ -15,8 +15,8 @@ import org.example.sweetea.database.model.Account
 fun Application.configureDatabases() {
     val database = Database.connect(
         url = "jdbc:mariadb://"+Constants.DATABASE_HOST+":3306/"+Constants.DATABASE_NAME,
-        user = Constants.DATABASE_USERNAME,
-        password = Constants.DATABASE_PASSWORD,
+//        user = Constants.DATABASE_USERNAME,
+//        password = Constants.DATABASE_PASSWORD,
         driver = "org.mariadb.jdbc.Driver",
     )
     val userService = UserService(database)
