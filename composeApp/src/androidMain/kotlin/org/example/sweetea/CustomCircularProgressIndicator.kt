@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -24,24 +25,18 @@ import kotlin.math.sin
 @Composable
 fun CustomCircularProgressIndicator(
     modifier: Modifier = Modifier,
-    initialValue:Int,
     primaryColor: Color,
     secondaryColor:Color,
     minValue:Int = 0,
     maxValue:Int = 100,
     circleRadius:Float,
-    onPositionChange:(Int)->Unit
+    positionValue: Int = 0,
+    onPositionChange:(Int)->Unit = {}
 ) {
     var circleCenter by remember {
         mutableStateOf(Offset.Zero)
     }
-
-    var positionValue by remember {
-        mutableStateOf(initialValue)
-    }
-
-
-
+    val colorScheme = MaterialTheme.colorScheme
     Box(
         modifier = modifier
     ){
@@ -139,7 +134,7 @@ fun CustomCircularProgressIndicator(
                         Paint().apply {
                             textSize = 38.sp.toPx()
                             textAlign = Paint.Align.CENTER
-                            color = Color.White.toArgb()
+                            color = colorScheme.inverseOnSurface.toArgb()
                             isFakeBoldText = true
                         }
                     )
