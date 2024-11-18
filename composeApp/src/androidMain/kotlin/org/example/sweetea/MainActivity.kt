@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,145 +61,14 @@ import java.util.UUID
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         //parameter of the function needs to be solved
         //MobilePaymentsSdk.initialize(getId(), this)
         setContent {
             //Displays current screen
             //App()- default *REMOVED*
-            SweeteaApp()
+            MainScreen()
         }
-    }
-}
-
-@Composable
-fun SweeteaApp( modifier: Modifier=Modifier){
-    MaterialTheme{
-        val navController = rememberNavController()
-        Scaffold(
-            bottomBar = { AppBottomBar(navController) }
-        ) {
-            padding -> HomeScreen(Modifier.padding(padding))
-            SweetTeaNavHost(
-                navController = navController,
-                modifier = Modifier.padding(padding)
-            )
-        }
-    }
-
-}
-
-@Preview
-@Composable
-fun HomeScreen(modifier: Modifier=Modifier) {
-    var clicked by remember { mutableStateOf(false) }
-    val logo = painterResource(id = R.drawable.sweetealogo_homepage)
-
-    //Calculates top padding based on screen height.
-    //Change the floating point value in calculatedPadding to change the image placement.
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
-    val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
-    Row(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = logo,
-                contentDescription = "App Logo",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(Alignment.Center)
-                    .padding(top = calculatedPadding)
-            )
-
-        }
-        Column(modifier = modifier) {
-            ElevatedButton(onClick = {clicked = !clicked}) {
-                Text("Events")
-            }
-        }
-    }
-
-}
-
-//navhost function of Navigation
-@Composable
-fun SweetTeaNavHost(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-){
-    NavHost(
-        navController = navController,
-        startDestination = Account.route,
-        modifier = modifier
-    ) {
-        composable(route = Account.route){
-            AccountPage(navController)
-        }
-    }
-}
-
-fun NavHostController.navigateSingleTopTo(route:String) =
-    this.navigate(route){
-        launchSingleTop = true
-    }
-
-@Composable
-private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Modifier){
-    NavigationBar(modifier = modifier) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Home")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Menu")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Reward")
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text("Account")
-            },
-            selected = false,
-            onClick = {
-                navController.navigateSingleTopTo(Account.route)
-            }
-        )
     }
 }
 

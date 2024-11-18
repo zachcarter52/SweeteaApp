@@ -33,14 +33,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.material3.android)
-            implementation(libs.androidx.navigation.runtime.ktx)
-            implementation(libs.androidx.navigation.compose)
-            implementation(libs.androidx.appcompat)
-            implementation(libs.androidx.compose.ui)
-            implementation(compose.uiTooling)
+            implementation(libs.core.splashscreen)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -48,14 +41,11 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            /*
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-            */
+            implementation(compose.components.uiToolingPreview)          
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
+            implementation(libs.core.splashscreen)
         }
     }
 }
@@ -96,10 +86,27 @@ android {
     }
 }
 
-dependencies{
+dependencies {
+
+    /*implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.3.1")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.4.0-alpha03")*/
+
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    debugImplementation(compose.uiTooling)
+    val nav_version = "2.8.3"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    implementation("androidx.compose.ui:ui:1.7.4")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    
     val squareSdkVersion = "2.0.0-beta5"
     //Mobile payments sdk dependency
     implementation(libs.mobile.payments.sdk)
     //mockreader ui dependency
     implementation(libs.mockreader.ui)
 }
+

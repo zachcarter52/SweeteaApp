@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 
 @Composable
-fun AccountPage(navController: NavHostController ,modifier: Modifier=Modifier){
+fun AccountPage(/*navController: NavHostController,*/ modifier: Modifier=Modifier){
     var clicked by rememberSaveable { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
