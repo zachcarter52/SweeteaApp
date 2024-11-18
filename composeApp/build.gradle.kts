@@ -95,3 +95,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
+dependencies{
+    val squareSdkVersion = "2.0.0-beta5"
+    //Mobile payments sdk dependency
+    implementation(libs.mobile.payments.sdk)
+    //mockreader ui dependency
+    implementation(libs.mockreader.ui)
+}

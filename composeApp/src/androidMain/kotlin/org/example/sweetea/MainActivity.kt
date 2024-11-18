@@ -2,6 +2,7 @@ package org.example.sweetea
 
 
 import android.os.Bundle
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -41,12 +42,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.squareup.sdk.mobilepayments.MobilePaymentsSdk
+import com.squareup.sdk.mobilepayments.authorization.AuthorizeErrorCode
+import com.squareup.sdk.mobilepayments.core.CallbackReference
+import com.squareup.sdk.mobilepayments.core.Result
+import com.squareup.sdk.mobilepayments.payment.AdditionalPaymentMethod
+import com.squareup.sdk.mobilepayments.payment.CurrencyCode
+import com.squareup.sdk.mobilepayments.payment.Money
+import com.squareup.sdk.mobilepayments.payment.PaymentHandle
+import com.squareup.sdk.mobilepayments.payment.PaymentParameters
+import com.squareup.sdk.mobilepayments.payment.PromptMode
+import com.squareup.sdk.mobilepayments.payment.PromptParameters
+import java.util.UUID
+
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //parameter of the function needs to be solved
+        //MobilePaymentsSdk.initialize(getId(), this)
         setContent {
             //Displays current screen
             //App()- default *REMOVED*
@@ -74,7 +89,6 @@ fun SweeteaApp( modifier: Modifier=Modifier){
 
 @Preview
 @Composable
-
 fun HomeScreen(modifier: Modifier=Modifier) {
     var clicked by remember { mutableStateOf(false) }
     val logo = painterResource(id = R.drawable.sweetealogo_homepage)
@@ -186,5 +200,61 @@ private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Mo
             }
         )
     }
+}
+
+/*--------------square payment api functionality--------------*/
+//actions after success and failure need to be added
+/*fun onResume() {
+    val authorizationManager = MobilePaymentsSdk.authorizationManager()
+    // Authorize and handle authorization successes or failures
+    callbackReference = authorizationManager.authorize(accessToken, locationId) { result ->
+        when (result) {
+            is Result.Success -> {
+                finishWithAuthorizedSuccess(result.value)
+            }
+
+            is Result.Failure -> {
+                when (result.errorCode) {
+                    AuthorizeErrorCode.NO_NETWORK -> // show error message and retry suggestion
+                    AuthorizeErrorCode.USAGE_ERROR-> // show error message
+                }
+            }
+        }
+    }
+}*/
+
+fun onPause() {
+    // Remove the callback reference to prevent memory leaks
+}
+
+//actions after success and failure need to be added
+/*fun startPaymentActivity() {
+    val paymentManager = MobilePaymentsSdk.paymentManager()
+    // Configure the payment parameters
+    val paymentParams = PaymentParameters.Builder(
+        amount = Money(100, CurrencyCode.USD),
+        idempotencyKey = UUID.randomUUID().toString()
+    )
+        .referenceId("1234")
+        .note("Chocolate Cookies and Lemonade")
+        .autocomplete(true)
+        .build()
+    // Configure the prompt parameters
+    val promptParams = PromptParameters(
+        mode = PromptMode.DEFAULT,
+        additionalPaymentMethods = listOf(AdditionalPaymentMethod.Type.KEYED)
+    )
+    // Start the payment activity
+    handle = paymentManager.startPaymentActivity(paymentParams, promptParams) { result ->
+        // Callback to handle the payment result
+        when (result) {
+            is Result.Success -> // show payment details
+            is Result.Failure -> // show error message
+        }
+    }
+}*/
+
+fun onDestroy() {
+
 }
 
