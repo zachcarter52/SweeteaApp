@@ -26,7 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import org.example.sweetea.R
+import org.example.sweetea.*
 
 open class AccountPageCard(
     val text:String,
@@ -69,15 +69,14 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
             Button(
                 elevation = ButtonDefaults.elevatedButtonElevation(),
                 onClick = {
-                    navController.navigate("login"){
-                    }
+                    navController.navigate(Login.route)
                 }
             ) {
                 Text("Log In")
             }
             ElevatedButton(
                 onClick = {
-                    navController.navigate("signup")
+                    navController.navigate(SignUp.route)
                 }
             ) {
                 Text("Sign Up")
@@ -97,7 +96,7 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
                         shape = RoundedCornerShape(percent = 5)
                     ) {
                         Column(
-                            modifier = Modifier.padding(20.dp).height(80.dp),
+                            modifier = Modifier.padding(0.dp, 20.dp).height(80.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {

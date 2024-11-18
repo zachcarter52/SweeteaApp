@@ -29,9 +29,9 @@ fun AppHeader(
     headerText: @Composable (() -> Unit)? = null,
     hideLocation: Boolean = false,
     hideTopBarHeader: Boolean? = false,
-    content: @Composable (() -> Unit)? = null,
     enterTransition: () -> EnterTransition,
-    exitTransition: () -> ExitTransition
+    exitTransition: () -> ExitTransition,
+    content: @Composable (() -> Unit)? = null,
 ) {
     val visible = hideTopBarHeader != null && !hideTopBarHeader
     Column(modifier = modifier.fillMaxWidth(1f)) {
@@ -81,6 +81,8 @@ fun AppHeader(
                 }
             }
         }
+        Row(){
+            if(content != null) content()
+        }
     }
-    if(content != null) content()
 }

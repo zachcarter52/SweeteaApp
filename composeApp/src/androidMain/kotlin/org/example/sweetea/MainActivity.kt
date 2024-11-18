@@ -100,16 +100,28 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         if(navRoute != null){
             currentRoute = navRoute
         }
+        var selectedItem by remember { mutableIntStateOf(0) }
+        var oldSelectedItem by remember { mutableIntStateOf(0) }
+
         val enterTransition = {
-            slideInHorizontally(initialOffsetX = {-it}) +
-                    fadeIn()
+            if(selectedItem > oldSelectedItem){
+                slideInHorizontally(initialOffsetX = {it}) +
+                        fadeIn()
+            } else {
+                slideInHorizontally(initialOffsetX = {-it}) +
+                        fadeIn()
+            }
         }
         val exitTransition = {
-            slideOutHorizontally(targetOffsetX = {it}) +
-                    fadeOut()
+            if(selectedItem > oldSelectedItem) {
+                slideOutHorizontally(targetOffsetX = { -it }) +
+                        fadeOut()
+            } else {
+                slideOutHorizontally(targetOffsetX = { it }) +
+                        fadeOut()
+            }
         }
 
-        var selectedItem by remember { mutableIntStateOf(0) }
         Scaffold(
             topBar = {
                 val currentDest = DestMap(currentRoute)
@@ -134,7 +146,10 @@ fun SweeteaApp(modifier: Modifier=Modifier){
             bottomBar = { AppBottomBar(
                 navController = navController,
                 selectedItem = selectedItem,
-                updateSelectedItem = {selectedItem = it}
+                updateSelectedItem = {
+                    oldSelectedItem = selectedItem
+                    selectedItem = it
+                }
             ) }
         ) {
             padding ->
@@ -171,8 +186,10 @@ fun SweetTeaNavHost(
                     destination.page(modifier, navController)
                 }
             } else {
-                navigation( startDestination = destination.route,
-                    route = destination.pageRoute){
+                navigation(
+                    startDestination = destination.route,
+                    route = destination.pageRoute,
+                ){
                     composable(destination.route){
                         destination.page(modifier, navController)
                     }
@@ -223,9 +240,11 @@ private fun AppBottomBar(navController: NavHostController,
                 },
                 selected = index == selectedItem,
                 onClick = {
-                    navController.navigateSingleTopTo(destination.route)
-                    updateSelectedItem(index)
-                    destination.onClick!!()
+                    if(selectedItem != index) {
+                        navController.navigateSingleTopTo(destination.route)
+                        updateSelectedItem(index)
+                        destination.onClick!!()
+                    }
                 }
             ) }
 
