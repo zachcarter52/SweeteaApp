@@ -41,7 +41,7 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(compose.components.uiToolingPreview)          
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
@@ -102,5 +102,11 @@ dependencies {
 
     implementation("androidx.compose.ui:ui:1.7.4")
     implementation("androidx.appcompat:appcompat:1.7.0")
+    
+    val squareSdkVersion = "2.0.0-beta5"
+    //Mobile payments sdk dependency
+    implementation(libs.mobile.payments.sdk)
+    //mockreader ui dependency
+    implementation(libs.mockreader.ui)
 }
 
