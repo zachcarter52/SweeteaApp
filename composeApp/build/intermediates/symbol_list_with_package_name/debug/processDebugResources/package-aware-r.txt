@@ -662,6 +662,7 @@ drawable circular_vignette_bottom
 drawable circular_vignette_top
 drawable compat_splash_screen
 drawable compat_splash_screen_no_icon_background
+drawable group_add
 drawable home_svgrepo_com
 drawable ic_call_answer
 drawable ic_call_answer_low
@@ -672,6 +673,8 @@ drawable ic_call_decline_low
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable icon_background
+drawable instagram_glyph_white
+drawable mail
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -692,6 +695,10 @@ drawable sweetealogo_homepage
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
+font courier_prime
+font courier_prime_bold
+font courier_prime_bold_italic
+font courier_prime_italic
 id ALT
 id CTRL
 id FUNCTION

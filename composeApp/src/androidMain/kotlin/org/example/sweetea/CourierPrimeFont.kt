@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.text.TextStyle
-import sweetea.composeapp.generated.resources.Res
+//import sweetea.composeapp.generated.resources.Res
 
 val courierPrimeFamily = FontFamily(
     Font(R.font.courier_prime, FontWeight.Normal),

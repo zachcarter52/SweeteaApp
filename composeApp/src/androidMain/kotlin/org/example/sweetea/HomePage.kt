@@ -27,14 +27,14 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HomePage(modifier: Modifier=Modifier) {
     var clicked by remember { mutableStateOf(false) }
-    val logo = painterResource(id = R.drawable.sweetealogo_homepage_light)
+    val logo = painterResource(id = R.drawable.sweetealogo_homepage)
 
     //Calculates top padding based on screen height.
     //Change the floating point value in calculatedPadding to change the image placement.
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
-    Row(modifier = modifier) {
+    Row(modifier = Modifier) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
                 painter = logo,
@@ -47,11 +47,15 @@ fun HomePage(modifier: Modifier=Modifier) {
             )
 
         }
+    }
+
         Column(modifier = modifier) {
+            ContentScreen()
             ElevatedButton(onClick = {clicked = !clicked}) {
                 CourierPrimeText("Events")
             }
         }
-    }
-
 }
+
+
+
