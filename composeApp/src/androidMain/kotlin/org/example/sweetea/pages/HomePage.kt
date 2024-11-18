@@ -48,47 +48,29 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import org.example.sweetea.R
+import org.example.sweetea.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import sweetea.composeapp.generated.resources.Res
 
 @Preview
 @Composable
 fun HomePage(modifier: Modifier=Modifier, navController: NavController) {
-    var clicked by remember { mutableStateOf(false) }
-    val logo = if (!isSystemInDarkTheme()){
-        painterResource(id = R.drawable.sweetealogo_homepage_light)
-    } else {
-        painterResource(id = R.drawable.sweetealogo_homepage_dark)
-    }
     val featuredItemsImage = painterResource(id = R.drawable.featured_items)
+    var clicked by remember { mutableStateOf(false) }
 
     //Calculates top padding based on screen height.
     //Change the floating point value in calculatedPadding to change the image placement.
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
-    Column(
+    BearPageTemplate(
         modifier = modifier.verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box {
-            Image(
-                painter = logo,
-                contentDescription = "App Logo",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(Alignment.Center)
-                    //.padding(top = calculatedPadding)
-            )
-        }
         ElevatedCard(
             elevation = CardDefaults.cardElevation(10.dp),
             modifier = Modifier.fillMaxWidth(0.90f)
                 .height(300.dp),
-            onClick = { navController.navigate("menumain"){
+            onClick = { navController.navigate(Menu.route){
                 launchSingleTop = true
             }}
         ){
@@ -122,7 +104,7 @@ fun HomePage(modifier: Modifier=Modifier, navController: NavController) {
         Column() {
             Button(
                 elevation = ButtonDefaults.elevatedButtonElevation(),
-                onClick = { navController.navigate("menumain"){
+                onClick = { navController.navigate(Menu.route){
                     launchSingleTop = true
                 }}
             ) {

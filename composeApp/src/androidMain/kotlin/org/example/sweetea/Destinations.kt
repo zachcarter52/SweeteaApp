@@ -56,8 +56,8 @@ object Home : Destination(
 object Menu : Destination(
     icon = Icons.Default.Menu,
     label = "Menu",
-    route = "menumain",
-    pageRoute = "menu",
+    route = "menu",
+    pageRoute = "menupage",
     page = {modifier, navController -> MenuPage(modifier, navController) },
     topBarHeaderText = {
         Text("Featured Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
@@ -70,7 +70,10 @@ object Rewards : Destination(
     route = "rewards",
     pageRoute = "rewardspage",
     page = {modifier, navController -> RewardsPage(modifier, navController) },
-    hideLocation = true
+    hideLocation = true,
+    topBarHeaderText = {
+        Text("Rewards Program", fontSize = 34.sp, fontWeight = FontWeight.Bold)
+    }
 )
 
 object Account : Destination(
@@ -83,7 +86,7 @@ object Account : Destination(
         Login,
         SignUp
     ),
-    hideTopBarHeader = true,
+    hideLocation = true,
 )
 
 object Login : BasicDestination(
@@ -104,6 +107,11 @@ val BaseDestinations = listOf(
     Rewards,
     Account
 )
+
+/*
+Maps the list of All Destinations to the their route in a dictionary
+e.g: [Account] => {"account": Account}
+ */
 
 val DestinationMap = mutableMapOf<String, BasicDestination>()
 private var destinationsUpToDate = false

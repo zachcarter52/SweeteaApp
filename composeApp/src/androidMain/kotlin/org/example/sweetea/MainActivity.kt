@@ -38,6 +38,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
@@ -58,7 +61,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import org.example.sweetea.ui.theme.AppTheme
-import org.example.sweetea.Destination
 
 
 class MainActivity : ComponentActivity() {
@@ -91,36 +93,56 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         dynamicColor = false
     ){
         val navController = rememberNavController()
-
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-
         var currentRoute by remember{mutableStateOf("")}
 
         val navRoute = navBackStackEntry?.destination?.route
         if(navRoute != null){
             currentRoute = navRoute
         }
+        val enterTransition = {
+            slideInHorizontally(initialOffsetX = {-it}) +
+                    fadeIn()
+        }
+        val exitTransition = {
+            slideOutHorizontally(targetOffsetX = {it}) +
+                    fadeOut()
+        }
 
+        var selectedItem by remember { mutableIntStateOf(0) }
         Scaffold(
             topBar = {
                 val currentDest = DestMap(currentRoute)
+
                 if(currentDest != null){
                     AppHeader(
                         modifier,
-                        currentDest.topBarHeaderText,
-                        currentDest.hideLocation,
-                        currentDest.hideTopBarHeader
+                        headerText = currentDest.topBarHeaderText,
+                        hideLocation = currentDest.hideLocation,
+                        hideTopBarHeader = currentDest.hideTopBarHeader,
+                        enterTransition = enterTransition,
+                        exitTransition = exitTransition
                     )
                 } else {
-                    AppHeader(modifier)
+                    AppHeader(
+                        modifier = modifier,
+                        enterTransition = enterTransition,
+                        exitTransition = exitTransition
+                    )
                 }
             },
-            bottomBar = { AppBottomBar(navController) }
+            bottomBar = { AppBottomBar(
+                navController = navController,
+                selectedItem = selectedItem,
+                updateSelectedItem = {selectedItem = it}
+            ) }
         ) {
             padding ->
             SweetTeaNavHost(
                 navController = navController,
-                modifier = Modifier.padding(padding)
+                modifier = Modifier.padding(padding),
+                enterTransition = enterTransition,
+                exitTransition = exitTransition
             )
         }
     }
@@ -132,18 +154,15 @@ fun SweeteaApp(modifier: Modifier=Modifier){
 @Composable
 fun SweetTeaNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enterTransition: () -> EnterTransition,
+    exitTransition: () -> ExitTransition
 ){
     NavHost(
         navController = navController,
         startDestination = BaseDestinations[0].route,
-        enterTransition = {
-            slideInHorizontally()
-        },
-        exitTransition = {
-            slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth}) +
-                    fadeOut()
-        }
+        enterTransition = {enterTransition()},
+        exitTransition = {exitTransition()},
     ) {
         BaseDestinations.forEach {
             destination ->
@@ -184,8 +203,11 @@ fun NavHostController.navigateSingleTopTo(route:String) {
 }
 
 @Composable
-private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Modifier){
-    var selectedItem by remember { mutableIntStateOf(0) }
+private fun AppBottomBar(navController: NavHostController,
+                         modifier: Modifier=Modifier,
+                         selectedItem: Int,
+                         updateSelectedItem: (Int) -> Unit,
+) {
     NavigationBar(modifier = modifier) {
         BaseDestinations.forEachIndexed{
             index, destination ->
@@ -202,9 +224,8 @@ private fun AppBottomBar(navController: NavHostController, modifier: Modifier=Mo
                 selected = index == selectedItem,
                 onClick = {
                     navController.navigateSingleTopTo(destination.route)
-                    selectedItem = index
+                    updateSelectedItem(index)
                     destination.onClick!!()
-
                 }
             ) }
 

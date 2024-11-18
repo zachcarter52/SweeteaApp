@@ -24,15 +24,17 @@ import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.core.Amplify
 
+import org.example.sweetea.*
+
 @Composable
 fun LoginPage(modifier: Modifier, navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
-    verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
-    horizontalAlignment = Alignment.CenterHorizontally,
-    modifier = modifier.fillMaxSize()
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
     )
 
     {
@@ -54,7 +56,7 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
         }
 
         TextButton(onClick = {
-            navController.navigate("signup")
+            navController.navigate(SignUp.route)
         }) {
             Text("Don't have an account? Sign Up")
         }
@@ -99,7 +101,7 @@ fun SignupPage(modifier: Modifier, navController: NavController) {
             Text("Sign Up")
         }
 
-        TextButton(onClick = { navController.navigate("login") }) {
+        TextButton(onClick = { navController.navigate(Login.route) }) {
             Text("Already have an account? Log in")
         }
     }
