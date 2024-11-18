@@ -79,6 +79,8 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.cardview)
     debugImplementation(compose.uiTooling)
 }
 
