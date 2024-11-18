@@ -34,14 +34,16 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(compose.uiTooling)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.appcompat)
+            implementation(libs.androidx.compose.ui)
+            implementation(libs.androidx.compose.ui.text.googlefonts)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.material3.android)
             implementation(libs.androidx.navigation.runtime.ktx)
             implementation(libs.androidx.navigation.compose)
-            implementation(libs.androidx.appcompat)
-            implementation(libs.androidx.compose.ui)
-            implementation(libs.androidx.compose.ui.text.googlefonts)
+            implementation(libs.core.splashscreen)
             //Jetpack Compose dependencies
             implementation(libs.androidx.compose.ui.tooling.preview) // Preview support
             implementation(libs.androidx.compose.material) // Material Design components
@@ -58,13 +60,10 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            /*
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-            */
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
+            implementation(libs.core.splashscreen)
         }
     }
 }
@@ -107,7 +106,14 @@ android {
 }
 
 dependencies {
+
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    val squareSdkVersion = "2.0.0-beta5"
+    //Mobile payments sdk dependency
+    implementation(libs.mobile.payments.sdk)
+    //mockreader ui dependency
+    implementation(libs.mockreader.ui)
 }
 
