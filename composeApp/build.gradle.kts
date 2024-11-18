@@ -41,14 +41,15 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.compose.ui)
+
             //Jetpack Compose dependencies
-            implementation(libs.androidx.compose.ui.tooling.preview) // Preview support
             implementation(libs.androidx.compose.material) // Material Design components
             implementation(libs.androidx.activity.compose) // Integration with Activities
             implementation(libs.androidx.navigation.compose)
+
             //Amazon Cognito / Amplify dependencies
-            implementation(libs.aws.amplify.core) //amplify library
-            implementation(libs.aws.auth.cognito)  //cognito library
+            implementation(libs.core)
+            implementation(libs.aws.auth.cognito)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -69,7 +70,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.1"
+        kotlinCompilerExtensionVersion = "1.2.0"
     }
 
     namespace = "org.example.sweetea"
@@ -101,6 +102,6 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.3")
 }
 

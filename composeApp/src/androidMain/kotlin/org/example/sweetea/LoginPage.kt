@@ -1,33 +1,39 @@
 package org.example.sweetea
 
+import android.util.Log
+import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Modifier
-import android.util.Log
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.core.Amplify
+import org.example.sweetea.UserPool.loginUser
+import org.example.sweetea.UserPool.signUpUser
+
 
 @Composable
-fun LoginPage(modifier: Modifier, navController: NavController) {
+fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit = {}) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
     verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
@@ -49,8 +55,21 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Button(onClick = { /* Handle login */ }) {
+        Button(onClick = {
+            loginUser(email,password) { success, error ->
+                if(success){
+                   onLoginComplete()
+                }else {
+                    errorMessage = error
+                }
+
+            }
+        }) {
             Text("Sign In")
+        }
+
+        errorMessage?.let {
+            Text(text = it, color = Color.Red)
         }
 
         TextButton(onClick = {
@@ -63,15 +82,15 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Log Out")
         }*/
-
     }
 }
 
 @Composable
-fun SignupPage(modifier: Modifier, navController: NavController) {
+fun SignupPage(modifier: Modifier, navController: NavController, onSignUpComplete: () -> Unit = {}) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column (verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -95,8 +114,25 @@ fun SignupPage(modifier: Modifier, navController: NavController) {
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Button(onClick = { /* Handle login */ }) {
+        Button(onClick = {
+            signUpUser(email,password)
+            { success, error ->
+                if (success) {
+                    onSignUpComplete()
+                } else {
+                    errorMessage = error
+                }
+            }
+        }) {
             Text("Sign Up")
+        }
+
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
 
         TextButton(onClick = { navController.navigate("login") }) {
@@ -123,44 +159,6 @@ fun VerificationPage() {
         Button(onClick = { /* Handle verification */ }) {
             Text("Verify")
         }
-
-
-    }
-
-
-    fun signup(username: String, password: String, email: String) {
-        val options = AuthSignUpOptions.builder()
-            .userAttribute(AuthUserAttributeKey.email(), email)
-            .build()
-
-        Amplify.Auth.signUp(
-            username,
-            password,
-            options,
-            { Log.i("AuthQuickstart", "Sign up succeeded: ${it.userId}") },
-            { Log.e("AuthQuickstart", "Sign up failed  ${it.message}") }
-
-        )
-
-        fun signin(username: String, password: String) {
-            Amplify.Auth.signIn(
-                username,
-                password,
-                { Log.i("AuthQuickstart", "Sign in succeeded:") },
-                { Log.e("AuthQuickstart", "Sign in failed") }
-            )
-
-        }
-
-        fun signout() {
-            Amplify.Auth.signOut() {
-                Log.i("AuthQuickstart", "Sign out succeeded: ")
-                Log.e("AuthQuickstart", "Sign out failed ")
-
-            }
-
-        }
-
     }
 }
 

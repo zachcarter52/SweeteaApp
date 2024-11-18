@@ -48,6 +48,7 @@ import com.amplifyframework.core.AmplifyConfiguration
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 
 
+
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -59,14 +60,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent {
-            //Displays current screen
-            //App()- default *REMOVED*
-            SweeteaApp()
-            //LoginScreen()
-            //VerificationScreen()
-        }
-
         // Initialize Amplify / Cognito
         try {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
@@ -75,6 +68,10 @@ class MainActivity : ComponentActivity() {
 
         } catch (error: AmplifyException) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error)
+        }
+
+        setContent {
+            SweeteaApp()
         }
 
     }
