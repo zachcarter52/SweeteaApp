@@ -43,6 +43,8 @@ kotlin {
             implementation(libs.androidx.material3.android)
             implementation(libs.androidx.navigation.runtime.ktx)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.legacy.support.v4)
+            implementation(libs.androidx.cardview)
             implementation(libs.core.splashscreen)
             //Jetpack Compose dependencies
             implementation(libs.androidx.compose.ui.tooling.preview) // Preview support
@@ -60,10 +62,12 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
             implementation(libs.core.splashscreen)
+            //Mobile payments sdk dependency
+            implementation(libs.mobile.payments.sdk)
+            //mockreader ui dependency
+            implementation(libs.mockreader.ui)
         }
     }
 }
@@ -111,9 +115,5 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     val squareSdkVersion = "2.0.0-beta5"
-    //Mobile payments sdk dependency
-    implementation(libs.mobile.payments.sdk)
-    //mockreader ui dependency
-    implementation(libs.mockreader.ui)
 }
 

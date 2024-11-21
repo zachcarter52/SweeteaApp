@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editTextText5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:padding="3pt"
+        android:text="location: 4010 Foothills Blvd #101, Roseville, CA 95747 "
+        android:textAlignment="viewEnd"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/editTextText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Signature Items" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="107dp"
+                android:layout_height="147dp"
+                android:layout_weight="1"
+                android:src="@drawable/flamingtigerpearlmilk" />
+
+            <EditText
+                android:id="@+id/editTextText7"
+                android:layout_width="306dp"
+                android:layout_height="146dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Flaming Tiger Pearl Milk" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="107dp"
+                android:layout_height="147dp"
+                android:layout_weight="1"
+                android:src="@drawable/MatchaUbeLatte" />
+
+            <EditText
+                android:id="@+id/editTextText7"
+                android:layout_width="306dp"
+                android:layout_height="146dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Matcha Ube Latte" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="107dp"
+                android:layout_height="147dp"
+                android:layout_weight="1"
+                android:src="@drawable/MatchaMangoLatte" />
+
+            <EditText
+                android:id="@+id/editTextText7"
+                android:layout_width="306dp"
+                android:layout_height="146dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Matcha Mango Latte" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="107dp"
+                android:layout_height="147dp"
+                android:layout_weight="1"
+                android:src="@drawable/strawberryBlossom" />
+
+            <EditText
+                android:id="@+id/editTextText7"
+                android:layout_width="306dp"
+                android:layout_height="146dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Strawberry Blossom" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="107dp"
+                android:layout_height="147dp"
+                android:layout_weight="1"
+                android:src="@drawable/creamyTaro" />
+
+            <EditText
+                android:id="@+id/editTextText7"
+                android:layout_width="306dp"
+                android:layout_height="146dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Strawberry Blossom" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
