@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.example.sweetea.*
+import org.example.sweetea.ui.components.BearPageTemplate
 
 open class AccountPageCard(
     val text:String,

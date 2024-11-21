@@ -14,7 +14,6 @@ import org.example.sweetea.navigateSingleTopTo
 fun AppBottomBar(navController: NavHostController,
                          modifier: Modifier = Modifier,
                          selectedItem: Int,
-                         updateSelectedItem: (Int) -> Unit,
 ) {
     NavigationBar(modifier = modifier) {
         BaseDestinations.forEachIndexed { index, destination ->
@@ -32,7 +31,6 @@ fun AppBottomBar(navController: NavHostController,
                 onClick = {
                     if (selectedItem != index) {
                         navController.navigateSingleTopTo(destination.route)
-                        updateSelectedItem(index)
                         destination.onClick!!()
                     }
                 }

@@ -27,6 +27,7 @@ open class BasicDestination(
     val topBarHeaderText: @Composable (() -> Unit)? = null,
     val hideLocation: Boolean = false,
     val hideTopBarHeader: Boolean = false,
+    var index: Int = -1,
 )
 
 open class Destination (
@@ -112,20 +113,33 @@ val BaseDestinations = listOf(
 Maps the list of All Destinations to the their route in a dictionary
 e.g: [Account] => {"account": Account}
  */
-
-val DestinationMap = mutableMapOf<String, BasicDestination>()
+val destinationMap = mutableMapOf<String, Destination>()
+val basicDestinationMap = mutableMapOf<String, BasicDestination>()
 private var destinationsUpToDate = false
-fun DestMap(string: String): BasicDestination?{
-    if(!destinationsUpToDate) {
-        listOf(
-            BaseDestinations,
-            BaseDestinations.mapNotNull{
-                    destination -> destination.subPages
-            }.flatten()
-        ).flatten().forEach{
-                destination -> DestinationMap[destination.route] = destination
+fun updateMaps(){
+    BaseDestinations.forEachIndexed {
+            index, destination ->
+        destinationMap[destination.route] = destination
+        basicDestinationMap[destination.route] = destination
+        destination.index = index
+        if(destination.subPages != null){
+            destination.subPages.forEach {
+                subDestination ->
+                basicDestinationMap[subDestination.route] = subDestination
+                subDestination.index = index
+            }
         }
-        destinationsUpToDate = true;
     }
-    return DestinationMap[string]
+}
+fun basicDestMap(route: String): Destination?{
+    if(!destinationsUpToDate){
+        updateMaps()
+    }
+    return destinationMap[route]
+}
+fun destMap(route: String): BasicDestination?{
+    if(!destinationsUpToDate) {
+        updateMaps()
+    }
+    return basicDestinationMap[route]
 }

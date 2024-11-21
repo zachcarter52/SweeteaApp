@@ -1,4 +1,4 @@
-package org.example.sweetea.pages
+package org.example.sweetea.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme

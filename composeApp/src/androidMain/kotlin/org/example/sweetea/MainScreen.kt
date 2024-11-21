@@ -18,6 +18,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.navigation.NavHostController
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
@@ -27,7 +28,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
-
 
 class MainScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,12 +64,18 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         var currentRoute by remember{mutableStateOf("")}
 
+        var selectedItem by remember { mutableIntStateOf(0) }
+        var oldSelectedItem by remember { mutableIntStateOf(0) }
+
         val navRoute = navBackStackEntry?.destination?.route
         if(navRoute != null){
             currentRoute = navRoute
+            val curRouteObj = destMap( navRoute)
+            if(curRouteObj != null && curRouteObj.index > 0 ){
+                oldSelectedItem = selectedItem
+                selectedItem = curRouteObj.index
+            }
         }
-        var selectedItem by remember { mutableIntStateOf(0) }
-        var oldSelectedItem by remember { mutableIntStateOf(0) }
 
         val enterTransition = {
             if(selectedItem > oldSelectedItem){
@@ -92,7 +98,7 @@ fun SweeteaApp(modifier: Modifier=Modifier){
 
         Scaffold(
             topBar = {
-                val currentDest = DestMap(currentRoute)
+                val currentDest = destMap(currentRoute)
 
                 if(currentDest != null){
                     AppHeader(
@@ -114,10 +120,6 @@ fun SweeteaApp(modifier: Modifier=Modifier){
             bottomBar = { AppBottomBar(
                 navController = navController,
                 selectedItem = selectedItem,
-                updateSelectedItem = {
-                    oldSelectedItem = selectedItem
-                    selectedItem = it
-                }
             ) }
         ) {
             padding ->

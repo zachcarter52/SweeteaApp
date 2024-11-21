@@ -4,6 +4,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,7 +17,8 @@ fun SweetTeaNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     enterTransition: () -> EnterTransition,
-    exitTransition: () -> ExitTransition
+    exitTransition: () -> ExitTransition,
+    updateSelectedItem: ((Int) -> Unit)? = null,
 ){
     NavHost(
         navController = navController,
@@ -49,9 +51,12 @@ fun SweetTeaNavHost(
         }
     }
 }
-fun NavHostController.navigateSingleTopTo(route:String) {
+
+fun NavController.navigateSingleTopTo(
+    route:String
+){
     val navController = this
-    this.navigate(route){
+    navController.navigate(route){
         //Clear the navigation stack
         popUpTo(navController.graph.findStartDestination().id){
             saveState = true
