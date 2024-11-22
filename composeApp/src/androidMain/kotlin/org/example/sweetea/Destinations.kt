@@ -131,15 +131,15 @@ fun updateMaps(){
         }
     }
 }
-fun basicDestMap(route: String): Destination?{
-    if(!destinationsUpToDate){
-        updateMaps()
-    }
-    return destinationMap[route]
-}
 fun destMap(route: String): BasicDestination?{
     if(!destinationsUpToDate) {
         updateMaps()
     }
     return basicDestinationMap[route]
+}
+fun basicDestMap(route: String): Destination?{
+    if(!destinationsUpToDate){
+        updateMaps()
+    }
+    return destinationMap[route]
 }

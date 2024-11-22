@@ -18,7 +18,6 @@ fun SweetTeaNavHost(
     modifier: Modifier = Modifier,
     enterTransition: () -> EnterTransition,
     exitTransition: () -> ExitTransition,
-    updateSelectedItem: ((Int) -> Unit)? = null,
 ){
     NavHost(
         navController = navController,
