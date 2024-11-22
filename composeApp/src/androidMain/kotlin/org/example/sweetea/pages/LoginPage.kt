@@ -34,7 +34,7 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     )
 
     {

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
@@ -31,7 +33,7 @@ import org.example.sweetea.ui.components.BearPageTemplate
 fun RewardsPage(modifier: Modifier, navController: NavController){
     var positionValue by remember {mutableIntStateOf(0)}
     BearPageTemplate(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
     ){
         ElevatedCard(
             elevation = CardDefaults.cardElevation(10.dp),

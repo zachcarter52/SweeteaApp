@@ -17,8 +17,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -31,7 +34,7 @@ import org.example.sweetea.R
 
 @Composable
 fun DisplayImage(
-    itemImage: Int,
+    imagePainter: Painter,
     itemName: String,
     imageHeight: Float,
 ){
@@ -42,7 +45,7 @@ fun DisplayImage(
             .width(imageHeight.dp * imageRatio)
     ) {
         Image(
-            painter = painterResource(id = itemImage),
+            painter = imagePainter,
             contentDescription = itemName,
             contentScale = ContentScale.FillHeight,
         )
@@ -51,7 +54,7 @@ fun DisplayImage(
 
 @Composable
 fun MenuItem(
-    itemImage: Int,
+    imagePainter: Painter,
     itemName: String,
     imageHeight: Float,
     price: Float? = null,
@@ -77,7 +80,7 @@ fun MenuItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             DisplayImage(
-                itemImage = itemImage,
+                imagePainter = imagePainter,
                 itemName = itemName,
                 imageHeight = imageHeight
             )
@@ -101,7 +104,7 @@ fun MenuItem(
 
 @Composable
 fun FeaturedItem(
-    itemImage: Int,
+    imagePainter: Painter,
     itemName: String,
     imageHeight: Float,
     onClick: () -> Unit = {},
@@ -119,7 +122,7 @@ fun FeaturedItem(
                 .padding(imageHeight.dp * paddingRatio)
         ) {
             DisplayImage(
-                itemImage = itemImage,
+                imagePainter = imagePainter,
                 itemName = itemName,
                 imageHeight = imageHeight
             )
@@ -136,73 +139,83 @@ fun FeaturedItem(
 }
 
 open class LabeledImage(
-    val itemImage: Int,
+    val imageID: Int,
     val itemName: String,
 )
 
 val featuredItems = listOf(
     LabeledImage(
-        itemImage = R.drawable.flaming_tiger_pearl_milk,
+        imageID = R.drawable.flaming_tiger_pearl_milk,
         itemName= "Flaming Tiger Pearl Milk Tea"
     ),
     LabeledImage(
-        itemImage = R.drawable.thai_milk_tea,
+        imageID = R.drawable.thai_milk_tea,
         itemName = "Thai Milk Tea"
     ),
     LabeledImage(
-        itemImage = R.drawable.taro_milk_tea,
+        imageID = R.drawable.taro_milk_tea,
         itemName= "Taro Milk Tea"
     ),
     LabeledImage(
-        itemImage = R.drawable.oreo_smoothie,
+        imageID = R.drawable.oreo_smoothie,
         itemName = "Oreo Smoothie"
     )
 )
 
 val subMenus = listOf(
     LabeledImage(
-        itemImage = R.drawable.flaming_tiger_pearl_milk,
+        imageID = R.drawable.flaming_tiger_pearl_milk,
         itemName = "Signature"
     ),
     LabeledImage(
-        itemImage = R.drawable.oreo_smoothie,
+        imageID = R.drawable.oreo_smoothie,
         itemName = "Smoothie"
     ),
     LabeledImage(
-        itemImage = R.drawable.peach_bubbling,
+        imageID = R.drawable.peach_bubbling,
         itemName = "Bubbling"
     ),
     LabeledImage(
-        itemImage = R.drawable.peach_iced_tea,
+        imageID = R.drawable.peach_iced_tea,
         itemName = "Iced Tea"
     ),
     LabeledImage(
-        itemImage = R.drawable.pearl_milk_tea,
+        imageID = R.drawable.pearl_milk_tea,
         itemName = "Milk Tea"
     ),
     LabeledImage(
-        itemImage = R.drawable.creamy_taro,
+        imageID = R.drawable.creamy_taro,
         itemName = "Creamy Series"
     ),
     LabeledImage(
-        itemImage = R.drawable.strawberry_lemon_delight,
+        imageID = R.drawable.strawberry_lemon_delight,
         itemName = "Delight"
     ),
     LabeledImage(
-        itemImage = R.drawable.fruit_swiss_roll,
+        imageID = R.drawable.fruit_swiss_roll,
         itemName = "Desserts & Food"
     ),
-
-
 )
 
 @Composable
 fun MenuPage(modifier: Modifier, navController: NavController){
     val configuration = LocalConfiguration.current
     val itemHeight = 120f
+
+    val imageCache = remember { mutableStateMapOf<Int, Painter>() }
+
+    @Composable
+    fun cachedImage(id: Int): Painter{
+        var returnImage = imageCache[id]
+        if(returnImage == null){
+            returnImage = painterResource(id = id)
+            imageCache[id] = returnImage
+        }
+        return returnImage
+    }
+
     Column(
-        modifier = modifier.fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+        modifier = modifier
     ){
         HorizontalDivider()
         Row(
@@ -210,7 +223,7 @@ fun MenuPage(modifier: Modifier, navController: NavController){
         ){
             featuredItems.forEach{
                 FeaturedItem(
-                    it.itemImage,
+                    cachedImage(it.imageID),
                     it.itemName,
                     itemHeight
                 )
@@ -220,7 +233,7 @@ fun MenuPage(modifier: Modifier, navController: NavController){
         subMenus.forEachIndexed{
             index, subMenu ->
             MenuItem(
-                itemImage = subMenu.itemImage,
+                imagePainter = cachedImage(subMenu.imageID),
                 itemName = subMenu.itemName,
                 imageHeight = itemHeight
             )
