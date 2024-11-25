@@ -32,7 +32,8 @@ fun BearPageTemplate(
     Column(
         modifier = modifier.fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = if(showBear) Arrangement.spacedBy(20.dp)
+            else Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
         if(showBear) {

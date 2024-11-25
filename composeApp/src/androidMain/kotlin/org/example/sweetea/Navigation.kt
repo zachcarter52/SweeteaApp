@@ -4,6 +4,8 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -14,6 +16,7 @@ import androidx.navigation.compose.navigation
 //navhost function of Navigation
 @Composable
 fun SweetTeaNavHost(
+    currentViewModel: ViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     enterTransition: () -> EnterTransition,

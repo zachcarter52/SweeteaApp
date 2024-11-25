@@ -1,5 +1,6 @@
 package org.example.sweetea
 
+import android.view.View
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
@@ -12,17 +13,24 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.motion.widget.DesignTool
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import aws.smithy.kotlin.runtime.util.type
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
 import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
+import org.example.sweetea.ui.components.MenuViewModel
 
-open class BasicDestination(
+open class BasicDestination (
     val route: String,
-    val page: @Composable (modifier: Modifier, navController: NavController) -> Unit,
+    val page: @Composable (
+        modifier: Modifier,
+        navController: NavController,
+        ) -> Unit,
     val subPages: List<BasicDestination>? = null,
     val topBarHeaderText: @Composable (() -> Unit)? = null,
     val hideLocation: Boolean = false,
@@ -35,7 +43,10 @@ open class Destination (
     val label: String,
     route: String,
     val pageRoute: String,
-    page: @Composable (modifier: Modifier, navController: NavController) -> Unit,
+    page: @Composable (
+        modifier: Modifier,
+        navController: NavController,
+    ) -> Unit,
     val onClick: (() -> Unit)? = {},
     subPages: List<BasicDestination>? = null,
     topBarHeaderText: @Composable (() -> Unit)? = null,

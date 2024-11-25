@@ -39,6 +39,8 @@ core-splashscreen = "1.0.1"
 
 legacySupportV4 = "1.0.0"
 cardview = "1.0.0"
+retrofit = "2.11.0"
+picasso = "2.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -75,6 +77,10 @@ androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "andro
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
+retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit"}
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso"}
+
 #server
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
@@ -95,7 +101,6 @@ mariadb-jdbc =  { module = "org.mariadb.jdbc:mariadb-java-client", version.ref =
 mobile-payments-sdk = { module = "com.squareup.sdk:mobile-payments-sdk", version.ref = "squareSdkVersion" }
 mockreader-ui = { module = "com.squareup.sdk:mockreader-ui", version.ref = "squareSdkVersion" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
-
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
-import org.example.sweetea.*
 import org.example.sweetea.ui.components.BearPageTemplate
+import org.example.sweetea.ui.components.CustomCircularProgressIndicator
 
 @Composable
 fun RewardsPage(modifier: Modifier, navController: NavController){

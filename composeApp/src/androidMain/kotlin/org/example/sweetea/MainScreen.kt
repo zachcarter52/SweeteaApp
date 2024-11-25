@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.appcompat.view.menu.MenuView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,16 +21,20 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.navigation.NavHostController
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 
-
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+
+import org.example.sweetea.dataclasses.*
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class MainScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,15 +58,33 @@ class MainScreen : ComponentActivity() {
         } catch (error: AmplifyException) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error)
         }
-
     }
 }
+
+class LocationsViewModel: ViewModel() {
+    var locationsList: List<LocationData>? by mutableStateOf(null)
+        private set
+    var currentLocation: LocationData? by mutableStateOf(null)
+        private set
+    init{
+        getLocations()
+    }
+    private fun getLocations() {
+        viewModelScope.launch {
+            locationsList = SquareApi.getLocations()
+            currentLocation = SquareApi.currentLocation
+        }
+    }
+}
+
 
 @Composable
 fun SweeteaApp(modifier: Modifier=Modifier){
     AppTheme(
         dynamicColor = false
     ){
+
+        //val currentStoreAddressID = remember{mutableIntStateOf(0)}
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         var currentRoute by remember{mutableStateOf("")}
@@ -71,6 +92,8 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         var selectedItem by remember { mutableIntStateOf(0) }
         var oldSelectedItem by remember { mutableIntStateOf(0) }
 
+        val navPageRoute = navBackStackEntry?.id
+        println(navPageRoute)
         val navRoute = navBackStackEntry?.destination?.route
         var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
         if(navRoute != null && navRoute != currentRoute){
@@ -80,7 +103,6 @@ fun SweeteaApp(modifier: Modifier=Modifier){
                 currentRouteObject = curRouteObj
                 oldSelectedItem = selectedItem
                 selectedItem = curRouteObj.index
-                println("CurrentRoute: $currentRoute, oldSelectedItem: $oldSelectedItem selectedItem: $selectedItem")
             }
         }
 
@@ -112,6 +134,12 @@ fun SweeteaApp(modifier: Modifier=Modifier){
             }
         }
 
+        val locationsViewModel = LocationsViewModel()
+        val menuViewModel = MenuViewModel()
+        val locationUIState = locationsViewModel.locationsList
+        println("LocationData $locationUIState")
+        //val coroutineScope = rememberCoroutineScope()
+
         Scaffold(
             topBar = {
                 if(currentRouteObject != null){
@@ -138,6 +166,7 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         ) {
             padding ->
             SweetTeaNavHost(
+                currentViewModel = menuViewModel,
                 navController = navController,
                 modifier = Modifier.padding(padding),
                 enterTransition = enterTransition,

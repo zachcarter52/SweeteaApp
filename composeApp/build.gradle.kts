@@ -54,6 +54,9 @@ kotlin {
             //Amazon Cognito / Amplify dependencies
             implementation(libs.aws.amplify.core) //amplify library
             implementation(libs.aws.auth.cognito)  //cognito library
+            //Web Request dependency
+            implementation(libs.retrofit)
+            implementation(libs.retrofit.gson)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -68,6 +71,8 @@ kotlin {
             implementation(libs.mobile.payments.sdk)
             //mockreader ui dependency
             implementation(libs.mockreader.ui)
+            //Image loader dependency
+            implementation(libs.picasso)
         }
     }
 }

@@ -10,15 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -28,9 +30,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 
 import org.example.sweetea.R
+import org.example.sweetea.SquareApi
+import org.example.sweetea.dataclasses.*
+import org.example.sweetea.ui.components.BearPageTemplate
+import org.example.sweetea.ui.components.MenuViewModel
 
 @Composable
 fun DisplayImage(
@@ -70,6 +79,7 @@ fun MenuItem(
     } else {
         TextUnit.Unspecified
     }
+
     Row(
         modifier = Modifier.fillMaxWidth()
             .clickable{},
@@ -204,6 +214,13 @@ fun MenuPage(modifier: Modifier, navController: NavController){
 
     val imageCache = remember { mutableStateMapOf<Int, Painter>() }
 
+    val menuViewModel = MenuViewModel()
+    val menuCategoryState = menuViewModel.categoryList
+    val menuProductState = menuViewModel.productList
+    println("MenuData $menuProductState")
+    println("Menu Categories $menuCategoryState")
+
+
     @Composable
     fun cachedImage(id: Int): Painter{
         var returnImage = imageCache[id]
@@ -214,8 +231,9 @@ fun MenuPage(modifier: Modifier, navController: NavController){
         return returnImage
     }
 
-    Column(
-        modifier = modifier
+    BearPageTemplate(
+        modifier = modifier,
+        showBear = false,
     ){
         HorizontalDivider()
         Row(

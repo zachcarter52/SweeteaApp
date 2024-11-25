@@ -45,7 +45,7 @@ fun HomePage(modifier: Modifier=Modifier, navController: NavController) {
     val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
 
     BearPageTemplate(
-        modifier = modifier.verticalScroll(rememberScrollState()),
+        modifier = modifier,
     ) {
         ElevatedCard(
             elevation = CardDefaults.cardElevation(10.dp),
