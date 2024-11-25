@@ -17,6 +17,7 @@ authCognito = "2.0.0"
 authenticator = "1.2.0"
 compose-plugin = "1.6.11"
 amplify-core = "2.24.0"
+coil = "2.7.0"
 desugar_jdk_libs = "2.1.2"
 junit = "4.13.2"
 kotlin = "2.0.21"
@@ -79,8 +80,10 @@ androidx-cardview = { group = "androidx.cardview", name = "cardview", version.re
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit"}
-picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso"}
 
+coil = {module = "io.coil-kt:coil-compose", version.ref="coil"}
+ktor-client-android = { module= "io.ktor:ktor-client-android", version.ref = "ktor"}
+ktor-client-ios= { module= "io.ktor:ktor-client-darwin", version.ref = "ktor"}
 #server
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 

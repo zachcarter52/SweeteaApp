@@ -1,5 +1,6 @@
 package org.example.sweetea.pages
 
+import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 
 import org.example.sweetea.R
@@ -43,9 +45,9 @@ import org.example.sweetea.ui.components.MenuViewModel
 
 @Composable
 fun DisplayImage(
-    imagePainter: Painter,
     itemName: String,
     imageHeight: Float,
+    image: @Composable () -> Unit
 ){
     val imageRatio = 0.92f
     ElevatedCard(
@@ -53,17 +55,13 @@ fun DisplayImage(
         modifier = Modifier.height(imageHeight.dp)
             .width(imageHeight.dp * imageRatio)
     ) {
-        Image(
-            painter = imagePainter,
-            contentDescription = itemName,
-            contentScale = ContentScale.FillHeight,
-        )
+        image()
     }
 }
 
 @Composable
 fun MenuItem(
-    imagePainter: Painter,
+    image: @Composable () -> Unit,
     itemName: String,
     imageHeight: Float,
     price: Float? = null,
@@ -90,7 +88,7 @@ fun MenuItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             DisplayImage(
-                imagePainter = imagePainter,
+                image = image,
                 itemName = itemName,
                 imageHeight = imageHeight
             )
@@ -114,7 +112,7 @@ fun MenuItem(
 
 @Composable
 fun FeaturedItem(
-    imagePainter: Painter,
+    image: @Composable () -> Unit,
     itemName: String,
     imageHeight: Float,
     onClick: () -> Unit = {},
@@ -132,7 +130,7 @@ fun FeaturedItem(
                 .padding(imageHeight.dp * paddingRatio)
         ) {
             DisplayImage(
-                imagePainter = imagePainter,
+                image = image,
                 itemName = itemName,
                 imageHeight = imageHeight
             )
@@ -241,13 +239,32 @@ fun MenuPage(modifier: Modifier, navController: NavController){
         ){
             featuredItems.forEach{
                 FeaturedItem(
-                    cachedImage(it.imageID),
-                    it.itemName,
-                    itemHeight
+                    image =
+                    {Image(
+                        painter = cachedImage(it.imageID),
+                        contentDescription = it.itemName,
+                        contentScale = ContentScale.FillHeight
+                    )},
+                    itemName = it.itemName,
+                    imageHeight = itemHeight
                 )
             }
         }
         HorizontalDivider()
+        menuCategoryState?.forEachIndexed{
+            index, menuCategory ->
+            MenuItem(
+                image = {AsyncImage(
+                    model = menuCategory.images.data[0].url,
+                    contentDescription = menuCategory.name,
+                    contentScale = ContentScale.FillHeight
+                )},
+                itemName = menuCategory.name,
+                imageHeight = itemHeight
+            )
+            if(index != menuCategoryState.size - 1) HorizontalDivider()
+        }
+        /*
         subMenus.forEachIndexed{
             index, subMenu ->
             MenuItem(
@@ -257,7 +274,7 @@ fun MenuPage(modifier: Modifier, navController: NavController){
             )
             if(index != subMenus.size - 1) HorizontalDivider()
 
-        }
+        }*/
         /*
         HorizontalDivider()
         MenuItem(

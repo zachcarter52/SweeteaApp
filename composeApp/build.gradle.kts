@@ -57,6 +57,8 @@ kotlin {
             //Web Request dependency
             implementation(libs.retrofit)
             implementation(libs.retrofit.gson)
+            implementation(libs.coil)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -72,7 +74,6 @@ kotlin {
             //mockreader ui dependency
             implementation(libs.mockreader.ui)
             //Image loader dependency
-            implementation(libs.picasso)
         }
     }
 }

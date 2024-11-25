@@ -24,7 +24,7 @@ data class CategoryData(
     val product_count: ProductCountData,
     //val children: List<String>,
     //val preferred_order_product_ids: List<String>
-    val images: CategoryImages,
+    val images: Data<List<CategoryImages>>,
     val availability: AvailabilityData
 )
 
