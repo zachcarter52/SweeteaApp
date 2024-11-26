@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import androidx.navigation.NavController
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
@@ -34,10 +35,8 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    )
-
-    {
+        modifier = modifier.fillMaxSize()
+    ) {
         Text(text = "Login", fontSize = 24.sp, modifier = Modifier.padding(bottom = 24.dp))
         TextField(
             value = email,

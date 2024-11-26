@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.sp
 
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
 
 val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
@@ -21,13 +23,50 @@ val bodyFontFamily = FontFamily(
     Font(
         googleFont = GoogleFont("Courier Prime"),
         fontProvider = provider,
+    ),
+    Font(
+        R.font.courier_prime,
+        FontWeight.Normal
+    ),
+    Font(
+        R.font.courier_prime_bold,
+        FontWeight.Bold
+    ),
+    Font(
+        R.font.courier_prime_italic,
+        FontWeight.Normal,
+        FontStyle.Italic
+    ),
+    Font(
+        R.font.courier_prime_bold_italic,
+        FontWeight.Bold,
+        FontStyle.Italic
     )
+
 )
 
 val displayFontFamily = FontFamily(
     Font(
         googleFont = GoogleFont("Courier Prime"),
         fontProvider = provider,
+    ),
+    Font(
+        R.font.courier_prime,
+        FontWeight.Normal
+    ),
+    Font(
+        R.font.courier_prime_bold,
+        FontWeight.Bold
+    ),
+    Font(
+        R.font.courier_prime_italic,
+        FontWeight.Normal,
+        FontStyle.Italic
+    ),
+    Font(
+        R.font.courier_prime_bold_italic,
+        FontWeight.Bold,
+        FontStyle.Italic
     )
 )
 

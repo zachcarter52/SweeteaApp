@@ -23,13 +23,15 @@ import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
 import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
-import org.example.sweetea.ui.components.MenuViewModel
+import org.example.sweetea.pages.SubMenuPage
+import org.example.sweetea.ui.components.AppViewModel
 
 open class BasicDestination (
     val route: String,
     val page: @Composable (
         modifier: Modifier,
         navController: NavController,
+        updateCategory: (Int) -> Unit
         ) -> Unit,
     val subPages: List<BasicDestination>? = null,
     val topBarHeaderText: @Composable (() -> Unit)? = null,
@@ -46,6 +48,7 @@ open class Destination (
     page: @Composable (
         modifier: Modifier,
         navController: NavController,
+        updateCategory: (Int) -> Unit
     ) -> Unit,
     val onClick: (() -> Unit)? = {},
     subPages: List<BasicDestination>? = null,
@@ -62,7 +65,7 @@ object Home : Destination(
     label = "Home",
     route = "home",
     pageRoute = "homepage",
-    page = {modifier, navController -> HomePage(modifier, navController) },
+    page = {modifier, navController, _ -> HomePage(modifier, navController) },
 )
 
 object Menu : Destination(
@@ -70,9 +73,20 @@ object Menu : Destination(
     label = "Menu",
     route = "menu",
     pageRoute = "menupage",
-    page = {modifier, navController -> MenuPage(modifier, navController) },
+    page = {modifier, navController, updateCategory -> MenuPage(modifier, navController, updateCategory) },
+    subPages = listOf(
+        SubMenu
+    ),
     topBarHeaderText = {
         Text("Featured Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+    }
+)
+
+object SubMenu : BasicDestination(
+    route = "subMenu",
+    page = { modifier, navController, _ -> SubMenuPage(modifier, navController) },
+    topBarHeaderText = {
+        Text("Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
     }
 )
 
@@ -81,7 +95,7 @@ object Rewards : Destination(
     label = "Rewards",
     route = "rewards",
     pageRoute = "rewardspage",
-    page = {modifier, navController -> RewardsPage(modifier, navController) },
+    page = {modifier, navController, _ -> RewardsPage(modifier, navController) },
     hideLocation = true,
     topBarHeaderText = {
         Text("Rewards Program", fontSize = 34.sp, fontWeight = FontWeight.Bold)
@@ -93,7 +107,7 @@ object Account : Destination(
     label = "Account",
     route = "account",
     pageRoute = "accountpage",
-    page = { modifier, navController -> AccountPage(modifier, navController) },
+    page = { modifier, navController, _ -> AccountPage(modifier, navController) },
     subPages = listOf(
         Login,
         SignUp
@@ -103,13 +117,13 @@ object Account : Destination(
 
 object Login : BasicDestination(
     route = "login",
-    page = { modifier, navController -> LoginPage(modifier, navController) },
+    page = { modifier, navController, _ -> LoginPage(modifier, navController) },
     hideTopBarHeader = true,
 )
 
 object SignUp : BasicDestination(
     route = "signup",
-    page = { modifier, navController -> SignupPage(modifier, navController) },
+    page = { modifier, navController, _ -> SignupPage(modifier, navController) },
     hideTopBarHeader = true,
 )
 

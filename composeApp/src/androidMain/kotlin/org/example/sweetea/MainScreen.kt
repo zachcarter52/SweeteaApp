@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.view.menu.MenuView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,13 +27,8 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
-import org.example.sweetea.dataclasses.*
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
-
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 
 class MainScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,30 +55,12 @@ class MainScreen : ComponentActivity() {
     }
 }
 
-class LocationsViewModel: ViewModel() {
-    var locationsList: List<LocationData>? by mutableStateOf(null)
-        private set
-    var currentLocation: LocationData? by mutableStateOf(null)
-        private set
-    init{
-        getLocations()
-    }
-    private fun getLocations() {
-        viewModelScope.launch {
-            locationsList = SquareApi.getLocations()
-            currentLocation = SquareApi.currentLocation
-        }
-    }
-}
-
-
 @Composable
 fun SweeteaApp(modifier: Modifier=Modifier){
     AppTheme(
         dynamicColor = false
     ){
 
-        //val currentStoreAddressID = remember{mutableIntStateOf(0)}
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         var currentRoute by remember{mutableStateOf("")}
@@ -134,9 +110,9 @@ fun SweeteaApp(modifier: Modifier=Modifier){
             }
         }
 
-        val locationsViewModel = LocationsViewModel()
-        val menuViewModel = MenuViewModel()
-        val locationUIState = locationsViewModel.locationsList
+        val appViewModel = AppViewModel()
+        //appViewModel.currentCategory = 3
+        val locationUIState = appViewModel.locationsList
         println("LocationData $locationUIState")
         //val coroutineScope = rememberCoroutineScope()
 
@@ -166,7 +142,9 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         ) {
             padding ->
             SweetTeaNavHost(
-                currentViewModel = menuViewModel,
+                updateCategory = {
+                    appViewModel.currentCategory = it
+                },
                 navController = navController,
                 modifier = Modifier.padding(padding),
                 enterTransition = enterTransition,

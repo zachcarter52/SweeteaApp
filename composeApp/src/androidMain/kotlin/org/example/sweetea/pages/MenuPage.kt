@@ -1,6 +1,5 @@
 package org.example.sweetea.pages
 
-import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -17,11 +16,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -31,90 +27,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import kotlinx.coroutines.launch
 
 import org.example.sweetea.R
-import org.example.sweetea.SquareApi
-import org.example.sweetea.dataclasses.*
+import org.example.sweetea.SubMenu
+import org.example.sweetea.ui.components.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
-import org.example.sweetea.ui.components.MenuViewModel
-
-@Composable
-fun DisplayImage(
-    itemName: String,
-    imageHeight: Float,
-    image: @Composable () -> Unit
-){
-    val imageRatio = 0.92f
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(20.dp),
-        modifier = Modifier.height(imageHeight.dp)
-            .width(imageHeight.dp * imageRatio)
-    ) {
-        image()
-    }
-}
-
-@Composable
-fun MenuItem(
-    image: @Composable () -> Unit,
-    itemName: String,
-    imageHeight: Float,
-    price: Float? = null,
-    ){
-    val isHeader = price == null
-    val textPadding = if(isHeader) {
-        48.dp
-    } else {
-        24.dp
-    }
-    val itemTextSize = if(isHeader){
-        24.sp
-    } else {
-        TextUnit.Unspecified
-    }
-
-    Row(
-        modifier = Modifier.fillMaxWidth()
-            .clickable{},
-    ) {
-        Row(
-            modifier = Modifier.padding(10.dp)
-                .height(imageHeight.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            DisplayImage(
-                image = image,
-                itemName = itemName,
-                imageHeight = imageHeight
-            )
-            Column(
-                modifier = Modifier.padding(textPadding, 0.dp)
-            ) {
-            Text(
-                    text = itemName,
-                    fontSize = itemTextSize,
-                )
-                if(!isHeader){
-                    Text(
-                        text = "$%.2f".format(price),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
-    }
-}
+import org.example.sweetea.ui.components.MenuDisplayImage
+import org.example.sweetea.ui.components.MenuItem
 
 @Composable
 fun FeaturedItem(
     image: @Composable () -> Unit,
     itemName: String,
-    imageHeight: Float,
+    imageHeight: Int,
     onClick: () -> Unit = {},
 ){
     val paddingRatio = 0.05f;
@@ -129,9 +57,8 @@ fun FeaturedItem(
                 .width(imageHeight.dp * (1 + paddingRatio))
                 .padding(imageHeight.dp * paddingRatio)
         ) {
-            DisplayImage(
+            MenuDisplayImage(
                 image = image,
-                itemName = itemName,
                 imageHeight = imageHeight
             )
             Text(
@@ -170,54 +97,25 @@ val featuredItems = listOf(
     )
 )
 
-val subMenus = listOf(
-    LabeledImage(
-        imageID = R.drawable.flaming_tiger_pearl_milk,
-        itemName = "Signature"
-    ),
-    LabeledImage(
-        imageID = R.drawable.oreo_smoothie,
-        itemName = "Smoothie"
-    ),
-    LabeledImage(
-        imageID = R.drawable.peach_bubbling,
-        itemName = "Bubbling"
-    ),
-    LabeledImage(
-        imageID = R.drawable.peach_iced_tea,
-        itemName = "Iced Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.pearl_milk_tea,
-        itemName = "Milk Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.creamy_taro,
-        itemName = "Creamy Series"
-    ),
-    LabeledImage(
-        imageID = R.drawable.strawberry_lemon_delight,
-        itemName = "Delight"
-    ),
-    LabeledImage(
-        imageID = R.drawable.fruit_swiss_roll,
-        itemName = "Desserts & Food"
-    ),
-)
-
 @Composable
-fun MenuPage(modifier: Modifier, navController: NavController){
+fun MenuPage(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    updateCategory: (Int) -> Unit
+){
     val configuration = LocalConfiguration.current
-    val itemHeight = 120f
+    val screenHeight = configuration.screenHeightDp
+    println("ScreenHeight $screenHeight")
+
+    val itemHeight = 120
 
     val imageCache = remember { mutableStateMapOf<Int, Painter>() }
 
-    val menuViewModel = MenuViewModel()
-    val menuCategoryState = menuViewModel.categoryList
-    val menuProductState = menuViewModel.productList
+    val appViewModel = AppViewModel()
+    val menuCategoryState = appViewModel.categoryList
+    val menuProductState = appViewModel.productList
     println("MenuData $menuProductState")
     println("Menu Categories $menuCategoryState")
-
 
     @Composable
     fun cachedImage(id: Int): Painter{
@@ -260,35 +158,14 @@ fun MenuPage(modifier: Modifier, navController: NavController){
                     contentScale = ContentScale.FillHeight
                 )},
                 itemName = menuCategory.name,
-                imageHeight = itemHeight
+                imageHeight = itemHeight,
+                onClick = {
+                    //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
+                    updateCategory(menuCategory.site_category_id.toInt())
+                    navController.navigate(SubMenu.route)
+                }
             )
             if(index != menuCategoryState.size - 1) HorizontalDivider()
         }
-        /*
-        subMenus.forEachIndexed{
-            index, subMenu ->
-            MenuItem(
-                imagePainter = cachedImage(subMenu.imageID),
-                itemName = subMenu.itemName,
-                imageHeight = itemHeight
-            )
-            if(index != subMenus.size - 1) HorizontalDivider()
-
-        }*/
-        /*
-        HorizontalDivider()
-        MenuItem(
-            itemImage = R.drawable.flaming_tiger_pearl_milk,
-            itemName = "Signature",
-            imageHeight = itemHeight
-        )
-        HorizontalDivider()
-        MenuItem(
-            itemImage = R.drawable.strawberry_blossom,
-            itemName = "Strawberry Blossom",
-            price = 8.99f,
-            imageHeight = itemHeight
-        )
-        HorizontalDivider()*/
     }
 }
