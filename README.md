@@ -42,7 +42,7 @@ and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack 
   - Place Order and recieve confirmation
   - Sign out
 
-##Project Files
+## Project Files
   * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
   It contains several subfolders:
     - `commonMain` is for code that’s common for all targets.
