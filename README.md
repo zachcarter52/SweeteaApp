@@ -31,7 +31,8 @@ and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack 
   - Square APIs for safe carded transactions.
  
 ## Setup and Installation
-  - TBD
+  - Apple Store Download
+  - Google Play Store Download
 
 ## Usage
   - Launch App
