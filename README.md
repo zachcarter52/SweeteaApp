@@ -4,11 +4,11 @@ A mobile application for Android and iOS to assist with ordering operations and 
 and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack Compose with AWS Amplify and Amazon RDS for backend services.
 
 ## Table of Contents
-1. [Features]
-2. [Technologies Used]
-3. [Setup and Installation]
-4. [Usage]
-5. [Project Files]
+1. [Features](#features)
+2. [Technologies Used](#technologies-used)
+3. [Setup and Installation](#setup-and-installation)
+4. [Usage](#usage)
+5. [Project Files](#project-files)
 
 
 
