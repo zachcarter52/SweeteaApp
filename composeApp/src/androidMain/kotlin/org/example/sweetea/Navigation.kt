@@ -4,20 +4,18 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import org.example.sweetea.ui.components.AppViewModel
+import org.example.sweetea.dataclasses.local.AppViewModel
 
 //navhost function of Navigation
 @Composable
 fun SweetTeaNavHost(
-    updateCategory: (Int) -> Unit,
+    viewModel: AppViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     enterTransition: () -> EnterTransition,
@@ -33,7 +31,7 @@ fun SweetTeaNavHost(
                 destination ->
             if(destination.subPages == null) {
                 composable(route = destination.route ) {
-                    destination.page(modifier, navController, updateCategory)
+                    destination.page(modifier, navController, viewModel)
                 }
             } else {
                 navigation(
@@ -41,12 +39,12 @@ fun SweetTeaNavHost(
                     route = destination.pageRoute,
                 ){
                     composable(destination.route){
-                        destination.page(modifier, navController, updateCategory)
+                        destination.page(modifier, navController, viewModel)
                     }
                     destination.subPages.forEach{
                             subpage ->
                         composable(subpage.route){
-                            subpage.page(modifier, navController, updateCategory)
+                            subpage.page(modifier, navController, viewModel)
                         }
                     }
                 }
@@ -59,14 +57,16 @@ fun NavController.navigateSingleTopTo(
     route:String
 ){
     val navController = this
-    navController.navigate(route){
-        //Clear the navigation stack
-        popUpTo(navController.graph.findStartDestination().id){
-            saveState = true
+    if(navController.currentDestination?.route != route){
+        navController.navigate(route) {
+            //Clear the navigation stack
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            //Only one copy of each destination is allowed
+            launchSingleTop = true
+            //Preserve the state between navigation
+            restoreState = true
         }
-        //Only one copy of each destination is allowed
-        launchSingleTop = true
-        //Preserve the state between navigation
-        restoreState = true
     }
 }

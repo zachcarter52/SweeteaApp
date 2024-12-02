@@ -29,10 +29,8 @@ fun AppBottomBar(navController: NavHostController,
                 },
                 selected = index == selectedItem,
                 onClick = {
-                    if (selectedItem != index) {
-                        navController.navigateSingleTopTo(destination.route)
-                        destination.onClick!!()
-                    }
+                    navController.navigateSingleTopTo(destination.route)
+                    destination.onClick!!()
                 }
             )
         }

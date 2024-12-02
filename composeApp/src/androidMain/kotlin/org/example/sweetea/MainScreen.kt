@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,6 +20,8 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
@@ -26,11 +29,14 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import org.example.sweetea.dataclasses.local.AppViewModel
 
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
 
 class MainScreen : ComponentActivity() {
+    private val appViewModel: AppViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -39,7 +45,7 @@ class MainScreen : ComponentActivity() {
         setContent {
             //Displays current screen
             //App()- default *REMOVED*
-            SweeteaApp()
+            SweeteaApp(viewModel = appViewModel)
             //LoginScreen()
             //VerificationScreen()
         }
@@ -56,7 +62,14 @@ class MainScreen : ComponentActivity() {
 }
 
 @Composable
-fun SweeteaApp(modifier: Modifier=Modifier){
+fun SweeteaApp(
+    modifier:Modifier = Modifier,
+    viewModel: AppViewModel
+){
+    LaunchedEffect(Unit){
+        viewModel.updateInfo()
+    }
+
     AppTheme(
         dynamicColor = false
     ){
@@ -69,7 +82,6 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         var oldSelectedItem by remember { mutableIntStateOf(0) }
 
         val navPageRoute = navBackStackEntry?.id
-        println(navPageRoute)
         val navRoute = navBackStackEntry?.destination?.route
         var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
         if(navRoute != null && navRoute != currentRoute){
@@ -91,8 +103,13 @@ fun SweeteaApp(modifier: Modifier=Modifier){
                     slideInHorizontally(initialOffsetX = { -it }) +
                             fadeIn()
                 else ->
-                    slideInVertically( initialOffsetY = { it } ) +
-                            fadeIn()
+                    if(BaseDestinations.indexOf(currentRouteObject) == -1) {
+                        slideInVertically(initialOffsetY = { it }) +
+                                fadeIn()
+                    } else {
+                        slideInVertically(initialOffsetY = { -it }) +
+                                fadeIn()
+                    }
             }
         }
 
@@ -105,15 +122,20 @@ fun SweeteaApp(modifier: Modifier=Modifier){
                     slideOutHorizontally(targetOffsetX = { it }) +
                             fadeOut()
                 else ->
-                    slideOutVertically( targetOffsetY = { -it }) +
-                            fadeOut()
+                    if(BaseDestinations.indexOf(currentRouteObject) == -1) {
+                        slideOutVertically(targetOffsetY = { -it }) +
+                                fadeOut()
+                    } else{
+                        slideOutVertically(targetOffsetY = { it }) +
+                                fadeOut()
+                    }
             }
         }
 
-        val appViewModel = AppViewModel()
         //appViewModel.currentCategory = 3
-        val locationUIState = appViewModel.locationsList
-        println("LocationData $locationUIState")
+        val locationList by viewModel.locationList.observeAsState(emptyList())
+        println("LocationData $locationList")
+        println("Current Categegory ${viewModel.currentCategory}")
         //val coroutineScope = rememberCoroutineScope()
 
         Scaffold(
@@ -142,9 +164,7 @@ fun SweeteaApp(modifier: Modifier=Modifier){
         ) {
             padding ->
             SweetTeaNavHost(
-                updateCategory = {
-                    appViewModel.currentCategory = it
-                },
+                viewModel = viewModel,
                 navController = navController,
                 modifier = Modifier.padding(padding),
                 enterTransition = enterTransition,

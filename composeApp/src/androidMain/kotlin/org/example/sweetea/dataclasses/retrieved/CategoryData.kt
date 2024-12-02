@@ -1,4 +1,4 @@
-package org.example.sweetea.dataclasses
+package org.example.sweetea.dataclasses.retrieved
 
 data class CategoryData(
     val id: String,

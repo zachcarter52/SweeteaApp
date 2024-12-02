@@ -1,6 +1,5 @@
 package org.example.sweetea
 
-import android.view.View
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
@@ -11,12 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.motion.widget.DesignTool
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import aws.smithy.kotlin.runtime.util.type
+import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LoginPage
@@ -24,14 +20,13 @@ import org.example.sweetea.pages.MenuPage
 import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
 import org.example.sweetea.pages.SubMenuPage
-import org.example.sweetea.ui.components.AppViewModel
 
 open class BasicDestination (
     val route: String,
     val page: @Composable (
         modifier: Modifier,
         navController: NavController,
-        updateCategory: (Int) -> Unit
+        appViewModel: AppViewModel
         ) -> Unit,
     val subPages: List<BasicDestination>? = null,
     val topBarHeaderText: @Composable (() -> Unit)? = null,
@@ -48,7 +43,7 @@ open class Destination (
     page: @Composable (
         modifier: Modifier,
         navController: NavController,
-        updateCategory: (Int) -> Unit
+        appViewModel: AppViewModel
     ) -> Unit,
     val onClick: (() -> Unit)? = {},
     subPages: List<BasicDestination>? = null,
@@ -73,7 +68,7 @@ object Menu : Destination(
     label = "Menu",
     route = "menu",
     pageRoute = "menupage",
-    page = {modifier, navController, updateCategory -> MenuPage(modifier, navController, updateCategory) },
+    page = {modifier, navController, appViewMenu -> MenuPage(modifier, navController, appViewMenu) },
     subPages = listOf(
         SubMenu
     ),
@@ -84,7 +79,7 @@ object Menu : Destination(
 
 object SubMenu : BasicDestination(
     route = "subMenu",
-    page = { modifier, navController, _ -> SubMenuPage(modifier, navController) },
+    page = { modifier, navController, appViewModel -> SubMenuPage(modifier, navController, appViewModel) },
     topBarHeaderText = {
         Text("Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
     }

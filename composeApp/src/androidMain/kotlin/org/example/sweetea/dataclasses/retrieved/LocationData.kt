@@ -1,5 +1,12 @@
-package org.example.sweetea.dataclasses
+package org.example.sweetea.dataclasses.retrieved
 
+/*
+Describes the json response to the store-locations query
+The class contains the a representation for the full response data,
+with some potential inaccuracy due to null values in the available
+responses; many values have also been commented out to to their lack of
+relevance to the product, and in favor of a decreased memory footprint
+ */
 data class LocationData (
     val id: String,
     //val owner_id: String,
@@ -14,11 +21,11 @@ data class LocationData (
     //val pickup_timezone_info: TimezoneInfo,
     val pickup_hours: WeeklyHours,
     //val delivery_hours: WeeklyHours,
-    val batch_order_settings: BatchOrderSettings,
+    //val batch_order_settings: BatchOrderSettings,
     val order_prep_time: Int,
-    val max_orders_per_window: Int,
+    //val max_orders_per_window: Int,
     val schedule_pickup_enabled: Boolean,
-    val schedule_pickup_max_days: Int,
+    //val schedule_pickup_max_days: Int,
     val pickup_instructions: String,
     //val is_shipping_location: Boolean,
     val square_business_hours: String,
@@ -30,26 +37,26 @@ data class LocationData (
     //val delivery_areas: List<String>,
     //val curbside_pickup_enabled: Boolean,
     //val no_contant_delivery_enabled: Boolean,
-    val automatically_assign_pickup_times: Boolean,
+    //val automatically_assign_pickup_times: Boolean,
     //val automatically_assign_delivery_times: Boolean,
-    val no_eta_fulfillment_instructions: String,
-    val no_eta_short_fulfillment_instructions: String,
+    //val no_eta_fulfillment_instructions: String,
+    //val no_eta_short_fulfillment_instructions: String,
     //val couriers: List<String>,
     //val courier_delivery_previously_enabled: Boolean,
     //val allowedDeliveryTypes: DeliveryTypes,
-    val service_fee_type: Int,
-    val service_fee: Int,
+    //val service_fee_type: Int,
+    val service_fee: Float,
     val service_fee_formatted: String,
     //val dine_in_enabled: Boolean,
     //val dine_in_settings: String,
     //val created_at: String,
     //val updated_at: String,
-    val google_food_ordering_id: String,
-    val google_food_ordering_site_id: String,
-    val is_open_tabs_feature_group: Boolean,
+    //val google_food_ordering_id: String,
+    //val google_food_ordering_site_id: String,
+    //val is_open_tabs_feature_group: Boolean,
     //val has_besi_enabled: Boolean,
     //val delivery_has_been_enabled: Boolean,
-    val pickup_has_been_enabled: Boolean,
+    //val pickup_has_been_enabled: Boolean,
     //val can_use_sso_business_hours: Boolean,
     //val can_use_ssosms_pickup_alerts: Boolean,
     //val pickup_settings: OrderMethodSettings,

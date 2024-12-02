@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.ui.text.googlefonts)
+            implementation(libs.androidx.compose.runtime.livedata)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.material3.android)
@@ -59,6 +60,7 @@ kotlin {
             implementation(libs.retrofit.gson)
             implementation(libs.coil)
             implementation(libs.ktor.client.android)
+            implementation(libs.kotlinx.coroutines.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

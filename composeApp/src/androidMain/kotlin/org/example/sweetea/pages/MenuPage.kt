@@ -5,17 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,16 +23,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 import org.example.sweetea.R
 import org.example.sweetea.SubMenu
-import org.example.sweetea.ui.components.AppViewModel
+import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.MenuDisplayImage
 import org.example.sweetea.ui.components.MenuItem
@@ -101,8 +98,12 @@ val featuredItems = listOf(
 fun MenuPage(
     modifier: Modifier = Modifier,
     navController: NavController,
-    updateCategory: (Int) -> Unit
+    appViewModel: AppViewModel,
 ){
+    LaunchedEffect(Unit){
+        appViewModel.updateInfo()
+    }
+
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp
     println("ScreenHeight $screenHeight")
@@ -111,10 +112,7 @@ fun MenuPage(
 
     val imageCache = remember { mutableStateMapOf<Int, Painter>() }
 
-    val appViewModel = AppViewModel()
-    val menuCategoryState = appViewModel.categoryList
-    val menuProductState = appViewModel.productList
-    println("MenuData $menuProductState")
+    val menuCategoryState by appViewModel.categoryList.observeAsState(emptyList())
     println("Menu Categories $menuCategoryState")
 
     @Composable
@@ -149,8 +147,8 @@ fun MenuPage(
             }
         }
         HorizontalDivider()
-        menuCategoryState?.forEachIndexed{
-            index, menuCategory ->
+        menuCategoryState.forEachIndexed{
+                                        index, menuCategory ->
             MenuItem(
                 image = {AsyncImage(
                     model = menuCategory.images.data[0].url,
@@ -161,7 +159,7 @@ fun MenuPage(
                 imageHeight = itemHeight,
                 onClick = {
                     //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
-                    updateCategory(menuCategory.site_category_id.toInt())
+                    appViewModel.setCategory(menuCategory)
                     navController.navigate(SubMenu.route)
                 }
             )

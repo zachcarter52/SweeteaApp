@@ -1,4 +1,4 @@
-package org.example.sweetea.dataclasses
+package org.example.sweetea.dataclasses.retrieved
 
 data class MetaData (
     val pagination: PaginationData
