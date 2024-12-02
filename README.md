@@ -2,8 +2,17 @@
 
 # Sweetea Boba Mobile Ordering App -
 
-A mobile application for Android and iOS to assist with ordering operations and provide users with a seamless experience to browse, customize,
-and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack Compose with AWS Amplify and Amazon RDS for backend services.
+Sweetea is a boba which serves high-quality boba drinks and desserts in Roseville, Fair Oaks, and Auburn. We have designed a mobile application for Android and iOS to assist with ordering operations and provide users with a seamless experience to browse, customize, and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack Compose with AWS Amplify and Amazon RDS for backend services.
+
+## Participants
+- James McDole https://github.com/ZOrangeBandit
+- Spencer Green https://github.com/scg88
+- Zach Carter https://github.com/zachcarter52
+- Chenbin Wu https://github.com/Megpoidgumi
+- Maria Flores-Rivera https://github.com/mariafloresrivera
+- Aditya Nori https://github.com/adityanori
+- Andrew Xu https://github.com/andy1xu
+- Samuel Rudey https://github.com/JesterSam
 
 ## Table of Contents
 1. [Features](#features)
