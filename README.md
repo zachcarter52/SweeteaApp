@@ -1,3 +1,5 @@
+![sweetealogo_homepage](https://github.com/user-attachments/assets/8d8cfbfe-0bc3-4473-8b66-901572748894)
+
 # Sweetea Boba Mobile Ordering App -
 
 A mobile application for Android and iOS to assist with ordering operations and provide users with a seamless experience to browse, customize,
@@ -9,6 +11,11 @@ and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack 
 3. [Setup and Installation](#setup-and-installation)
 4. [Usage](#usage)
 5. [Project Files](#project-files)
+6. [ERD](#erd)
+7. [Testing](#testing)
+8. [Deployment](#deployment)
+9. [Developer Instructions](#developer-instructions)
+10. [Timeline](#timeline)
 
 
 
@@ -61,3 +68,26 @@ and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack 
 
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## ERD
+![image](https://github.com/user-attachments/assets/f6208f7e-51c6-4738-9cb6-a6c2a795253b)
+
+
+## Testing
+
+## Deployment
+
+## Developer Instructions
+
+## Timeline
+  - 1 Oct 2024:  Project development began.
+  - 20 Oct 2024: First commits, UI started and initial database setup.
+  - 30 Oct 2024: Navigation implemented and store functionality setup.
+  - 2 Nov 2024: Login backend functionality setup.
+  - 17 Nov 2024: Further UI development including rewards page, account page, home page, menu page.
+
+  Future development projections
+  - Jan 2025: Fully implement up to date menu browsing, drink customizations, and order placing capabilities including communication with Square POS system.
+  - Feb 2025: Fully implement Google maps store locator and password reset capabilities. Also, creation of an admin portal for easy update of menu items and images as well as ability to 86 items that are out of stock.
+  - Mar 2025: Implement ability for users to view order history and receive updates via notifications regarding their order status. Employees should have ability to update reward and event information.
+  - Apr 2025: Focus on refining details, including consistent details in fonts and sizing for a professional experience. Deploy application.
