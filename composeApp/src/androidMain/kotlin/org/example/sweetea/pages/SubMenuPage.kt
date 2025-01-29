@@ -28,14 +28,11 @@ fun SubMenuPage(
     ){
         HorizontalDivider()
         currentCategoryProducts?.forEachIndexed { index, product ->
+            val url = "${product.images.data[0].url}?height=${3*itemHeight}"
             MenuItem(
-                image = {
-                    AsyncImage(
-                        model = product.images.data[0].url,
-                        contentDescription = product.name,
-                        contentScale = ContentScale.FillHeight
-                    )
-                },
+                url = url,
+                contentDescription = product.name,
+                contentScale = ContentScale.FillHeight,
                 itemName = product.name,
                 imageHeight = itemHeight,
                 price = product.price.regular_high_with_modifiers

@@ -29,17 +29,48 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.Coil
+import coil.ImageLoader
+import coil.ImageLoaderFactory
+import coil.annotation.ExperimentalCoilApi
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
+import coil.request.CachePolicy
+import coil.util.DebugLogger
 import org.example.sweetea.dataclasses.local.AppViewModel
 
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
 
-class MainScreen : ComponentActivity() {
+class MainScreen : ComponentActivity(), ImageLoaderFactory {
+    override fun newImageLoader(): ImageLoader {
+        return ImageLoader.Builder(this)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .memoryCache {
+                MemoryCache.Builder(this)
+                    .maxSizePercent(0.20)
+                    .build()
+            }
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(cacheDir.resolve("image_cache"))
+                    .maxSizeBytes(5 * 1024 * 1024)
+                    .build()
+            }
+            .logger(DebugLogger())
+            .respectCacheHeaders(false)
+            .build()
+    }
+
+
     private val appViewModel: AppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        Coil.setImageLoader(this)
         //parameter of the function needs to be solved
         //MobilePaymentsSdk.initialize(getId(), this)
         setContent {
@@ -142,7 +173,8 @@ fun SweeteaApp(
             topBar = {
                 if(currentRouteObject != null){
                     AppHeader(
-                        modifier,
+                        modifier = modifier,
+                        viewModel = viewModel,
                         headerText = currentRouteObject!!.topBarHeaderText,
                         hideLocation = currentRouteObject!!.hideLocation,
                         hideTopBarHeader = currentRouteObject!!.hideTopBarHeader,
@@ -152,6 +184,7 @@ fun SweeteaApp(
                 } else {
                     AppHeader(
                         modifier = modifier,
+                        viewModel = viewModel,
                         enterTransition = enterTransition,
                         exitTransition = exitTransition
                     )

@@ -19,11 +19,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.example.sweetea.dataclasses.local.AppViewModel
 
 @Composable
 fun AppHeader(
     modifier: Modifier = Modifier,
-    headerText: @Composable (() -> Unit)? = null,
+    viewModel: AppViewModel,
+    headerText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     hideLocation: Boolean = false,
     hideTopBarHeader: Boolean? = false,
     enterTransition: () -> EnterTransition,
@@ -67,7 +70,7 @@ fun AppHeader(
                 exit = exitTransition(),
             ) {
                 if(headerText != null){
-                    headerText()
+                    headerText(viewModel)
                 } else {
                     Text(
                         modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),

@@ -29,7 +29,7 @@ open class BasicDestination (
         appViewModel: AppViewModel
         ) -> Unit,
     val subPages: List<BasicDestination>? = null,
-    val topBarHeaderText: @Composable (() -> Unit)? = null,
+    val topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     val hideLocation: Boolean = false,
     val hideTopBarHeader: Boolean = false,
     var index: Int = -1,
@@ -47,7 +47,7 @@ open class Destination (
     ) -> Unit,
     val onClick: (() -> Unit)? = {},
     subPages: List<BasicDestination>? = null,
-    topBarHeaderText: @Composable (() -> Unit)? = null,
+    topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     hideLocation: Boolean = false,
     hideTopBarHeader: Boolean = false
 ) : BasicDestination(
@@ -81,7 +81,12 @@ object SubMenu : BasicDestination(
     route = "subMenu",
     page = { modifier, navController, appViewModel -> SubMenuPage(modifier, navController, appViewModel) },
     topBarHeaderText = {
-        Text("Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        viewModel ->
+        Text(
+            viewModel.currentCategory!!.name,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 )
 

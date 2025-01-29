@@ -14,14 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import org.example.sweetea.R
 
 @Composable
 fun MenuDisplayImage(
-    imageHeight: Int,
-    image: @Composable () -> Unit
+    image:@Composable () -> Unit,
+    imageHeight: Int
 ){
     val imageRatio = 0.92f
     ElevatedCard(
@@ -32,12 +37,38 @@ fun MenuDisplayImage(
         image()
     }
 }
+@Composable
+fun MenuDisplayImage(
+    imageHeight: Int,
+    url: String,
+    contentDescription: String,
+    contentScale: ContentScale
+){
+    val placeholder = R.drawable.pearl_milk_tea
+    MenuDisplayImage(
+        image = {AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(url)
+                .memoryCacheKey(url)
+                .diskCacheKey(url)
+                .placeholder(placeholder)
+                .error(placeholder)
+                .fallback(placeholder)
+                .build(),
+            contentDescription = contentDescription,
+            contentScale = contentScale
+        )},
+        imageHeight = imageHeight
+    )
+}
 
 @Composable
 fun MenuItem(
-    image: @Composable () -> Unit,
-    itemName: String,
     imageHeight: Int,
+    url: String,
+    contentDescription: String,
+    contentScale: ContentScale,
+    itemName: String,
     price: Float? = null,
     onClick: (() -> Unit)? = {},
 ){
@@ -63,8 +94,10 @@ fun MenuItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             MenuDisplayImage(
-                image = image,
-                imageHeight = imageHeight
+                imageHeight = imageHeight,
+                url = url,
+                contentDescription = contentDescription,
+                contentScale = contentScale,
             )
             Column(
                 modifier = Modifier.padding(textPadding, 0.dp)

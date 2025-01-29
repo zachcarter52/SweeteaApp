@@ -21,7 +21,7 @@ class AppViewModel: ViewModel() {
     private val _categoryList = MutableLiveData<List<CategoryData>>()
     val categoryList: LiveData<List<CategoryData>> = _categoryList
     private val _productList = MutableLiveData<List<ProductData>>()
-    val productList: MutableLiveData<List<ProductData>> = _productList
+    private val productList: MutableLiveData<List<ProductData>> = _productList
 
     var currentLocation: LocationData? by mutableStateOf(null)
     var currentCategory: CategoryData? by mutableStateOf(null)
