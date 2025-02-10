@@ -1,6 +1,6 @@
 package org.example.sweetea.dataclasses.local
 
-import org.example.sweetea.Constants.Companion
+import org.example.sweetea.Constants
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
@@ -9,10 +9,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface SquareApiService {
-    @GET(Companion.LOCATIONS_ENDPOINT)
+    @GET(Constants.LOCATIONS_ENDPOINT)
     suspend fun getLocations(): SquareApiRequest<LocationData>
-    @GET(Companion.CATEGORY_ENDPOINT)
+    @GET(Constants.CATEGORY_ENDPOINT)
     suspend fun getCategories(): SquareApiRequest<CategoryData>
-    @GET("${Companion.LOCATIONS_ENDPOINT}{location}/${Companion.PRODUCTS_ENDPOINT}")
+    @GET("${Constants.LOCATIONS_ENDPOINT}{location}/${Constants.PRODUCTS_ENDPOINT}")
     suspend fun getProducts(@Path("location") locationID: String): SquareApiRequest<ProductData>
 }

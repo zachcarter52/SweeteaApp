@@ -1,5 +1,12 @@
 package org.example.sweetea.dataclasses.retrieved
 
+/*
+Describes the json response to the querying of categories
+The class contains the a representation for the full response data,
+with some potential inaccuracy due to null values in the available
+responses; many values have also been commented out to to their lack of
+relevance to the product, and in favor of a decreased memory footprint
+ */
 data class CategoryData(
     val id: String,
     val site_category_id: String,

@@ -23,60 +23,43 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.platform.LocalContext
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import coil.Coil
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.annotation.ExperimentalCoilApi
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
-import coil.util.DebugLogger
+import coil3.ImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.disk.DiskCache
+import coil3.disk.directory
+import coil3.memory.MemoryCache
+import coil3.request.CachePolicy
+import coil3.util.DebugLogger
 import org.example.sweetea.dataclasses.local.AppViewModel
 
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
+import java.io.File
 
-class MainScreen : ComponentActivity(), ImageLoaderFactory {
-    override fun newImageLoader(): ImageLoader {
-        return ImageLoader.Builder(this)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .memoryCache {
-                MemoryCache.Builder(this)
-                    .maxSizePercent(0.20)
-                    .build()
-            }
-            .diskCachePolicy(CachePolicy.ENABLED)
-            .networkCachePolicy(CachePolicy.ENABLED)
-            .diskCache {
-                DiskCache.Builder()
-                    .directory(cacheDir.resolve("image_cache"))
-                    .maxSizeBytes(5 * 1024 * 1024)
-                    .build()
-            }
-            .logger(DebugLogger())
-            .respectCacheHeaders(false)
-            .build()
-    }
-
+class MainScreen : ComponentActivity(){
 
     private val appViewModel: AppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        Coil.setImageLoader(this)
         //parameter of the function needs to be solved
         //MobilePaymentsSdk.initialize(getId(), this)
         setContent {
             //Displays current screen
             //App()- default *REMOVED*
-            SweeteaApp(viewModel = appViewModel)
+            SweeteaApp(
+                viewModel = appViewModel,
+                cacheDir = cacheDir
+            )
             //LoginScreen()
             //VerificationScreen()
         }
@@ -95,10 +78,31 @@ class MainScreen : ComponentActivity(), ImageLoaderFactory {
 @Composable
 fun SweeteaApp(
     modifier:Modifier = Modifier,
-    viewModel: AppViewModel
+    viewModel: AppViewModel,
+    cacheDir: File
 ){
     LaunchedEffect(Unit){
         viewModel.updateInfo()
+    }
+
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .memoryCache {
+                MemoryCache.Builder()
+                    .maxSizePercent(context, 0.20)
+                    .build()
+            }
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(cacheDir.resolve("image_cache"))
+                    .maxSizeBytes(5 * 1024 * 1024)
+                    .build()
+            }
+            .logger(DebugLogger())
+            .build()
     }
 
     AppTheme(

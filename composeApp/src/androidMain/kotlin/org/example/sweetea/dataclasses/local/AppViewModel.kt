@@ -1,20 +1,24 @@
 package org.example.sweetea.dataclasses.local
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.jordond.connectivity.Connectivity
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import org.example.sweetea.Constants.Companion
+import org.example.sweetea.Constants
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 
 class AppViewModel: ViewModel() {
-    private val repository = SquareRepository()
+    private lateinit var repository: SquareRepository
 
     private val _locationList = MutableLiveData<List<LocationData>>()
     val locationList: LiveData<List<LocationData>> = _locationList
@@ -31,7 +35,16 @@ class AppViewModel: ViewModel() {
     var productMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
         private set
 
-    fun updateInfo(){
+    suspend fun updateInfo(){
+        val connectivity = Connectivity{autoStart = true}
+        val internetStatus = coroutineScope {
+            when (connectivity.status()) {
+                is Connectivity.Status.Connected -> true
+                else -> false
+            }
+        }
+        System.out.println("Internet Status: $internetStatus")
+        repository = SquareRepository(internetStatus)
         println("Updating info")
         if(currentLocation == null) getLocations()
         if(currentCategory == null) getCategories()
@@ -56,8 +69,8 @@ class AppViewModel: ViewModel() {
                 }
             } catch (e: Exception){
                 println("Unable to get locations, ${e}")
-                println("Url : ${Companion.BASE_URL + Companion.LOCATIONS_ENDPOINT}")
-                throw e
+                println("Url : ${Constants.BASE_URL + Constants.LOCATIONS_ENDPOINT}")
+                //throw e
             }
         }
     }
@@ -73,7 +86,7 @@ class AppViewModel: ViewModel() {
                 }
             } catch (e: Exception){
                 println("Unable to get categories, ${e}")
-                throw e
+                //throw e
             }
         }
     }
@@ -95,10 +108,9 @@ class AppViewModel: ViewModel() {
                 }
             } catch (e: Exception){
                 println("Unable to get products for location ${locationID}, ${e}")
-                throw e
+                //throw e
             }
         }
     }
-
 }
 

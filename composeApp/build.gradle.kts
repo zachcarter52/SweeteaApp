@@ -32,6 +32,7 @@ kotlin {
     sourceSets {
         
         androidMain.dependencies {
+
             implementation(compose.preview)
             implementation(compose.uiTooling)
             implementation(libs.androidx.activity.compose)
@@ -58,10 +59,14 @@ kotlin {
             //Web Request dependency
             implementation(libs.retrofit)
             implementation(libs.retrofit.gson)
-            implementation(libs.coil)
             implementation(libs.ktor.client.android)
             implementation(libs.kotlinx.coroutines.android)
         }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.ios)
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -70,12 +75,18 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
-            implementation(libs.core.splashscreen)
             //Mobile payments sdk dependency
             implementation(libs.mobile.payments.sdk)
             //mockreader ui dependency
             implementation(libs.mockreader.ui)
             //Image loader dependency
+            implementation(libs.coil)
+            implementation(libs.coil.network)
+            implementation(libs.coil.compose)
+            //Connectivity Status dependency
+            implementation(libs.connectivity.core)
+            implementation(libs.connectivity.device)
+            implementation(libs.connectivity.compose.device)
         }
     }
 }
@@ -121,7 +132,5 @@ dependencies {
 
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-
-    val squareSdkVersion = "2.0.0-beta5"
 }
 

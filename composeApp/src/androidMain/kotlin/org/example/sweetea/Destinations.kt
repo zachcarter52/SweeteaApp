@@ -21,6 +21,10 @@ import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
 import org.example.sweetea.pages.SubMenuPage
 
+/*
+Describes a basic destination within the NavController,
+allowing for configuration of the visible navigation elements
+ */
 open class BasicDestination (
     val route: String,
     val page: @Composable (
@@ -35,6 +39,10 @@ open class BasicDestination (
     var index: Int = -1,
 )
 
+/*
+Describes a top-level Destination within the NavController,
+with the addition of sub-pages and a navigation icon for the bottom navigation
+ */
 open class Destination (
     val icon: ImageVector,
     val label: String,

@@ -16,12 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.Image
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import org.example.sweetea.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import sweetea.composeapp.generated.resources.Res
 
 @Composable
 fun MenuDisplayImage(
@@ -37,6 +41,7 @@ fun MenuDisplayImage(
         image()
     }
 }
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun MenuDisplayImage(
     imageHeight: Int,
@@ -44,19 +49,17 @@ fun MenuDisplayImage(
     contentDescription: String,
     contentScale: ContentScale
 ){
-    val placeholder = R.drawable.pearl_milk_tea
     MenuDisplayImage(
         image = {AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(url)
                 .memoryCacheKey(url)
                 .diskCacheKey(url)
-                .placeholder(placeholder)
-                .error(placeholder)
-                .fallback(placeholder)
                 .build(),
             contentDescription = contentDescription,
-            contentScale = contentScale
+            contentScale = contentScale,
+            placeholder = painterResource(R.drawable.pearl_milk_tea)
+
         )},
         imageHeight = imageHeight
     )

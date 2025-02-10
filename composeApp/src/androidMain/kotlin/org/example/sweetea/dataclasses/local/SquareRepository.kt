@@ -1,13 +1,16 @@
 package org.example.sweetea.dataclasses.local
 
+import android.content.Context
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.dataclasses.retrieved.SquareApiRequest
 
 
-class SquareRepository{
-    private val squareApiService = RetrofitServiceHandler.squareService
+class SquareRepository(
+    val internetStatus: Boolean
+){
+    private val squareApiService = RetrofitServiceHandler(internetStatus).squareService
     suspend fun getLocations(): List<LocationData>{
         return squareApiService.getLocations().data
     }
