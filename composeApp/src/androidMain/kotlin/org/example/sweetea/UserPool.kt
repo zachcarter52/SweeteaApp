@@ -50,16 +50,6 @@ object UserPool {
         )
     }
 
-    fun confirmSignUp(email: String, confirmationCode: String, onResult: (Boolean, String?) -> Unit) {
-        Amplify.Auth.confirmSignUp(email, confirmationCode,
-            { result ->
-                if (result.isSignUpComplete) onResult(true, null)
-                else onResult(false, "Confirmation not complete")
-            },
-            { error -> onResult(false, error.message) }
-        )
-    }
-
     fun checkAuthState(onAuth: (Boolean) -> Unit) {
         Amplify.Auth.fetchAuthSession(
             { session -> onAuth(session.isSignedIn) },

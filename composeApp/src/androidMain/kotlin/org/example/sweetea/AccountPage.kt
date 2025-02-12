@@ -36,5 +36,12 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
         ) {
             Text("Sign Up")
         }
+        ElevatedButton(
+            onClick = {
+                navController.navigate("logout")
+            }
+        ) {
+            Text("Sign Out")
+        }
     }
 }

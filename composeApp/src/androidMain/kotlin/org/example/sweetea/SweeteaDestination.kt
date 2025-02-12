@@ -67,7 +67,9 @@ object Account : Destination(
     onClick = { null },
     subPages = listOf(
         Login,
-        SignUp
+        SignUp,
+        Verification,
+        LogOut
     )
 )
 
@@ -80,6 +82,21 @@ object Login : SubDestination(
 object SignUp : SubDestination(
     route = "signup",
     page = {modifier, navController -> SignupPage(modifier, navController) },
+    subPages = null
+)
+
+object LogOut : SubDestination(
+    route = "logout",
+    page = {modifier, navController -> LogOutPage(modifier, navController) },
+    subPages = null
+)
+
+object Verification : SubDestination(
+    route = "verification/{email}",
+    page = {modifier, navController ->
+        val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
+        VerificationPage(modifier, navController, email)
+    },
     subPages = null
 )
 
