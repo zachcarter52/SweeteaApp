@@ -10,34 +10,52 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
 import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
+import org.example.sweetea.pages.SubMenuPage
 
-open class BasicDestination(
+/*
+Describes a basic destination within the NavController,
+allowing for configuration of the visible navigation elements
+ */
+open class BasicDestination (
     val route: String,
-    val page: @Composable (modifier: Modifier, navController: NavController) -> Unit,
+    val page: @Composable (
+        modifier: Modifier,
+        navController: NavController,
+        appViewModel: AppViewModel
+        ) -> Unit,
     val subPages: List<BasicDestination>? = null,
-    val topBarHeaderText: @Composable (() -> Unit)? = null,
+    val topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     val hideLocation: Boolean = false,
     val hideTopBarHeader: Boolean = false,
+    var index: Int = -1,
 )
 
+/*
+Describes a top-level Destination within the NavController,
+with the addition of sub-pages and a navigation icon for the bottom navigation
+ */
 open class Destination (
     val icon: ImageVector,
     val label: String,
     route: String,
     val pageRoute: String,
-    page: @Composable (modifier: Modifier, navController: NavController) -> Unit,
+    page: @Composable (
+        modifier: Modifier,
+        navController: NavController,
+        appViewModel: AppViewModel
+    ) -> Unit,
     val onClick: (() -> Unit)? = {},
     subPages: List<BasicDestination>? = null,
-    topBarHeaderText: @Composable (() -> Unit)? = null,
+    topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     hideLocation: Boolean = false,
     hideTopBarHeader: Boolean = false
 ) : BasicDestination(
@@ -50,7 +68,7 @@ object Home : Destination(
     label = "Home",
     route = "home",
     pageRoute = "homepage",
-    page = {modifier, navController -> HomePage(modifier, navController) },
+    page = {modifier, navController, _ -> HomePage(modifier, navController) },
 )
 
 object Menu : Destination(
@@ -58,9 +76,25 @@ object Menu : Destination(
     label = "Menu",
     route = "menu",
     pageRoute = "menupage",
-    page = {modifier, navController -> MenuPage(modifier, navController) },
+    page = {modifier, navController, appViewMenu -> MenuPage(modifier, navController, appViewMenu) },
+    subPages = listOf(
+        SubMenu
+    ),
     topBarHeaderText = {
         Text("Featured Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+    }
+)
+
+object SubMenu : BasicDestination(
+    route = "subMenu",
+    page = { modifier, navController, appViewModel -> SubMenuPage(modifier, navController, appViewModel) },
+    topBarHeaderText = {
+        viewModel ->
+        Text(
+            viewModel.currentCategory!!.name,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 )
 
@@ -69,7 +103,7 @@ object Rewards : Destination(
     label = "Rewards",
     route = "rewards",
     pageRoute = "rewardspage",
-    page = {modifier, navController -> RewardsPage(modifier, navController) },
+    page = {modifier, navController, _ -> RewardsPage(modifier, navController) },
     hideLocation = true,
     topBarHeaderText = {
         Text("Rewards Program", fontSize = 34.sp, fontWeight = FontWeight.Bold)
@@ -81,7 +115,7 @@ object Account : Destination(
     label = "Account",
     route = "account",
     pageRoute = "accountpage",
-    page = { modifier, navController -> AccountPage(modifier, navController) },
+    page = { modifier, navController, _ -> AccountPage(modifier, navController) },
     subPages = listOf(
         Login,
         SignUp
@@ -91,13 +125,13 @@ object Account : Destination(
 
 object Login : BasicDestination(
     route = "login",
-    page = { modifier, navController -> LoginPage(modifier, navController) },
+    page = { modifier, navController, _ -> LoginPage(modifier, navController) },
     hideTopBarHeader = true,
 )
 
 object SignUp : BasicDestination(
     route = "signup",
-    page = { modifier, navController -> SignupPage(modifier, navController) },
+    page = { modifier, navController, _ -> SignupPage(modifier, navController) },
     hideTopBarHeader = true,
 )
 
@@ -112,20 +146,33 @@ val BaseDestinations = listOf(
 Maps the list of All Destinations to the their route in a dictionary
 e.g: [Account] => {"account": Account}
  */
-
-val DestinationMap = mutableMapOf<String, BasicDestination>()
+val destinationMap = mutableMapOf<String, Destination>()
+val basicDestinationMap = mutableMapOf<String, BasicDestination>()
 private var destinationsUpToDate = false
-fun DestMap(string: String): BasicDestination?{
-    if(!destinationsUpToDate) {
-        listOf(
-            BaseDestinations,
-            BaseDestinations.mapNotNull{
-                    destination -> destination.subPages
-            }.flatten()
-        ).flatten().forEach{
-                destination -> DestinationMap[destination.route] = destination
+fun updateMaps(){
+    BaseDestinations.forEachIndexed {
+            index, destination ->
+        destinationMap[destination.route] = destination
+        basicDestinationMap[destination.route] = destination
+        destination.index = index
+        if(destination.subPages != null){
+            destination.subPages.forEach {
+                subDestination ->
+                basicDestinationMap[subDestination.route] = subDestination
+                subDestination.index = index
+            }
         }
-        destinationsUpToDate = true;
     }
-    return DestinationMap[string]
+}
+fun destMap(route: String): BasicDestination?{
+    if(!destinationsUpToDate) {
+        updateMaps()
+    }
+    return basicDestinationMap[route]
+}
+fun basicDestMap(route: String): Destination?{
+    if(!destinationsUpToDate){
+        updateMaps()
+    }
+    return destinationMap[route]
 }

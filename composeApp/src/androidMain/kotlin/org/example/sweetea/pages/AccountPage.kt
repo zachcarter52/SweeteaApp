@@ -3,6 +3,7 @@ package org.example.sweetea.pages
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.example.sweetea.*
+import org.example.sweetea.ui.components.BearPageTemplate
+import kotlin.math.ceil
 
 open class AccountPageCard(
     val text:String,
@@ -61,7 +64,8 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
     )
 
     BearPageTemplate(
-        modifier = modifier) {
+        modifier = modifier,
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -82,21 +86,39 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
                 Text("Sign Up")
             }
         }
+        val columnCount = 2
+        //card height calculation
+        val boxPadding = 10
+        val buttonVerticalPadding = 8
+        val columnVerticalPadding = 20
+        val columnHeight = 80
+        //Padding values apply to top and bottom, so double them
+        val cardHeight =  2 * (boxPadding + buttonVerticalPadding + columnVerticalPadding) + columnHeight
+        val gridItems = listOf(
+            //Add elements to the grid here
+            cards,
+        ).flatten()
+        val gridHeight = (cardHeight) * ceil(gridItems.size.toFloat() / columnCount)
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            modifier = Modifier.height(gridHeight.dp),
+            userScrollEnabled = false,
+            columns = GridCells.Fixed(columnCount),
         ) {
             items(cards.size){ index ->
                 Box(
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier.padding(boxPadding.dp)
                         .fillMaxWidth()
                 ) {
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = cards[index].onClick,
+                        //horizontal is from ButtonDefaults.buttonHorizontalPadding (private val)
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = buttonVerticalPadding.dp),
                         shape = RoundedCornerShape(percent = 5)
                     ) {
                         Column(
-                            modifier = Modifier.padding(0.dp, 20.dp).height(80.dp),
+                            modifier = Modifier.padding(vertical = columnVerticalPadding.dp)
+                                .height(columnHeight.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
@@ -107,7 +129,7 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
                             )
                             Text(
                                 text = cards[index].text,
-                                modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
+                                modifier = Modifier.padding(top = 4.dp),
                                 fontSize = 16.sp,
                             )
                         }

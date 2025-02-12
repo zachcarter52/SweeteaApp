@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,20 +17,37 @@ import androidx.compose.runtime.setValue
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.platform.LocalContext
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 
-
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.disk.DiskCache
+import coil3.disk.directory
+import coil3.memory.MemoryCache
+import coil3.request.CachePolicy
+import coil3.util.DebugLogger
+import org.example.sweetea.dataclasses.local.AppViewModel
+
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
+import java.io.File
 
+class MainScreen : ComponentActivity(){
 
-class MainScreen : ComponentActivity() {
+    private val appViewModel: AppViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -38,7 +56,10 @@ class MainScreen : ComponentActivity() {
         setContent {
             //Displays current screen
             //App()- default *REMOVED*
-            SweeteaApp()
+            SweeteaApp(
+                viewModel = appViewModel,
+                cacheDir = cacheDir
+            )
             //LoginScreen()
             //VerificationScreen()
         }
@@ -51,61 +72,123 @@ class MainScreen : ComponentActivity() {
         } catch (error: AmplifyException) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error)
         }
-
     }
 }
 
 @Composable
-fun SweeteaApp(modifier: Modifier=Modifier){
+fun SweeteaApp(
+    modifier:Modifier = Modifier,
+    viewModel: AppViewModel,
+    cacheDir: File
+){
+    LaunchedEffect(Unit){
+        viewModel.updateInfo()
+    }
+
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .memoryCache {
+                MemoryCache.Builder()
+                    .maxSizePercent(context, 0.20)
+                    .build()
+            }
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(cacheDir.resolve("image_cache"))
+                    .maxSizeBytes(5 * 1024 * 1024)
+                    .build()
+            }
+            .logger(DebugLogger())
+            .build()
+    }
+
     AppTheme(
         dynamicColor = false
     ){
+
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         var currentRoute by remember{mutableStateOf("")}
 
-        val navRoute = navBackStackEntry?.destination?.route
-        if(navRoute != null){
-            currentRoute = navRoute
-        }
         var selectedItem by remember { mutableIntStateOf(0) }
         var oldSelectedItem by remember { mutableIntStateOf(0) }
 
+        val navPageRoute = navBackStackEntry?.id
+        val navRoute = navBackStackEntry?.destination?.route
+        var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
+        if(navRoute != null && navRoute != currentRoute){
+            currentRoute = navRoute
+            val curRouteObj = destMap( navRoute )
+            if(curRouteObj != null && curRouteObj.index >= 0 ){
+                currentRouteObject = curRouteObj
+                oldSelectedItem = selectedItem
+                selectedItem = curRouteObj.index
+            }
+        }
+
         val enterTransition = {
-            if(selectedItem > oldSelectedItem){
-                slideInHorizontally(initialOffsetX = {it}) +
-                        fadeIn()
-            } else {
-                slideInHorizontally(initialOffsetX = {-it}) +
-                        fadeIn()
+            when{
+                selectedItem > oldSelectedItem ->
+                    slideInHorizontally(initialOffsetX = { it }) +
+                            fadeIn()
+                selectedItem < oldSelectedItem ->
+                    slideInHorizontally(initialOffsetX = { -it }) +
+                            fadeIn()
+                else ->
+                    if(BaseDestinations.indexOf(currentRouteObject) == -1) {
+                        slideInVertically(initialOffsetY = { it }) +
+                                fadeIn()
+                    } else {
+                        slideInVertically(initialOffsetY = { -it }) +
+                                fadeIn()
+                    }
             }
         }
+
         val exitTransition = {
-            if(selectedItem > oldSelectedItem) {
-                slideOutHorizontally(targetOffsetX = { -it }) +
-                        fadeOut()
-            } else {
-                slideOutHorizontally(targetOffsetX = { it }) +
-                        fadeOut()
+            when{
+                selectedItem > oldSelectedItem ->
+                    slideOutHorizontally(targetOffsetX = { -it }) +
+                            fadeOut()
+                selectedItem < oldSelectedItem ->
+                    slideOutHorizontally(targetOffsetX = { it }) +
+                            fadeOut()
+                else ->
+                    if(BaseDestinations.indexOf(currentRouteObject) == -1) {
+                        slideOutVertically(targetOffsetY = { -it }) +
+                                fadeOut()
+                    } else{
+                        slideOutVertically(targetOffsetY = { it }) +
+                                fadeOut()
+                    }
             }
         }
+
+        //appViewModel.currentCategory = 3
+        val locationList by viewModel.locationList.observeAsState(emptyList())
+        println("LocationData $locationList")
+        println("Current Categegory ${viewModel.currentCategory}")
+        //val coroutineScope = rememberCoroutineScope()
 
         Scaffold(
             topBar = {
-                val currentDest = DestMap(currentRoute)
-
-                if(currentDest != null){
+                if(currentRouteObject != null){
                     AppHeader(
-                        modifier,
-                        headerText = currentDest.topBarHeaderText,
-                        hideLocation = currentDest.hideLocation,
-                        hideTopBarHeader = currentDest.hideTopBarHeader,
+                        modifier = modifier,
+                        viewModel = viewModel,
+                        headerText = currentRouteObject!!.topBarHeaderText,
+                        hideLocation = currentRouteObject!!.hideLocation,
+                        hideTopBarHeader = currentRouteObject!!.hideTopBarHeader,
                         enterTransition = enterTransition,
                         exitTransition = exitTransition
                     )
                 } else {
                     AppHeader(
                         modifier = modifier,
+                        viewModel = viewModel,
                         enterTransition = enterTransition,
                         exitTransition = exitTransition
                     )
@@ -114,14 +197,11 @@ fun SweeteaApp(modifier: Modifier=Modifier){
             bottomBar = { AppBottomBar(
                 navController = navController,
                 selectedItem = selectedItem,
-                updateSelectedItem = {
-                    oldSelectedItem = selectedItem
-                    selectedItem = it
-                }
             ) }
         ) {
             padding ->
             SweetTeaNavHost(
+                viewModel = viewModel,
                 navController = navController,
                 modifier = Modifier.padding(padding),
                 enterTransition = enterTransition,
