@@ -18,6 +18,7 @@ authenticator = "1.2.0"
 compose-plugin = "1.6.11"
 amplify-core = "2.24.0"
 desugar_jdk_libs = "2.1.2"
+inappPaymentsSdk = "1.0.0"
 junit = "4.13.2"
 kotlin = "2.0.21"
 kotlinx-serialization = "1.7.3"
@@ -25,6 +26,8 @@ kotlinx-datetime = "0.6.1"
 ktor = "3.0.1"
 logback = "1.5.8"
 ktor-tests = "3.0.0"
+mobilePaymentsSdk = "2.0.2"
+mobilePaymentsSdkVersion = "1.0.0"
 navigationCompose = "2.8.3"
 exposed = "0.53.0"
 mariadb= "3.5.0"
@@ -34,11 +37,19 @@ material3Android = "1.3.1"
 navigationRuntimeKtx = "2.8.3"
 composeUI = "1.7.5"
 aws-kotlin = "1.3.31"
+nettyAll = "4.1.100.Final"
+okhttp = "4.12.0"
+okhttpVersion = "4.9.0"
+paymentsCore = "1.7.6"
+paymentsCoreVersion = "1.7.5"
 squareSdkVersion = "2.0.0-beta5"
 core-splashscreen = "1.0.1"
+squareupPaymentsCore = "1.6.6"
 
 
 [libraries]
+card-entry = { module = "com.squareup.sdk.in-app-payments:card-entry", version.ref = "paymentsCore" }
+inapp-payments-sdk = { module = "com.squareup.sdk.inapp.payments:inapp-payments-sdk", version.ref = "inappPaymentsSdk" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -89,8 +100,16 @@ exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datet
 kotlinx-datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime-jvm", version.ref = "kotlinx-datetime"}
 mariadb-jdbc =  { module = "org.mariadb.jdbc:mariadb-java-client", version.ref = "mariadb" }
 mobile-payments-sdk = { module = "com.squareup.sdk:mobile-payments-sdk", version.ref = "squareSdkVersion" }
+mobile-payments-sdk-v202 = { module = "com.squareup.sdk:mobile-payments-sdk", version.ref = "mobilePaymentsSdk" }
+mobilepayments-mobile-payments-sdk = { module = "com.squareup.sdk.mobilepayments:mobile-payments-sdk", version.ref = "mobilePaymentsSdkVersion" }
 mockreader-ui = { module = "com.squareup.sdk:mockreader-ui", version.ref = "squareSdkVersion" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
+netty-all = { module = "io.netty:netty-all", version.ref = "nettyAll" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-v490 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }
+payments-core = { module = "com.squareup.sdk.in-app-payments:payments-core", version.ref = "paymentsCore" }
+payments-core-v166 = { module = "com.squareup.sdk.in-app-payments:payments-core", version.ref = "squareupPaymentsCore" }
+payments-core-v175 = { module = "com.squareup.sdk.in-app-payments:payments-core", version.ref = "paymentsCoreVersion" }
 
 
 [plugins]

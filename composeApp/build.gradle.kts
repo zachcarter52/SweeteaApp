@@ -52,6 +52,21 @@ kotlin {
             //Amazon Cognito / Amplify dependencies
             implementation(libs.aws.amplify.core) //amplify library
             implementation(libs.aws.auth.cognito)  //cognito library
+            val squareSdkVersion = "2.0.0-beta5"
+            // Mobile Payments SDK dependency
+            implementation(libs.mobile.payments.sdk)
+
+            // MockReader UI dependency
+            implementation(libs.mockreader.ui)
+            implementation(libs.okhttp)
+            implementation(libs.okhttp.v490)
+//            implementation(libs.card.entry)
+//            implementation (libs.mobilepayments.mobile.payments.sdk)
+
+
+
+
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -64,6 +79,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
             implementation(libs.core.splashscreen)
+
         }
     }
 }
@@ -91,8 +107,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+
+            resources.pickFirsts.add("META-INF/io.netty.versions.properties")
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -107,13 +126,14 @@ android {
 
 dependencies {
 
+    implementation(project(":server"))
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    val squareSdkVersion = "2.0.0-beta5"
-    //Mobile payments sdk dependency
-    implementation(libs.mobile.payments.sdk)
-    //mockreader ui dependency
-    implementation(libs.mockreader.ui)
+
+//    //Mobile payments sdk dependency
+//    implementation(libs.mobile.payments.sdk)
+//    //mockreader ui dependency
+//    implementation(libs.mockreader.ui)
 }
 
