@@ -8,6 +8,91 @@
         android:minSdkVersion="25"
         android:targetSdkVersion="34" />
 
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Starting with API 31, location-based Bluetooth perms are now classified as "dangerous". -->
+    <!-- Any device on 30 and below will use the old permissions, and 31+ will use the new ones. -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.HIDE_OVERLAY_WINDOWS" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Package visibility restrictions are enforced for API 30 and above. -->
+    <!-- Explicit queries are defined to limit visibility of intent actions to certain apps/packages. -->
+    <!-- See: https://developer.android.com/training/package-visibility for more details. -->
+    <!-- Note: This module is SPECIAL as it houses isIntentAvailable, which is called everywhere. -->
+    <!-- We want to handle the common use cases here vs at call sites to avoid regressions. -->
+    <queries>
+
+        <!-- Make sure apps that allow us to view URLs (i.e. the browser) are visible. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <data android:scheme="https" />
+        </intent>
+        <!-- Make sure apps that allow us to open the Play Store are visible. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <data android:scheme="market" />
+        </intent>
+        <!-- Make sure each of the Square vertical packages are visible to the PackageManager. -->
+        <package android:name="com.android.inputmethod.latin.square" />
+        <package android:name="com.squareup" />
+        <package android:name="com.squareup.apos" />
+        <package android:name="com.squareup.bran" />
+        <package android:name="com.squareup.camera" />
+        <package android:name="com.squareup.invoicesapp" />
+        <package android:name="com.squareup.oob" />
+        <package android:name="com.squareup.restaurants" />
+        <package android:name="com.squareup.retail" />
+        <package android:name="com.squareup.signin" />
+        <package android:name="com.squareup.squid.push" />
+        <package android:name="com.squareup.squid.launcher" />
+        <package android:name="com.squareup.switcher" />
+        <package android:name="com.squareup.t2devicetour" />
+        <package android:name="com.squareup.t3devicetour" />
+        <package android:name="com.squareup.terminalapi" />
+        <package android:name="com.squareup.x2devicetour" />
+        <package android:name="com.squareup.x2settings" /> <!-- Beta packages too! We need to be explicit, unfortunately - wildcards do not work. -->
+        <package android:name="com.android.inputmethod.latin.square.beta" />
+        <package android:name="com.squareup.apos.beta" />
+        <package android:name="com.squareup.beta" />
+        <package android:name="com.squareup.camera.beta" />
+        <package android:name="com.squareup.invoicesapp.beta" />
+        <package android:name="com.squareup.oob.beta" />
+        <package android:name="com.squareup.restaurants.beta" />
+        <package android:name="com.squareup.retail.beta" />
+        <package android:name="com.squareup.signin.beta" />
+        <package android:name="com.squareup.squid.push.beta" />
+        <package android:name="com.squareup.switcher.beta" />
+        <package android:name="com.squareup.t2devicetour.beta" />
+        <package android:name="com.squareup.t3devicetour.beta" />
+        <package android:name="com.squareup.terminalapi.beta" />
+        <package android:name="com.squareup.x2devicetour.beta" />
+        <package android:name="com.squareup.x2settings.beta" />
+    </queries>
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <permission
         android:name="org.example.sweetea.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
@@ -16,11 +101,12 @@
 
     <application
         android:allowBackup="true"
-        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:appComponentFactory="papa.PerfAppComponentFactory"
         android:debuggable="true"
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:resizeableActivity="false"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:testOnly="true"
@@ -41,14 +127,93 @@
             android:name="wear-sdk"
             android:required="false" />
 
+        <meta-data
+            android:name="shadow.com.bugsnag.android.square.API_KEY"
+            android:value="3679dbdddec052c40c1525a57ceb9704" /> <!-- See com.squareup.bugsnag.config.BugsnagConfigurationBuilder -->
+        <meta-data
+            android:name="com.squareup.CONFIGURE_BUGSNAG_FOR_SQUARE_SDKS"
+            android:value="true" />
+        <meta-data
+            android:name="com.squareup.BUGSNAG_SDK_VERSION_NAME"
+            android:value="2.0.0-beta5" />
+        <meta-data
+            android:name="com.squareup.BUGSNAG_SDK_VERSION_CODE"
+            android:value="20009999" />
+
+        <activity
+            android:name="com.squareup.sdk.mobilepayments.payment.manager.MobilePaymentsSdkPaymentActivity"
+            android:exported="false"
+            android:theme="@style/MobilePaymentsSdk.Theme" >
+        </activity>
+        <activity
+            android:name="com.squareup.sdk.mobilepayments.refund.thirdpartyapi.MobilePaymentsSdkRefundActivity"
+            android:exported="false"
+            android:theme="@style/MobilePaymentsSdk.Theme" >
+        </activity>
+        <activity
+            android:name="com.squareup.sdk.mobilepayments.settings.MobilePaymentsSdkSettingsActivity"
+            android:exported="false"
+            android:theme="@style/MobilePaymentsSdk.Theme" >
+        </activity>
+        <activity
+            android:name="com.squareup.sdk.mobilepayments.payment.manager.MobilePaymentsSdkCardEntryActivity"
+            android:exported="false"
+            android:theme="@style/MobilePaymentsSdk.Theme.CardEntry"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+
+        <receiver
+            android:name="com.squareup.cardreader.ble.lock.PosMarkerReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.squareup.cardreader.ble.FAKE_INTENT" />
+            </intent-filter>
+        </receiver> <!-- For printing and cash drawers. -->
+        <activity
+            android:name="com.squareup.usb.UsbAttachedActivity"
+            android:enabled="false"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/usb_device_filter" />
+        </activity>
+        <activity
+            android:name="sqip.internal.CardEntryActivity"
+            android:exported="false"
+            android:theme="@style/sqip.Theme.CardEntry"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+
+        <provider
+            android:name="sqip.internal.ContextCaptureContentProvider"
+            android:authorities="org.example.sweetea.sqip"
+            android:exported="false" />
+        <provider
+            android:name="shadow.com.bugsnag.android.internal.BugsnagContentProvider"
+            android:authorities="org.example.sweetea.bugsnag-startup"
+            android:exported="false"
+            android:initOrder="9000" />
+
         <activity
             android:name="androidx.compose.ui.tooling.PreviewActivity"
             android:exported="true" />
+        <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="org.example.sweetea.androidx-startup"
             android:exported="false" >
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup" />
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"
                 android:value="androidx.startup" />
@@ -59,6 +224,159 @@
                 android:name="androidx.profileinstaller.ProfileInstallerInitializer"
                 android:value="androidx.startup" />
         </provider>
+
+        <service
+            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+            android:directBootAware="false"
+            android:enabled="@bool/enable_system_alarm_service_default"
+            android:exported="false" />
+        <service
+            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+            android:directBootAware="false"
+            android:enabled="@bool/enable_system_job_service_default"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:directBootAware="false"
+            android:enabled="@bool/enable_system_foreground_service_default"
+            android:exported="false" />
+
+        <receiver
+            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+            android:directBootAware="false"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+            android:directBootAware="false"
+            android:enabled="false"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+            android:directBootAware="false"
+            android:enabled="false"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+            android:directBootAware="false"
+            android:enabled="false"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+            android:directBootAware="false"
+            android:enabled="false"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+            android:directBootAware="false"
+            android:enabled="false"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+            android:directBootAware="false"
+            android:enabled="@bool/enable_system_alarm_service_default"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+            android:directBootAware="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.DUMP" >
+            <intent-filter>
+                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="papa.internal.PerfsAppStartListener"
+            android:authorities="org.example.sweetea.perfs-startup-listener"
+            android:exported="false" />
+
+        <service
+            android:name="com.evernote.android.job.v21.PlatformJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="com.evernote.android.job.v14.PlatformAlarmService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="com.evernote.android.job.v14.PlatformAlarmServiceExact"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.evernote.android.job.v14.PlatformAlarmReceiver"
+            android:exported="false" >
+            <intent-filter>
+
+                <!-- Keep the filter for legacy intents -->
+                <action android:name="com.evernote.android.job.v14.RUN_JOB" />
+                <action android:name="net.vrallev.android.job.v14.RUN_JOB" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.evernote.android.job.JobBootReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.evernote.android.job.gcm.PlatformGcmService"
+            android:enabled="false"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.evernote.android.job.JobRescheduleService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <service
+            android:name="androidx.room.MultiInstanceInvalidationService"
+            android:directBootAware="true"
+            android:exported="false" />
 
         <receiver
             android:name="androidx.profileinstaller.ProfileInstallReceiver"
@@ -79,6 +397,16 @@
                 <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="com.jakewharton.processphoenix.ProcessPhoenix"
+            android:process=":phoenix"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- The activities will be merged into the manifest of the hosting app. -->
+        <activity
+            android:name="com.google.android.play.core.common.PlayCoreDialogWrapperActivity"
+            android:exported="false"
+            android:stateNotNeeded="true"
+            android:theme="@style/Theme.PlayCore.Transparent" />
     </application>
 
 </manifest>

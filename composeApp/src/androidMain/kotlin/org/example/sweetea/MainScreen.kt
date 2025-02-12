@@ -84,7 +84,7 @@ fun MainScreenNavigationConfiguration(modifier: Modifier = Modifier, selectedInd
         0 -> HomePage()
         1 -> MenuPage()
         2 -> RewardsPage()
-        3 -> AccountPage()
+        3 -> ItemCustom()
 
     }
 }
