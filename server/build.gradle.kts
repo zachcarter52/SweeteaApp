@@ -8,7 +8,7 @@ plugins {
 group = "org.example.site.square.site.square.sweeteaus"
 version = "1.0.0"
 application {
-    mainClass.set("org.example.site.square.site.square.sweeteaus.ApplicationKt")
+    mainClass.set("org.example.sweetea.ApplicationKt")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=${extra["io.ktor.development"] ?: "false"}")
 }
 
@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.ktor.server.host.common)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.thymeleaf)
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.kotlinx.datetime)
