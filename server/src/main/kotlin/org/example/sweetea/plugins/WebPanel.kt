@@ -4,13 +4,11 @@ import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.thymeleaf.*
+import org.example.sweetea.database.eventSchema
+import org.jetbrains.exposed.sql.Database
 import org.thymeleaf.templateresolver.*
 
-data class User(
-    val id:Int,
-    val name: String,
-)
-fun Application.configureWebPanel() {
+fun Application.configureWebPanel(database: Database) {
     install(Thymeleaf){
         setTemplateResolver((if (developmentMode) {
             FileTemplateResolver().apply{
@@ -28,8 +26,7 @@ fun Application.configureWebPanel() {
     } 
     routing {
        get("/index") {
-           val sampleUser = User(1, "John")
-           call.respond(ThymeleafContent("index", mapOf("user" to sampleUser)))
+           call.respond(ThymeleafContent("index", mapOf("events" to eventSchema.allEvents())))
        }
     }
 

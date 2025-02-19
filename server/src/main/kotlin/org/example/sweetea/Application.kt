@@ -6,6 +6,7 @@ import org.example.sweetea.plugins.configureRouting
 import org.example.sweetea.plugins.configureSecurity
 import org.example.sweetea.plugins.configureSerialization
 import io.ktor.server.netty.*;
+import org.example.sweetea.database.configureDatabases
 import org.example.sweetea.plugins.configureWebPanel
 
 fun main(args: Array<String>) {
@@ -15,9 +16,9 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    val database = configureDatabases()
     configureSecurity()
     configureSerialization()
-    //configureDatabases()
     configureRouting()
-    configureWebPanel()
+    configureWebPanel(database)
 }

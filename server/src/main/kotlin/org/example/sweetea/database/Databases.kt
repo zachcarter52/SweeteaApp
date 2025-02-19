@@ -1,28 +1,95 @@
 package org.example.sweetea.database
 
-import com.sun.jna.platform.win32.Advapi32Util
 import io.ktor.http.*
+import io.ktor.http.content.PartData
+import io.ktor.http.content.forEachPart
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.copyTo
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.example.sweetea.Constants
 import org.example.sweetea.database.model.Account
+import org.example.sweetea.database.model.Event
+import java.io.File
 
-fun Application.configureDatabases() {
-    val database = Database.connect(
-        url = "jdbc:mariadb://"+Constants.DATABASE_HOST+":3306/"+Constants.DATABASE_NAME,
-        user = Constants.DATABASE_USERNAME,
-        password = Constants.DATABASE_PASSWORD,
-        driver = "org.mariadb.jdbc.Driver",
-    )
-    val userService = UserService(database)
-    val accountSchema = AccountSchema(database)
+private val database = Database.connect(
+    url = "jdbc:mariadb://"+Constants.DATABASE_HOST+":3306/"+Constants.DATABASE_NAME,
+    user = Constants.DATABASE_USERNAME,
+    password = Constants.DATABASE_PASSWORD,
+    driver = "org.mariadb.jdbc.Driver",
+)
 
+val accountSchema = AccountSchema(database)
+val eventSchema = EventSchema(database)
+
+fun Application.configureDatabases() : Database {
+    val l: String = File.separator
     routing {
+        route("/events"){
+            get(""){
+                call.respond(eventSchema.allEvents())
+            }
+            get("/{eventID}"){
+                val eventID = call.parameters["accountID"]?.toULong()
+                if(eventID != null){
+                    val event = eventSchema.getEvent(eventID)
+                    if(event != null) {
+                        call.respond(event)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+            post(""){
+                if(call.request.contentType().match(ContentType.MultiPart.FormData)){
+                    var eventname = ""
+                    var filename = ""
+                    var fileWasCreated = false
+                    var file = File("")
+                    call.receiveMultipart().forEachPart { part ->
+                        if(part is PartData.FormItem){
+                            println("${part.name}: ${part.value}")
+                            if(part.name == "event-name") eventname = part.value
+                        } else if(part is PartData.FileItem) {
+                            filename = part.originalFileName!!
+                            if(filename.split(".")[1]=="svg") {
+                                call.respond(HttpStatusCode.NotAcceptable, "SVG files are not allowed")
+                            } else {
+                                file = File("uploads$l$filename")
+                                if (!file.exists()) {
+                                    file.createNewFile()
+                                    part.provider.invoke().copyTo(file.writeChannel())
+                                    fileWasCreated = true
+                                } else {
+                                    call.respond(HttpStatusCode.Conflict)
+                                }
+                            }
+                        } else {
+                            println(part.toString())
+                        }
+                    }
+                    if(eventname.isNotBlank() && fileWasCreated){
+                        val eventID = eventSchema.createEvent(Event(0U, eventname, filename, false))
+                        if(eventID != null) call.respond(HttpStatusCode.Created, eventID)
+                    } else {
+                        call.respond(HttpStatusCode.BadRequest)
+                    }
+                    if(eventname.isBlank() && fileWasCreated){
+                        file.delete()
+                    }
+                } else {
+                    println("Upload Failed")
+                    call.respond(HttpStatusCode.BadRequest,"Upload failed")
+                }
+            }
+        }
         route("/accounts"){
             get(""){
                 call.respond(accountSchema.allAccounts())
@@ -65,40 +132,7 @@ fun Application.configureDatabases() {
 
             }
         }
-
-
-        // Create user
-        post("/users") {
-            val user = call.receive<ExposedUser>()
-            val id = userService.create(user)
-            call.respond(HttpStatusCode.Created, id)
-        }
-
-        // Read user
-        get("/users/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            val user = userService.read(id)
-            if (user != null) {
-                call.respond(HttpStatusCode.OK, user)
-            } else {
-                call.respond(HttpStatusCode.NotFound)
-            }
-        }
-
-        // Update user
-        put("/users/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            val user = call.receive<ExposedUser>()
-            userService.update(id, user)
-            call.respond(HttpStatusCode.OK)
-        }
-
-
-        // Delete user
-        delete("/users/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            userService.delete(id)
-            call.respond(HttpStatusCode.OK)
-        }
     }
+    return database
 }
+
