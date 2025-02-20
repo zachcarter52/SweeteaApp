@@ -26,10 +26,16 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                return@dbQuery null
            } else {
                println(event.name)
-               return@dbQuery Events.insert{
+               val newEventID = Events.insert{
                    it[name] = event.name;
                    it[filename] = event.filename;
                }[Events.eventID]
+               if(newEventID == 0UL){
+                  Events.update({ Events.eventID eq newEventID }){
+                      it[isSelected] = true;
+                  }
+               }
+               return@dbQuery newEventID;
            }
        }
     }
@@ -61,23 +67,54 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         }
     }
 
-    override suspend fun updateEvent(eventID: ULong, updatedEvent: Event): Event? {
+    override suspend fun getSelectedEvent(): Event? {
+        return dbQuery {
+            Events.selectAll().where{Events.isSelected eq true}
+                .map{
+                    Event(
+                        it[Events.eventID],
+                        it[Events.name],
+                        it[Events.filename],
+                        it[Events.isSelected]
+                    )
+                }.singleOrNull()
+        }
+    }
+
+    override suspend fun updateEvent(eventID: ULong, updatedEvent: Event): Boolean {
         return dbQuery {
             if(Events.update({Events.eventID eq eventID}){
                 if(updatedEvent.name.isNotBlank()) it[name] = updatedEvent.name
                 if(updatedEvent.filename.isNotBlank()) it[filename] = updatedEvent.filename
             } > 0){
                 return@dbQuery Events.selectAll().where{Events.eventID eq eventID}
-                    .map{
+                    .map {
                         Event(
                             it[Events.eventID],
                             it[Events.name],
                             it[Events.filename],
                             it[Events.isSelected]
                         )
-                    }.singleOrNull()
+                    }.isNotEmpty()
             } else {
-                null
+                return@dbQuery false
+            }
+        }
+    }
+
+    override suspend fun selectEvent(eventID: ULong): Event?{
+        return dbQuery {
+            val previouslySelectedEvent = getSelectedEvent()
+            val selectedNewEvent = Events.update({ Events.eventID eq eventID }){
+                it[isSelected] = true
+            } > 0
+            if(selectedNewEvent){
+                if(previouslySelectedEvent != null) Events.update({ Events.eventID eq previouslySelectedEvent.eventID  }){
+                    it[isSelected] = false
+                }
+                return@dbQuery getEvent(eventID)
+            } else {
+                return@dbQuery null
             }
         }
     }

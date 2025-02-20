@@ -6,7 +6,12 @@ $(document).ready(async () => {
             location.reload();
         },
         error: (response, statusText) =>{
-            console.log(response.status);
+            var errorText = `An error occured $(response.status)`
+            switch(response.status){
+                case 409:
+                    errorText = "There is already and event with that image"
+                    break;
+            }
         }
     });
     let table = $("#eventTable");

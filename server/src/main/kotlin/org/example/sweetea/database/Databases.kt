@@ -47,6 +47,23 @@ fun Application.configureDatabases() : Database {
                     call.respond(HttpStatusCode.BadRequest)
                 }
             }
+            put("select/{eventID}"){
+                val eventID = call.parameters["accountID"]?.toULong()
+                if(eventID != null){
+                    val event = eventSchema.selectEvent(eventID)
+                    if(event != null) {
+                        val selecedEventFile = File("selectedEvent")
+                        if(!selecedEventFile.exists()) selecedEventFile.createNewFile()
+                        selecedEventFile.writeText(event.filename)
+                        call.respond(event)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+
+            }
             post(""){
                 if(call.request.contentType().match(ContentType.MultiPart.FormData)){
                     var eventname = ""
@@ -55,7 +72,6 @@ fun Application.configureDatabases() : Database {
                     var file = File("")
                     call.receiveMultipart().forEachPart { part ->
                         if(part is PartData.FormItem){
-                            println("${part.name}: ${part.value}")
                             if(part.name == "event-name") eventname = part.value
                         } else if(part is PartData.FileItem) {
                             filename = part.originalFileName!!
@@ -68,6 +84,7 @@ fun Application.configureDatabases() : Database {
                                     part.provider.invoke().copyTo(file.writeChannel())
                                     fileWasCreated = true
                                 } else {
+                                    println("File Conflict")
                                     call.respond(HttpStatusCode.Conflict)
                                 }
                             }
@@ -76,12 +93,14 @@ fun Application.configureDatabases() : Database {
                         }
                     }
                     if(eventname.isNotBlank() && fileWasCreated){
+                        println("adding Event to Database")
                         val eventID = eventSchema.createEvent(Event(0U, eventname, filename, false))
                         if(eventID != null) call.respond(HttpStatusCode.Created, eventID)
                     } else {
                         call.respond(HttpStatusCode.BadRequest)
                     }
                     if(eventname.isBlank() && fileWasCreated){
+                        println("Created unnecessary file, deleting")
                         file.delete()
                     }
                 } else {

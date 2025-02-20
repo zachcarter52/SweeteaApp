@@ -59,6 +59,7 @@ kotlin {
             //Web Request dependency
             implementation(libs.retrofit)
             implementation(libs.retrofit.gson)
+            implementation(libs.connectivity.core)
             implementation(libs.ktor.client.android)
             implementation(libs.kotlinx.coroutines.android)
         }
