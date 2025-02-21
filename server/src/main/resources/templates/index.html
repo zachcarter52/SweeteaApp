@@ -18,7 +18,7 @@
             </label>
             <label hidden for="select-route"></label>
             <select name="select-route" id="select-route">
-                <option th:each="route, iter: ${pageRoutes}" th:attr="selected= ${iter.index} == 1 ? '' : null, name=${route}" th:text="${route}"></option>
+                <option th:each="route, iter: ${pageRoutes}" th:attr="selected= ${iter.index} == 1 ? '' : null, name=${route}" th:text="${#strings.capitalizeWords(route)}"></option>
             </select>
             <input hidden type="text" id="link-url" name="link-url"/>
             <br>

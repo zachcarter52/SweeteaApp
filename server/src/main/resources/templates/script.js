@@ -46,6 +46,7 @@ $(document).ready(async () => {
     let headerCells = headerRow.children()
 
     let selectedCell = $("#selected");
+    let selectedCellIndex = selectedCell.index();
 
     let tableBorderWidth = (table.outerWidth() - table.width())/2;
     var selectionOutline = $("#selectionOutline");
@@ -75,9 +76,11 @@ $(document).ready(async () => {
     for(var i = 0; i < tableRows.length; i++){
         var tableCells = $(tableRows[i]).children();
         for(var j = 0; j < tableCells.length; j++){
-            let cell =$(tableCells[j]);
-            cell.on("click", onClicks[j]);
-            cell.css("cursor", "pointer");
+            if(j != selectedCellIndex){
+                let cell =$(tableCells[j]);
+                cell.on("click", onClicks[j]);
+                cell.css("cursor", "pointer");
+            }
         }
     }
 });

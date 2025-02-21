@@ -31,7 +31,7 @@ fun Application.configureWebPanel(database: Database) {
             call.respond(ThymeleafContent(template = "index", model = mapOf(
                 "events" to eventSchema.allEvents(),
                 "selectedEventName" to selectedEventFile.readLines()[0],
-                "pageRoutes" to listOf("home", "menu", "subMenu", "rewards", "account", "login", "signup")
+                "pageRoutes" to listOf("home", "menu",/* "subMenu",*/ "rewards", "account", "login", "signup")
             )))
         }
     }
