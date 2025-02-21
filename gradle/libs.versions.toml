@@ -88,9 +88,10 @@ retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref 
 coil= {module = "io.coil-kt.coil3:coil", version.ref="coil"}
 coil-compose = {module = "io.coil-kt.coil3:coil-compose", version.ref = "coil"}
 coil-network = {module = "io.coil-kt.coil3:coil-network-ktor3", version.ref ="coil"}
-ktor-clinet-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor"}
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor"}
 ktor-client-android = { module= "io.ktor:ktor-client-okhttp", version.ref = "ktor"}
 ktor-client-ios= { module= "io.ktor:ktor-client-darwin", version.ref = "ktor"}
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor"}
 
 connectivity-core = { module = "dev.jordond.connectivity:connectivity-core", version.ref = "connectivity" }
 connectivity-device = { module = "dev.jordond.connectivity:connectivity-device", version.ref = "connectivity" }
@@ -105,8 +106,9 @@ ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "k
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor-tests" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml-jvm", version.ref = "ktor" }
 ktor-server-thymeleaf = { module = "io.ktor:ktor-server-thymeleaf-jvm", version.ref = "ktor" }
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-network-tls = { module = "io.ktor:ktor-network-tls-certificates", version.ref = "ktor"}
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed"}
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed"}
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed"}

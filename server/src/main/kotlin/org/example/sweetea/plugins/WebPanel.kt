@@ -5,6 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.thymeleaf.*
 import org.example.sweetea.database.eventSchema
+import org.example.sweetea.database.selectedEventFile
 import org.jetbrains.exposed.sql.Database
 import org.thymeleaf.templateresolver.*
 
@@ -25,9 +26,14 @@ fun Application.configureWebPanel(database: Database) {
         })
     } 
     routing {
-       get("/index") {
-           call.respond(ThymeleafContent("index", mapOf("events" to eventSchema.allEvents())))
-       }
+        //pageRoutes are manually copied from composeApp/src/androidMain/kotlin/org/example/sweetea/Destinations
+        get("/index") {
+            call.respond(ThymeleafContent(template = "index", model = mapOf(
+                "events" to eventSchema.allEvents(),
+                "selectedEventName" to selectedEventFile.readLines()[0],
+                "pageRoutes" to listOf("home", "menu", "subMenu", "rewards", "account", "login", "signup")
+            )))
+        }
     }
 
 }

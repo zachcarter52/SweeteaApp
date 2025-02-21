@@ -1,17 +1,26 @@
 package org.example.sweetea.plugins
 
+import io.ktor.client.request.forms.FormPart
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.http.ContentDisposition
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.server.application.*
 import io.ktor.server.request.*
-import io.ktor.server.response.respond
-import io.ktor.server.response.respondBytes
-import io.ktor.server.response.respondText
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
+import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.writeFully
+import org.example.sweetea.Constants
+import org.example.sweetea.EventResponse
+import org.example.sweetea.database.selectedEventFile
 import java.io.File
 import java.util.Date
 
@@ -28,6 +37,13 @@ fun Application.configureRouting() {
         }
     }
     routing {
+        get("/events/selected"){
+            val eventFile = selectedEventFile.readLines()
+            println("${eventFile}, ${eventFile.size}")
+            if(eventFile.size == 5){
+                call.respond(EventResponse(eventFile[0], eventFile[1], eventFile[2], eventFile[3], eventFile[4]=="true"))
+            }
+        }
         get("/{filename}"){
             val filename = call.parameters["filename"]!!
             call.respondFile("src/main/resources/templates/${filename}")

@@ -1,10 +1,10 @@
 package org.example.sweetea.database.model
 
 interface EventRepository {
-    suspend fun createEvent(event: Event): ULong?
+    suspend fun createEvent(event: Event): Long?
     suspend fun allEvents(): List<Event>
-    suspend fun getEvent(eventID: ULong): Event?
-    suspend fun updateEvent(eventID: ULong, updatedEvent: Event): Boolean
+    suspend fun getEvent(eventID: Long): Event?
+    suspend fun updateEvent(eventID: Long, updatedEvent: Event): Boolean
     suspend fun getSelectedEvent(): Event?
-    suspend fun selectEvent(eventID: ULong): Event?
+    suspend fun selectEvent(eventID: Long): Event?
 }

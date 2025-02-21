@@ -22,25 +22,22 @@ td {
     border-top: 1px solid black;
     padding-bottom: 1em;
 }
-#selected{
-    background-color: #a6e3a1;
-}
 th, td {
     /*border-right: 1px solid black;*/
     text-align: center;
     padding: 5px;
 }
-th:nth-child(1){
+tr:first-child > th:nth-child(1){
     border-top-left-radius: 1em;
 }
-td:nth-child(1){
+tr:last-child > td:nth-child(1){
     border-bottom-left-radius: 1em;
 }
-th:last-child{
+tr:first-child > th:last-child{
     border-right: 0px;
     border-top-right-radius: 1em;
 }
-td:last-child{
+tr:last-child > td:last-child{
     border-right: 0px;
     border-bottom-right-radius: 1em;
 }
@@ -60,4 +57,5 @@ tr > *{
     border-radius: 1em;
     padding: 5px;
     border: 3px solid deepskyblue;
+    pointer-events: none;
 }

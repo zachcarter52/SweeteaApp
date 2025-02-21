@@ -26,6 +26,16 @@ private val database = Database.connect(
 
 val accountSchema = AccountSchema(database)
 val eventSchema = EventSchema(database)
+val selectedEventFile = File("selectedEvent")
+
+private fun updateSelectedEventFile(event: Event){
+    if(!selectedEventFile.exists()) selectedEventFile.createNewFile()
+    selectedEventFile.writeText("${event.name}\n")
+    selectedEventFile.appendText("${event.buttonText}\n")
+    selectedEventFile.appendText("${Constants.TEST_URL}:${Constants.SERVER_PORT}/uploads/${event.filename}\n")
+    selectedEventFile.appendText("${event.link}\n")
+    selectedEventFile.appendText(event.linkIsRoute.toString())
+}
 
 fun Application.configureDatabases() : Database {
     val l: String = File.separator
@@ -35,7 +45,7 @@ fun Application.configureDatabases() : Database {
                 call.respond(eventSchema.allEvents())
             }
             get("/{eventID}"){
-                val eventID = call.parameters["accountID"]?.toULong()
+                val eventID = call.parameters["accountID"]?.toLong()
                 if(eventID != null){
                     val event = eventSchema.getEvent(eventID)
                     if(event != null) {
@@ -47,14 +57,12 @@ fun Application.configureDatabases() : Database {
                     call.respond(HttpStatusCode.BadRequest)
                 }
             }
-            put("select/{eventID}"){
-                val eventID = call.parameters["accountID"]?.toULong()
+            put("/select/{eventID}"){
+                val eventID = call.parameters["eventID"]?.toLong()
                 if(eventID != null){
                     val event = eventSchema.selectEvent(eventID)
                     if(event != null) {
-                        val selecedEventFile = File("selectedEvent")
-                        if(!selecedEventFile.exists()) selecedEventFile.createNewFile()
-                        selecedEventFile.writeText(event.filename)
+                        updateSelectedEventFile(event)
                         call.respond(event)
                     } else {
                         call.respond(HttpStatusCode.NotFound)
@@ -68,11 +76,17 @@ fun Application.configureDatabases() : Database {
                 if(call.request.contentType().match(ContentType.MultiPart.FormData)){
                     var eventname = ""
                     var filename = ""
+                    var buttonText = ""
+                    var linkURL = ""
+                    var linkIsRoute = false
                     var fileWasCreated = false
                     var file = File("")
                     call.receiveMultipart().forEachPart { part ->
                         if(part is PartData.FormItem){
                             if(part.name == "event-name") eventname = part.value
+                            if(part.name == "event-button-text") buttonText = part.value
+                            if(part.name == "link-url") linkURL = part.value
+                            if(part.name == "link-is-route") linkIsRoute = part.value == "true"
                         } else if(part is PartData.FileItem) {
                             filename = part.originalFileName!!
                             if(filename.split(".")[1]=="svg") {
@@ -93,8 +107,13 @@ fun Application.configureDatabases() : Database {
                         }
                     }
                     if(eventname.isNotBlank() && fileWasCreated){
+                        if(buttonText.isBlank()) buttonText = eventname
                         println("adding Event to Database")
-                        val eventID = eventSchema.createEvent(Event(0U, eventname, filename, false))
+                        val event = Event(0L, eventname, buttonText, filename, false, linkURL, linkIsRoute)
+                        val eventID = eventSchema.createEvent(event)
+                        if(eventID == 1L) {
+                            updateSelectedEventFile(event)
+                        }
                         if(eventID != null) call.respond(HttpStatusCode.Created, eventID)
                     } else {
                         call.respond(HttpStatusCode.BadRequest)
@@ -129,7 +148,6 @@ fun Application.configureDatabases() : Database {
                val accountID = call.parameters["accountID"]?.toULong()
                val emailAddress = call.request.queryParameters["emailAddress"]?.toString()
                val phoneNumber = call.request.queryParameters["phoneNumber"]?.toString()
-               var updatedAccount = false;
                if(accountID != null){
                    if(accountSchema.updateAccount(accountID, emailAddress, phoneNumber)){
                        call.respond(HttpStatusCode.OK)

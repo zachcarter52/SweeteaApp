@@ -1,31 +1,37 @@
 package org.example.sweetea.dataclasses.local
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.jordond.connectivity.Connectivity
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.example.sweetea.Constants
+import org.example.sweetea.EventResponse
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 
 class AppViewModel: ViewModel() {
-    private lateinit var repository: SquareRepository
+    private var eventRespository = EventRepository()
+    private val DefaultEvent = EventResponse("","", "", "", false)
+    private lateinit var squareRepository: SquareRepository
 
-    private val _locationList = MutableLiveData<List<LocationData>>()
-    val locationList: LiveData<List<LocationData>> = _locationList
-    private val _categoryList = MutableLiveData<List<CategoryData>>()
-    val categoryList: LiveData<List<CategoryData>> = _categoryList
-    private val _productList = MutableLiveData<List<ProductData>>()
-    private val productList: MutableLiveData<List<ProductData>> = _productList
+    private val _locationList = MutableStateFlow<List<LocationData>>(listOf())
+    val locationList: StateFlow<List<LocationData>> = _locationList
+    private val _categoryList = MutableStateFlow<List<CategoryData>>(listOf())
+    val categoryList: StateFlow<List<CategoryData>> = _categoryList
+    private val _productList = MutableStateFlow<List<ProductData>>(listOf())
+    private val productList: StateFlow<List<ProductData>> = _productList
+    private val _currentEvent = MutableStateFlow(DefaultEvent)
+    val currentEvent: StateFlow<EventResponse> = _currentEvent
 
     var currentLocation: LocationData? by mutableStateOf(null)
     var currentCategory: CategoryData? by mutableStateOf(null)
@@ -44,8 +50,9 @@ class AppViewModel: ViewModel() {
             }
         }
         System.out.println("Internet Status: $internetStatus")
-        repository = SquareRepository(internetStatus)
+        squareRepository = SquareRepository(internetStatus)
         println("Updating info")
+        getCurrentEvent()
         if(currentLocation == null) getLocations()
         if(currentCategory == null) getCategories()
         if(currentLocation != null) getProducts(currentLocation!!.id)
@@ -55,12 +62,25 @@ class AppViewModel: ViewModel() {
         currentCategory = category
     }
 
+    private fun getCurrentEvent(){
+       viewModelScope.launch{
+           try{
+               _currentEvent.value = eventRespository.getCurrentEvent() ?: DefaultEvent
+               println("currentEvent:{name: ${currentEvent.value.eventName}, url:${currentEvent.value.eventImageURL}}")
+           } catch (e: Exception){
+               println("Unable to get Current Event, ${e}")
+               println("Url : ${Constants.SERVER_URL}:${Constants.SERVER_PORT}${Constants.EVENT_ENDPOINT}")
+               //throw e
+           }
+       }
+    }
+
     private fun getLocations() {
         viewModelScope.launch {
             try {
                 println("Getting Locations")
-                _locationList.value = repository.getLocations()
-                if(currentLocation == null) locationList.value!!.forEach{
+                _locationList.value = squareRepository.getLocations()
+                if(currentLocation == null) locationList.value.forEach{
                     location ->
                     if( location.address.data.is_primary ){
                         currentLocation = location
@@ -79,8 +99,8 @@ class AppViewModel: ViewModel() {
         viewModelScope.launch {
             try{
                 println("Getting Categories")
-                _categoryList.value = repository.getCategories()
-                _categoryList.value!!.forEach{
+                _categoryList.value = squareRepository.getCategories()
+                _categoryList.value.forEach{
                     category ->
                     categoryMap[category.site_category_id] = category
                 }
@@ -95,9 +115,9 @@ class AppViewModel: ViewModel() {
         viewModelScope.launch {
             try{
                 println("Getting products for location ${locationID}")
-                _productList.value = repository.getProducts(locationID)
+                _productList.value = squareRepository.getProducts(locationID)
                 productMapLocation = currentLocation
-                _productList.value!!.forEach {
+                _productList.value.forEach {
                     product ->
                     if( productMap[product.categories.data[0].site_category_id] == null ){
                         productMap[product.categories.data[0].site_category_id] = arrayListOf()

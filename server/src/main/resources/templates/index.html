@@ -9,13 +9,35 @@
         <iframe name="dummyframe" id="dummyframe" style="display:none;"></iframe>
         <form id="eventForm" action="events" target="dummyframe" method="post" enctype="multipart/form-data">
             <label for="event-name">Event:</label><input type="text" id="event-name" name="event-name"/><br>
+            <label for="event-button-text">Button Text:</label><input type="text" id="event-button-text" name="event-button-text"/><br>
+            <label for="link-url">
+                <select name="link-type" id="link-type">
+                    <option selected="selected" name="route">App Page</option>
+                    <option name="url">Link</option>
+                </select>
+            </label>
+            <label hidden for="select-route"></label>
+            <select name="select-route" id="select-route">
+                <option th:each="route, iter: ${pageRoutes}" th:attr="selected= ${iter.index} == 1 ? '' : null, name=${route}" th:text="${route}"></option>
+            </select>
+            <input hidden type="text" id="link-url" name="link-url"/>
+            <br>
             <input type="file" id="event-image" name="event-image" accept="image/*"/><br>
+            <input type="hidden" id="link-is-route" name="link-is-route"/>
+
             <button value="upload">Submit</button>
         </form>
         <table id="eventTable">
-            <tbody th:id="${selectedEvent}">
+            <tbody>
             <tr>
-                <th th:each="event, iter: ${events}" th:id="eventHeader + ${iter.index}" th:text="${event.name}"></th>
+                <th th:each="event, iter: ${events}"
+                    th:id="${event.isSelected} ? 'selected' : ''"
+                    th:text="${event.name}"
+                    th:attr="event-id=${event.id}"
+                ></th>
+            </tr>
+            <tr>
+                <td th:each="event, iter: ${events}" th:id="eventButton + ${iter.index}" th:text="${event.buttonText}"></td>
             </tr>
             <tr>
                 <td th:each="event, iter: ${events}" th:id="eventImage + ${iter.index}" >

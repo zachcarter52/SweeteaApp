@@ -59,6 +59,7 @@ kotlin {
             //Web Request dependency
             implementation(libs.retrofit)
             implementation(libs.retrofit.gson)
+
             implementation(libs.connectivity.core)
             implementation(libs.ktor.client.android)
             implementation(libs.kotlinx.coroutines.android)
@@ -84,6 +85,10 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network)
             implementation(libs.coil.compose)
+            //ktor
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
             //Connectivity Status dependency
             implementation(libs.connectivity.core)
             implementation(libs.connectivity.device)

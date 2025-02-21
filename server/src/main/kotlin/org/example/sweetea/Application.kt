@@ -10,7 +10,7 @@ import org.example.sweetea.database.configureDatabases
 import org.example.sweetea.plugins.configureWebPanel
 
 fun main(args: Array<String>) {
-    embeddedServer(Netty, port = Constants.SERVER_PORT, host = "0.0.0.0", module = Application::module)
+    embeddedServer(Netty, port = Constants.SERVER_PORT, host = Constants.SERVER_HOST, module = Application::module)
         .start(wait = true)
     //io.ktor.server.netty.EngineMain.main(args)
 }
