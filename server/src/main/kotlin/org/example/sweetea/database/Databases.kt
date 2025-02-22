@@ -87,7 +87,9 @@ fun Application.configureDatabases() : Database {
                             if(part.name == "event-button-text") buttonText = part.value
                             if(part.name == "link-url") linkURL = part.value
                             if(part.name == "link-is-route") linkIsRoute = part.value == "true"
+                            println("${part.name}: ${part.value}")
                         } else if(part is PartData.FileItem) {
+                            println("recieved a file")
                             filename = part.originalFileName!!
                             if(filename.split(".")[1]=="svg") {
                                 call.respond(HttpStatusCode.NotAcceptable, "SVG files are not allowed")
@@ -109,6 +111,7 @@ fun Application.configureDatabases() : Database {
                     if(eventname.isNotBlank() && fileWasCreated){
                         if(buttonText.isBlank()) buttonText = eventname
                         println("adding Event to Database")
+                        println("$eventname, $buttonText, $filename, false, $linkURL, $linkIsRoute")
                         val event = Event(0L, eventname, buttonText, filename, false, linkURL, linkIsRoute)
                         val eventID = eventSchema.createEvent(event)
                         if(eventID == 1L) {

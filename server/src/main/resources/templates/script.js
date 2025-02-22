@@ -10,7 +10,7 @@ $(document).ready(async () => {
             location.reload();
         },
         error: (response, statusText) =>{
-            var errorText = "An error occured $(response.status)"
+            var errorText = `An error occured ${response.status}`
             switch(response.status){
                 case 409:
                     errorText = "There is already and event with that image"
@@ -40,7 +40,8 @@ $(document).ready(async () => {
         }
         return true;
     })
-    let table = $("#eventTable");
+    let eventTable = $("#eventTable");
+    let eventContainer = $("#eventContainer");
     let tableRows = $("tr");
     let headerRow = $(tableRows[0]);
     let headerCells = headerRow.children()
@@ -48,18 +49,34 @@ $(document).ready(async () => {
     let selectedCell = $("#selected");
     let selectedCellIndex = selectedCell.index();
 
-    let tableBorderWidth = (table.outerWidth() - table.width())/2;
+    let tableBorderWidth = (eventTable.outerWidth() - eventTable.width())/2;
     var selectionOutline = $("#selectionOutline");
-    let selectionPadding = 7;
-    selectionOutline.height(table.height());
-    if(selectedCell) selectionOutline.width(selectedCell.width())
-    tableOffset = table.offset();
-    selectedOffset = selectedCell.offset();
-    selectionOutlineOffset = {top: tableOffset.top - selectionPadding, left: selectedOffset.left}
-    //tableOffset.left -= selectionPadding;
-    selectionOutline.offset(selectionOutlineOffset);
+    let selectionPadding = 5;
+    let positionSelectionOutline = () =>{
+        selectionOutline.height(eventTable.height());
+        if(selectedCell){
+            let currentCellWidth = eventContainer.width()+eventContainer.offset().left-selectedCell.offset().left+2*selectionPadding;
+            let outlineWidth = Math.max(Math.min(selectedCell.width(), currentCellWidth), 0);
+            selectionOutline.width(outlineWidth);
+            if(outlineWidth == 0){
+                selectionOutline.hide();
+            } else {
+                selectionOutline.show();
+            }
+        }
+        tableOffset = eventTable.offset();
+        selectedOffset = selectedCell.offset();
+        selectionOutlineOffset = {top: tableOffset.top - selectionPadding, left: selectedOffset.left}
+        //tableOffset.left -= selectionPadding;
+        selectionOutline.offset(selectionOutlineOffset);
+        selectionOutline.width()
+
+    }
+    positionSelectionOutline();
+    $(window).on("resize", positionSelectionOutline);
+    $("#eventContainer").on("scroll", positionSelectionOutline);
     let onClicks = []
-    for(var i = 0; i < headerCells.length; i++){
+    for(var i = 1; i < headerCells.length; i++){
         let eventID = headerCells[i].attributes["event-id"].value
         onClicks[i] = () => {
             $.ajax({
@@ -67,7 +84,7 @@ $(document).ready(async () => {
                 method: "PUT",
                 success: () => {location.reload();},
                 error: (response, statusText) =>{
-                    var errorText = "An error occured $(response.status)"
+                    var errorText = `An error occured ${response.status}`
                     alert(errorText)
                 }
             })
@@ -75,7 +92,7 @@ $(document).ready(async () => {
     }
     for(var i = 0; i < tableRows.length; i++){
         var tableCells = $(tableRows[i]).children();
-        for(var j = 0; j < tableCells.length; j++){
+        for(var j = 1; j < tableCells.length; j++){
             if(j != selectedCellIndex){
                 let cell =$(tableCells[j]);
                 cell.on("click", onClicks[j]);
