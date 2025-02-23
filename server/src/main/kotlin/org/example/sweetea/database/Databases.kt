@@ -28,7 +28,7 @@ val accountSchema = AccountSchema(database)
 val eventSchema = EventSchema(database)
 val selectedEventFile = File("selectedEvent")
 
-private fun updateSelectedEventFile(event: Event){
+internal fun updateSelectedEventFile(event: Event){
     if(!selectedEventFile.exists()) selectedEventFile.createNewFile()
     selectedEventFile.writeText("${event.name}\n")
     selectedEventFile.appendText("${event.buttonText}\n")
@@ -57,12 +57,25 @@ fun Application.configureDatabases() : Database {
                     call.respond(HttpStatusCode.BadRequest)
                 }
             }
+            delete("/{eventID}"){
+                val eventID = call.parameters["eventID"]?.toLong()
+                if(eventID != null){
+                    val deletedEvent = eventSchema.deleteEvent(eventID)
+                    if(deletedEvent != null) {
+                        File("uploads$l${deletedEvent.filename}").delete()
+                        call.respond(HttpStatusCode.OK)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
             put("/select/{eventID}"){
                 val eventID = call.parameters["eventID"]?.toLong()
                 if(eventID != null){
                     val event = eventSchema.selectEvent(eventID)
                     if(event != null) {
-                        updateSelectedEventFile(event)
                         call.respond(event)
                     } else {
                         call.respond(HttpStatusCode.NotFound)
@@ -117,7 +130,7 @@ fun Application.configureDatabases() : Database {
                         if(eventID == 1L) {
                             updateSelectedEventFile(event)
                         }
-                        if(eventID != null) call.respond(HttpStatusCode.Created, eventID)
+                        if(eventID != null) call.respond(HttpStatusCode.Created)
                     } else {
                         call.respond(HttpStatusCode.BadRequest)
                     }

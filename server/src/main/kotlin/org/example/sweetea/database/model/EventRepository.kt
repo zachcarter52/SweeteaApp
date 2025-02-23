@@ -7,4 +7,5 @@ interface EventRepository {
     suspend fun updateEvent(eventID: Long, updatedEvent: Event): Boolean
     suspend fun getSelectedEvent(): Event?
     suspend fun selectEvent(eventID: Long): Event?
+    suspend fun deleteEvent(eventID: Long): Event?
 }

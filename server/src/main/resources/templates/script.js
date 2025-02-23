@@ -23,6 +23,11 @@ $(document).ready(async () => {
     let linkSelector = $("#link-type")
     let routeSelector = $("#select-route")
     let linkUrlInput = $("#link-url")
+    let linkIsRouteInput = $("#link-is-route")
+    routeSelector.val("Menu")
+    linkUrlInput.val("menu")
+    linkIsRouteInput.val(true)
+
     linkSelector.on("change", ()=>{
         if(getNameOfSelectedOption(linkSelector) == "route"){
             routeSelector.show()
@@ -34,7 +39,7 @@ $(document).ready(async () => {
     })
     eventForm.on("submit", ()=>{
         let linkIsRoute = getNameOfSelectedOption(linkSelector) == "route"
-        $("#link-is-route").val(linkIsRoute)
+        linkIsRouteInput.val(linkIsRoute)
         if(linkIsRoute){
             linkUrlInput.val(getNameOfSelectedOption(routeSelector))
         }
@@ -55,30 +60,41 @@ $(document).ready(async () => {
     let positionSelectionOutline = () =>{
         selectionOutline.height(eventTable.height());
         if(selectedCell){
-            let currentCellWidth = eventContainer.width()+eventContainer.offset().left-selectedCell.offset().left+2*selectionPadding;
+            let selectedCellWidth = selectedCell.width();
+            let selectedCellLeft = selectedCell.offset().left;
+            let selectedCellRight = selectedCellLeft + selectedCellWidth;
+            let eventContainerWidth = eventContainer.width();
+            let eventContainerLeft = eventContainer.offset().left;
+            let eventContainerRight = eventContainerLeft + eventContainerWidth;
+
+            let outlineLeft = Math.max(selectedCellLeft, eventContainerLeft);
+            let outlineRight = Math.min(selectedCellRight, eventContainerRight)
+            let currentCellWidth = outlineRight-outlineLeft;
             let outlineWidth = Math.max(Math.min(selectedCell.width(), currentCellWidth), 0);
             selectionOutline.width(outlineWidth);
             if(outlineWidth == 0){
                 selectionOutline.hide();
             } else {
                 selectionOutline.show();
+                tableOffset = eventTable.offset();
+                selectedOffset = selectedCell.offset();
+                selectionOutlineOffset = {top: tableOffset.top - selectionPadding, left: outlineLeft}
+                //tableOffset.left -= selectionPadding;
+                selectionOutline.offset(selectionOutlineOffset);
+                selectionOutline.width()
             }
+        } else {
+            selectionOutline.hide();
         }
-        tableOffset = eventTable.offset();
-        selectedOffset = selectedCell.offset();
-        selectionOutlineOffset = {top: tableOffset.top - selectionPadding, left: selectedOffset.left}
-        //tableOffset.left -= selectionPadding;
-        selectionOutline.offset(selectionOutlineOffset);
-        selectionOutline.width()
-
     }
     positionSelectionOutline();
     $(window).on("resize", positionSelectionOutline);
     $("#eventContainer").on("scroll", positionSelectionOutline);
-    let onClicks = []
+    let selectClicks = []
+    let deleteClicks = []
     for(var i = 1; i < headerCells.length; i++){
         let eventID = headerCells[i].attributes["event-id"].value
-        onClicks[i] = () => {
+        selectClicks[i] = (i) => {
             $.ajax({
                 url: `/events/select/${eventID}`,
                 method: "PUT",
@@ -89,14 +105,38 @@ $(document).ready(async () => {
                 }
             })
         }
+        deleteClicks[i] = (i) => {
+            if(confirm("Are you sure you want to delete this Event?")){
+                $.ajax({
+                    url: `/events/${eventID}`,
+                    method: "DELETE",
+                    success: () => {location.reload();},
+                    error: (response, statusText) =>{
+                        var errorText = `An error occured ${response.status}`
+                        alert(errorText)
+                    }
+                })
+            }
+        }
     }
+    let headerRowIndex = $("#header-row").index()
+    let deleteRowIndex = $("#delete-row").index()
     for(var i = 0; i < tableRows.length; i++){
+        var tableRow = $(tableRows[i])
         var tableCells = $(tableRows[i]).children();
         for(var j = 1; j < tableCells.length; j++){
-            if(j != selectedCellIndex){
-                let cell =$(tableCells[j]);
-                cell.on("click", onClicks[j]);
-                cell.css("cursor", "pointer");
+            let cell =$(tableCells[j]);
+            switch(i){
+                case deleteRowIndex:
+                    cell.on("click", deleteClicks[j])
+                    cell.css("cursor", "pointer");
+                break;
+                default:
+                    if(j != selectedCellIndex){
+                        cell.on("click", selectClicks[j]);
+                        cell.css("cursor", "pointer");
+                    }
+                break;
             }
         }
     }

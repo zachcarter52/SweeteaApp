@@ -15,74 +15,80 @@
     </div>
 </header>
 <div class="container-xxl">
-<div class="container">
-    <form id="eventForm" action="events" target="dummyframe" method="post" enctype="multipart/form-data">
-        <div class="mb-2 row">
-            <div class="col">
-                <label class="form-label" for="event-name">Event:</label>
-                <input class="form-control" type="text" id="event-name" name="event-name"/><br>
+    <div class="container">
+        <form id="eventForm" action="events" target="dummyframe" method="post" enctype="multipart/form-data">
+            <div class="mb-2 row">
+                <div class="col">
+                    <label class="form-label" for="event-name">Event:</label>
+                    <input class="form-control" type="text" id="event-name" name="event-name"/><br>
+                </div>
+                <div class="col">
+                    <label class="form-label" for="event-button-text">Button Text:</label>
+                    <input class="form-control" type="text" id="event-button-text" name="event-button-text"/><br>
+                </div>
             </div>
-            <div class="col">
-                <label class="form-label" for="event-button-text">Button Text:</label>
-                <input class="form-control" type="text" id="event-button-text" name="event-button-text"/><br>
+            <div class="mb-2 row">
+                <div class="col">
+                    <select class="form-select" name="link-type" id="link-type">
+                        <option selected="selected" name="route">App Page</option>
+                        <option name="url">Link</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-select" name="select-route" id="select-route">
+                        <option th:each="route, iter: ${pageRoutes}" th:attr="selected= ${iter.index} == 1 ? '' : null, name=${route}" th:text="${#strings.capitalizeWords(route)}"></option>
+                    </select>
+                    <input style="display: none;" type="text" id="link-url" name="link-url"/>
+                </div>
             </div>
-        </div>
-        <div class="mb-2 row">
-            <div class="col">
-                <select class="form-select" name="link-type" id="link-type">
-                    <option selected="selected" name="route">App Page</option>
-                    <option name="url">Link</option>
-                </select>
+            <div class="mb-2">
+                <input class="form-select" type="file" id="event-image" name="event-image" accept="image/*"/>
             </div>
-            <div class="col">
-                <select class="form-select" name="select-route" id="select-route">
-                    <option th:each="route, iter: ${pageRoutes}" th:attr="selected= ${iter.index} == 1 ? '' : null, name=${route}" th:text="${#strings.capitalizeWords(route)}"></option>
-                </select>
-                <input style="display: none;" type="text" id="link-url" name="link-url"/>
+            <input class="form-control" type="hidden" id="link-is-route" name="link-is-route"/>
+            <div class="mb-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-sweetea me-md-2" value="upload">Submit</button>
             </div>
-        </div>
-        <div class="mb-2">
-            <input class="form-select" type="file" id="event-image" name="event-image" accept="image/*"/>
-        </div>
-        <input class="form-control" type="hidden" id="link-is-route" name="link-is-route"/>
-        <div class="mb-2 d-md-flex justify-content-md-end">
-            <button class="btn btn-sweetea me-md-2" value="upload">Submit</button>
-        </div>
-    </form>
-</div>
-<div id="eventContainer" class="container">
-    <table id="eventTable" class="table table-striped-columns bd-example">
-        <tbody>
-        <tr>
-            <th>Name</th>
-            <th th:each="event, iter: ${events}"
-                th:id="${event.isSelected} ? 'selected' : ''"
-                th:text="${event.name}"
-                th:attr="event-id=${event.id}"
-            ></th>
-        </tr>
-        <tr>
-            <th>Button Text</th>
-            <td th:each="event, iter: ${events}" th:id="eventButton + ${event.id}" th:text="${event.buttonText}"></td>
-        </tr>
-        <tr>
-            <th>Link Type</th>
-            <td th:each="event, iter: ${events}" th:id="eventType + ${event.id}" th:text="${event.linkIsRoute} ? 'Route' : 'URL' "></td>
-        </tr>
-        <tr>
-            <th>Link</th>
-            <td th:each="event, iter: ${events}" th:id="eventLink + ${event.id}" th:text="${event.link}"></td>
-        </tr>
-        <tr>
-            <th>Image</th>
-            <td th:each="event, iter: ${events}" th:id="eventImage + ${event.id}" >
-                <img src="uploads/car.JPG" alt="car" th:attr="src=@{uploads/__${event.filename}__}, alt=${event.name}"/>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div id="selectionOutline"></div>
-</div>
+        </form>
+    </div>
+    <div id="eventContainer" class="container">
+        <table id="eventTable" class="table table-striped-columns bd-example">
+            <tbody>
+            <tr id="header-row">
+                <th>Name</th>
+                <th th:each="event, iter: ${events}"
+                    th:id="${event.isSelected} ? 'selected' : ''"
+                    th:text="${event.name}"
+                    th:attr="event-id=${event.id}"
+                ></th>
+            </tr>
+            <tr>
+                <th>Button Text</th>
+                <td th:each="event, iter: ${events}" th:id="eventButton + ${event.id}" th:text="${event.buttonText}"></td>
+            </tr>
+            <tr>
+                <th>Link Type</th>
+                <td th:each="event, iter: ${events}" th:id="eventType + ${event.id}" th:text="${event.linkIsRoute} ? 'Route' : 'URL' "></td>
+            </tr>
+            <tr>
+                <th>Link</th>
+                <td th:each="event, iter: ${events}" th:id="eventLink + ${event.id}" th:text="${event.link}"></td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td th:each="event, iter: ${events}" th:id="eventImage + ${event.id}" >
+                    <img src="uploads/car.JPG" alt="car" th:attr="src=@{uploads/__${event.filename}__}, alt=${event.name}"/>
+                </td>
+            </tr>
+            <tr id="delete-row">
+                <td></td>
+                <td th:each="event, iter: ${events}">
+                    <button type="button" class="btn btn-danger d-block mx-auto" th:attr="event-id=${event.id}">Delete</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="selectionOutline"></div>
+    </div>
 </div>
 </body>
 </html>

@@ -86,10 +86,8 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-            //Connectivity Status dependency
-            implementation(libs.connectivity.core)
-            implementation(libs.connectivity.device)
-            implementation(libs.connectivity.compose.device)
+
+            implementation(libs.multiplatform.paths)
         }
     }
 }

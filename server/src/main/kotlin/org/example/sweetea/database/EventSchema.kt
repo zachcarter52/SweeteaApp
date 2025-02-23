@@ -4,6 +4,7 @@ import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.database.model.Event
 import org.example.sweetea.database.model.EventRepository
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class EventSchema(database: Database): EventRepository, DatabaseSchema() {
@@ -131,7 +132,33 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                 if(previouslySelectedEvent != null) Events.update({ Events.id eq previouslySelectedEvent.id  }){
                     it[isSelected] = false
                 }
-                return@dbQuery getEvent(id)
+                val selectedEvent = getEvent(id)
+                if(selectedEvent != null) {
+                    updateSelectedEventFile(selectedEvent)
+                    return@dbQuery selectedEvent
+                }
+                return@dbQuery null
+            } else {
+                return@dbQuery null
+            }
+        }
+    }
+
+    override suspend fun deleteEvent(id: Long): Event? {
+        return dbQuery {
+            val eventToDelete = getEvent(id)
+            if (eventToDelete != null) {
+                if(eventToDelete.isSelected){
+                   selectEvent(allEvents().first().id)
+                }
+                val rowsChanged = Events.deleteWhere{
+                    Events.id eq id
+                }
+                if(rowsChanged == 1) {
+                    return@dbQuery eventToDelete
+                } else {
+                    return@dbQuery null
+                }
             } else {
                 return@dbQuery null
             }
