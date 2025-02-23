@@ -153,7 +153,7 @@ fun MenuPage(
             MenuItem(
                 url = url,
                 contentDescription = menuCategory.name,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.FillHeight,
                 itemName = menuCategory.name,
                 imageHeight = itemHeight,
                 onClick = {

@@ -3,13 +3,8 @@ package org.example.sweetea.dataclasses.local
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.jordond.connectivity.Connectivity
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,9 +15,9 @@ import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 
 class AppViewModel: ViewModel() {
-    private var eventRespository = EventRepository()
+    private val eventRespository = EventRepository()
+    private val squareRepository = SquareRepository()
     private val DefaultEvent = EventResponse("","", "", "", false)
-    private lateinit var squareRepository: SquareRepository
 
     private val _locationList = MutableStateFlow<List<LocationData>>(listOf())
     val locationList: StateFlow<List<LocationData>> = _locationList
@@ -42,16 +37,6 @@ class AppViewModel: ViewModel() {
         private set
 
     suspend fun updateInfo(){
-        val connectivity = Connectivity{autoStart = true}
-        val internetStatus = coroutineScope {
-            when (connectivity.status()) {
-                is Connectivity.Status.Connected -> true
-                else -> false
-            }
-        }
-        System.out.println("Internet Status: $internetStatus")
-        squareRepository = SquareRepository(internetStatus)
-        println("Updating info")
         getCurrentEvent()
         if(currentLocation == null) getLocations()
         if(currentCategory == null) getCategories()
@@ -79,12 +64,14 @@ class AppViewModel: ViewModel() {
         viewModelScope.launch {
             try {
                 println("Getting Locations")
-                _locationList.value = squareRepository.getLocations()
-                if(currentLocation == null) locationList.value.forEach{
-                    location ->
-                    if( location.address.data.is_primary ){
-                        currentLocation = location
-                        return@forEach
+                val locations = squareRepository.getLocations()
+                if(!locations.isNullOrEmpty()) {
+                    _locationList.value = locations
+                    if (currentLocation == null) locationList.value.forEach { location ->
+                        if (location.address.data.is_primary) {
+                            currentLocation = location
+                            return@forEach
+                        }
                     }
                 }
             } catch (e: Exception){
@@ -99,10 +86,12 @@ class AppViewModel: ViewModel() {
         viewModelScope.launch {
             try{
                 println("Getting Categories")
-                _categoryList.value = squareRepository.getCategories()
-                _categoryList.value.forEach{
-                    category ->
-                    categoryMap[category.site_category_id] = category
+                val categories =  squareRepository.getCategories()
+                if(!categories.isNullOrEmpty()) {
+                    _categoryList.value = categories
+                    _categoryList.value.forEach { category ->
+                        categoryMap[category.site_category_id] = category
+                    }
                 }
             } catch (e: Exception){
                 println("Unable to get categories, ${e}")
@@ -115,15 +104,17 @@ class AppViewModel: ViewModel() {
         viewModelScope.launch {
             try{
                 println("Getting products for location ${locationID}")
-                _productList.value = squareRepository.getProducts(locationID)
-                productMapLocation = currentLocation
-                _productList.value.forEach {
-                    product ->
-                    if( productMap[product.categories.data[0].site_category_id] == null ){
-                        productMap[product.categories.data[0].site_category_id] = arrayListOf()
-                    }
-                    if( productMap[product.categories.data[0].site_category_id]?.indexOf(product) == -1 ) {
-                        productMap[product.categories.data[0].site_category_id]?.add(product)
+                val products = squareRepository.getProducts(locationID)
+                if(!products.isNullOrEmpty()) {
+                    _productList.value = products
+                    productMapLocation = currentLocation
+                    _productList.value.forEach { product ->
+                        if (productMap[product.categories.data[0].site_category_id] == null) {
+                            productMap[product.categories.data[0].site_category_id] = arrayListOf()
+                        }
+                        if (productMap[product.categories.data[0].site_category_id]?.indexOf(product) == -1) {
+                            productMap[product.categories.data[0].site_category_id]?.add(product)
+                        }
                     }
                 }
             } catch (e: Exception){
