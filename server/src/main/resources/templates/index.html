@@ -38,10 +38,10 @@
                     <select class="form-select" name="select-route" id="select-route">
                         <option th:each="route, iter: ${pageRoutes}" th:attr="selected= ${iter.index} == 1 ? '' : null, name=${route}" th:text="${#strings.capitalizeWords(route)}"></option>
                     </select>
-                    <input style="display: none;" type="text" id="link-url" name="link-url"/>
+                    <input class="form-control" style="display: none;" type="text" id="link-url" name="link-url"/>
                 </div>
             </div>
-            <div class="mb-2">
+            <div class="mb-2 row">
                 <input class="form-select" type="file" id="event-image" name="event-image" accept="image/*"/>
             </div>
             <input class="form-control" type="hidden" id="link-is-route" name="link-is-route"/>

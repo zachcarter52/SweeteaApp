@@ -83,6 +83,16 @@ tr > *{
     border: 1px solid var(--bs-border-color);
     border-radius: var(--bs-border-radius);
 }
+#eventContainer::-webkit-scrollbar{
+    width: 5px;
+}
+#eventContainer::-webkit-scrollbar-track{
+    background-color: #eee;
+}
+#eventContainer::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background-color: var(--sweetea-blue);
+}
 #selectionoutline{
     position:absolute;
     top: -204px;

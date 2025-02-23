@@ -29,7 +29,9 @@ $(document).ready(async () => {
     linkIsRouteInput.val(true)
 
     linkSelector.on("change", ()=>{
-        if(getNameOfSelectedOption(linkSelector) == "route"){
+        let linkIsRoute = getNameOfSelectedOption(linkSelector) == "route";
+        linkIsRouteInput.val(linkIsRoute)
+        if(linkIsRoute){
             routeSelector.show()
             linkUrlInput.hide()
         } else {
@@ -37,13 +39,8 @@ $(document).ready(async () => {
             linkUrlInput.show()
         }
     })
-    eventForm.on("submit", ()=>{
-        let linkIsRoute = getNameOfSelectedOption(linkSelector) == "route"
-        linkIsRouteInput.val(linkIsRoute)
-        if(linkIsRoute){
-            linkUrlInput.val(getNameOfSelectedOption(routeSelector))
-        }
-        return true;
+    routeSelector.on("change", ()=>{
+        linkUrlInput.val(getNameOfSelectedOption(routeSelector))
     })
     let eventTable = $("#eventTable");
     let eventContainer = $("#eventContainer");
@@ -68,7 +65,7 @@ $(document).ready(async () => {
             let eventContainerRight = eventContainerLeft + eventContainerWidth;
 
             let outlineLeft = Math.max(selectedCellLeft, eventContainerLeft);
-            let outlineRight = Math.min(selectedCellRight, eventContainerRight)
+            let outlineRight = Math.min(selectedCellRight, eventContainerRight+2*selectionPadding+1);
             let currentCellWidth = outlineRight-outlineLeft;
             let outlineWidth = Math.max(Math.min(selectedCell.width(), currentCellWidth), 0);
             selectionOutline.width(outlineWidth);
