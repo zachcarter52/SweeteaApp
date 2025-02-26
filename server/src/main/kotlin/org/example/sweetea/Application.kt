@@ -16,9 +16,9 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    val database = configureDatabases()
+    configureDatabases()
     configureSecurity()
     configureSerialization()
     configureRouting()
-    configureWebPanel(database)
+    configureWebPanel()
 }

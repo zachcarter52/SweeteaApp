@@ -50,8 +50,11 @@ class AppViewModel: ViewModel() {
     private fun getCurrentEvent(){
        viewModelScope.launch{
            try{
-               _currentEvent.value = eventRespository.getCurrentEvent() ?: DefaultEvent
-               println("currentEvent:{name: ${currentEvent.value.eventName}, url:${currentEvent.value.eventImageURL}}")
+               val event = eventRespository.getCurrentEvent()
+               if(event != null) {
+                   _currentEvent.value = event
+                   println("currentEvent:{name: ${currentEvent.value.eventName}, url:${currentEvent.value.eventImageURL}}")
+               }
            } catch (e: Exception){
                println("Unable to get Current Event, ${e}")
                println("Url : ${Constants.SERVER_URL}:${Constants.SERVER_PORT}${Constants.EVENT_ENDPOINT}")

@@ -10,6 +10,8 @@ import kotlinx.serialization.json.Json
 import me.sujanpoudel.utils.paths.appCacheDirectory
 import org.example.sweetea.Constants
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class KtorServiceHandler {
     val ktor by lazy{
@@ -26,8 +28,8 @@ class KtorServiceHandler {
             }
 
             install(HttpCache){
-                val cachePath = appCacheDirectory(Constants.PACKAGE_NAME).toString()
-                val cacheFile = File(cachePath, "ktorCache")
+                val cacheDir = appCacheDirectory(Constants.PACKAGE_NAME).toString()
+                val cacheFile = Files.createDirectories(Paths.get(cacheDir)).toFile()
                 publicStorage(FileStorage(cacheFile))
 
             }

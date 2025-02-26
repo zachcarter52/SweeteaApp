@@ -26,10 +26,15 @@ private val database = Database.connect(
 
 val accountSchema = AccountSchema(database)
 val eventSchema = EventSchema(database)
-val selectedEventFile = File("selectedEvent")
 
-internal fun updateSelectedEventFile(event: Event){
+internal fun getSelectedEventFile(): File{
+    val selectedEventFile = File("selectedEvent")
     if(!selectedEventFile.exists()) selectedEventFile.createNewFile()
+    return selectedEventFile
+
+}
+internal fun updateSelectedEventFile(event: Event){
+    val selectedEventFile = getSelectedEventFile()
     selectedEventFile.writeText("${event.name}\n")
     selectedEventFile.appendText("${event.buttonText}\n")
     selectedEventFile.appendText("${Constants.TEST_URL}:${Constants.SERVER_PORT}/uploads/${event.filename}\n")
@@ -37,7 +42,7 @@ internal fun updateSelectedEventFile(event: Event){
     selectedEventFile.appendText(event.linkIsRoute.toString())
 }
 
-fun Application.configureDatabases() : Database {
+fun Application.configureDatabases(){
     val l: String = File.separator
     routing {
         route("/events"){
@@ -186,6 +191,5 @@ fun Application.configureDatabases() : Database {
             }
         }
     }
-    return database
 }
 

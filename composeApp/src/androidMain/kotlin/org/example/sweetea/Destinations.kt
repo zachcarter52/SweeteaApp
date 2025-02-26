@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,7 +34,7 @@ open class BasicDestination (
         appViewModel: AppViewModel
         ) -> Unit,
     val subPages: List<BasicDestination>? = null,
-    val topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
+    val topBarHeaderText: @Composable ((viewModel: AppViewModel, modifier: Modifier) -> Unit)? = null,
     val hideLocation: Boolean = false,
     val hideTopBarHeader: Boolean = false,
     var index: Int = -1,
@@ -55,7 +56,7 @@ open class Destination (
     ) -> Unit,
     val onClick: (() -> Unit)? = {},
     subPages: List<BasicDestination>? = null,
-    topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
+    topBarHeaderText: @Composable ((viewModel: AppViewModel, modifier: Modifier) -> Unit)? = null,
     hideLocation: Boolean = false,
     hideTopBarHeader: Boolean = false
 ) : BasicDestination(
@@ -81,7 +82,12 @@ object Menu : Destination(
         SubMenu
     ),
     topBarHeaderText = {
-        Text("Featured Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        _, modifier ->
+        Text(
+            text ="Featured Menu Items",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = modifier
+        )
     }
 )
 
@@ -89,11 +95,10 @@ object SubMenu : BasicDestination(
     route = "subMenu",
     page = { modifier, navController, appViewModel -> SubMenuPage(modifier, navController, appViewModel) },
     topBarHeaderText = {
-        viewModel ->
+        viewModel, modifier ->
         Text(
-            viewModel.currentCategory!!.name,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold
+            text =viewModel.currentCategory!!.name,
+            style = MaterialTheme.typography.headlineMedium
         )
     }
 )
@@ -106,7 +111,11 @@ object Rewards : Destination(
     page = {modifier, navController, _ -> RewardsPage(modifier, navController) },
     hideLocation = true,
     topBarHeaderText = {
-        Text("Rewards Program", fontSize = 34.sp, fontWeight = FontWeight.Bold)
+            _, modifier ->
+        Text(
+            text = "Rewards Program",
+            style = MaterialTheme.typography.headlineMedium
+        )
     }
 )
 

@@ -20,7 +20,7 @@ import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeFully
 import org.example.sweetea.Constants
 import org.example.sweetea.EventResponse
-import org.example.sweetea.database.selectedEventFile
+import org.example.sweetea.database.getSelectedEventFile
 import java.io.File
 import java.util.Date
 
@@ -38,7 +38,7 @@ fun Application.configureRouting() {
     }
     routing {
         get("/events/selected"){
-            val eventFile = selectedEventFile.readLines()
+            val eventFile = getSelectedEventFile().readLines()
             println("${eventFile}, ${eventFile.size}")
             if(eventFile.size == 5){
                 call.respond(EventResponse(eventFile[0], eventFile[1], eventFile[2], eventFile[3], eventFile[4]=="true"))

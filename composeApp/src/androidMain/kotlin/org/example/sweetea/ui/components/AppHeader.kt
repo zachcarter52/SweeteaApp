@@ -26,7 +26,7 @@ import org.example.sweetea.dataclasses.local.AppViewModel
 fun AppHeader(
     modifier: Modifier = Modifier,
     viewModel: AppViewModel,
-    headerText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
+    headerText: @Composable ((viewModel: AppViewModel, modifier: Modifier) -> Unit)? = null,
     hideLocation: Boolean = false,
     hideTopBarHeader: Boolean? = false,
     enterTransition: () -> EnterTransition,
@@ -37,7 +37,8 @@ fun AppHeader(
     Column(modifier = modifier.fillMaxWidth(1f)) {
         Row(
             modifier = Modifier.height(28.dp).
-            align(Alignment.End)
+            align(Alignment.End),
+            verticalAlignment = Alignment.Bottom,
         ) {
             AnimatedVisibility(
                 visible = !hideLocation && visible,
@@ -61,7 +62,6 @@ fun AppHeader(
         }
 
         Row(
-            modifier = Modifier.height(38.dp),
             verticalAlignment = Alignment.Bottom
         ){
             AnimatedVisibility(
@@ -70,13 +70,12 @@ fun AppHeader(
                 exit = exitTransition(),
             ) {
                 if(headerText != null){
-                    headerText(viewModel)
+                    headerText(viewModel, Modifier.padding(4.dp, 0.dp))
                 } else {
                     Text(
-                        modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
-                        text = "Hi, <username>",
-                        fontSize = 34.sp,
-                        fontWeight = FontWeight.Bold
+                        modifier = Modifier.padding(4.dp, 0.dp),
+                        text = "Hi, {username}",
+                        style = MaterialTheme.typography.headlineLarge,
                     )
                 }
             }

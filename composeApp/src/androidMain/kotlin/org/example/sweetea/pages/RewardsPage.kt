@@ -52,8 +52,8 @@ fun RewardsPage(modifier: Modifier, navController: NavController){
                 )
                 CustomCircularProgressIndicator(
                     modifier = Modifier
-                        .size(250.dp)
-                        .background(MaterialTheme.colorScheme.inverseSurface),
+                        .size(250.dp),
+                        //.background(MaterialTheme.colorScheme.inverseSurface),
                     primaryColor = MaterialTheme.colorScheme.primary,
                     secondaryColor = MaterialTheme.colorScheme.secondary,
                     circleRadius = 230f,
