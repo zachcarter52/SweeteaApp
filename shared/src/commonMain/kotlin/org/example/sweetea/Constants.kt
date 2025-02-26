@@ -1,8 +1,13 @@
 package org.example.sweetea
 
 object Constants {
+    const val PACKAGE_NAME = "org.example.sweetea"
     const val DATABASE_HOST = "localhost"
     const val DATABASE_NAME = "SweeteaTest"
+    const val TEST_URL = "http://10.0.2.2"
+    const val SERVER_HOST = "localhost"
+    const val SERVER_URL = "http://${SERVER_HOST}"
+    const val EVENT_ENDPOINT = "/events/selected"
     const val SERVER_PORT = 8080
     const val ACCOUNT_SAFE_PERIOD_DAYS = 4*7
     const val DATABASE_USERNAME = PrivateConstants.DATABASE_USERNAME

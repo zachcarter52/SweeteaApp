@@ -21,6 +21,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.platform.LocalContext
@@ -168,7 +169,7 @@ fun SweeteaApp(
         }
 
         //appViewModel.currentCategory = 3
-        val locationList by viewModel.locationList.observeAsState(emptyList())
+        val locationList by viewModel.locationList.collectAsState()
         println("LocationData $locationList")
         println("Current Categegory ${viewModel.currentCategory}")
         //val coroutineScope = rememberCoroutineScope()
