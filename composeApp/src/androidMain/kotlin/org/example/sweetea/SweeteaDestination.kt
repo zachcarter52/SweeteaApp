@@ -69,7 +69,8 @@ object Account : Destination(
         Login,
         SignUp,
         Verification,
-        LogOut
+        LogOut,
+        ForgotPassword
     )
 )
 
@@ -96,6 +97,15 @@ object Verification : SubDestination(
     page = {modifier, navController ->
         val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
         VerificationPage(modifier, navController, email)
+    },
+    subPages = null
+)
+
+object ForgotPassword : SubDestination(
+    route = "forgotpassword/{email}",
+    page = {modifier, navController ->
+        val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
+        ForgotPasswordPage(modifier, navController)
     },
     subPages = null
 )

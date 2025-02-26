@@ -21,11 +21,9 @@ object UserPool {
             { result -> onResult(true,null)
                 // Handle successful sign-up
                 Log.i("Amplify", "Sign up successful!")
-
             },
             { error -> onResult(false, error.message)
                 Log.e("Amplify", "Sign up failed: $error")
-                // Handle sign-up errors
             }
         )
     }
@@ -45,26 +43,8 @@ object UserPool {
                 }
             },
             { error -> onResult(false, error.message) }
-            //{ Log.i("AuthQuickstart", "Sign in succeeded:") },
-            //{ Log.e("AuthQuickstart", "Sign in failed") }
         )
     }
-
-    fun checkAuthState(onAuth: (Boolean) -> Unit) {
-        Amplify.Auth.fetchAuthSession(
-            { session -> onAuth(session.isSignedIn) },
-            { error -> onAuth(false) }
-        )
-    }
-
-    fun signout() {
-        Amplify.Auth.signOut() {
-            Log.i("AuthQuickstart", "Sign out succeeded: ")
-            Log.e("AuthQuickstart", "Sign out failed ")
-        }
-
-    }
-
 }
 
 
