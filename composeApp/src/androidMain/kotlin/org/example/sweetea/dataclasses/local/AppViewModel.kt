@@ -30,6 +30,7 @@ class AppViewModel: ViewModel() {
 
     var currentLocation: LocationData? by mutableStateOf(null)
     var currentCategory: CategoryData? by mutableStateOf(null)
+    var currentProduct: ProductData? by mutableStateOf(null)
     var categoryMap: MutableMap<String, CategoryData> = mutableMapOf()
         private set
     private var productMapLocation: LocationData? by mutableStateOf(null)
@@ -47,6 +48,10 @@ class AppViewModel: ViewModel() {
         currentCategory = category
     }
 
+    fun setProduct(product: ProductData){
+        currentProduct = product
+    }
+    
     private fun getCurrentEvent(){
        viewModelScope.launch{
            try{
