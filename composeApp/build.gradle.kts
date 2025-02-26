@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlinCocoapods)
+    //alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
@@ -41,8 +41,7 @@ kotlin {
             implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.ui.text.googlefonts)
             implementation(libs.androidx.compose.runtime.livedata)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
+
             implementation(libs.androidx.material3.android)
             implementation(libs.androidx.navigation.runtime.ktx)
             implementation(libs.androidx.navigation.compose)
@@ -75,6 +74,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
             //Mobile payments sdk dependency
             implementation(libs.mobile.payments.sdk)
@@ -84,10 +85,6 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network)
             implementation(libs.coil.compose)
-            //Connectivity Status dependency
-            implementation(libs.connectivity.core)
-            implementation(libs.connectivity.device)
-            implementation(libs.connectivity.compose.device)
         }
     }
 }
