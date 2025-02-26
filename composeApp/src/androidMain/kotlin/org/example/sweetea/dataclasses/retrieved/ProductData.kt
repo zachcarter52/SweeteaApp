@@ -1,5 +1,7 @@
 package org.example.sweetea.dataclasses.retrieved
 
+import kotlinx.serialization.Serializable
+
 /*
 Describes the json response to the products query
 The class contains the a representation for the full response data,
@@ -7,6 +9,7 @@ with some potential inaccuracy due to null values in the available
 responses; many values have also been commented out to to their lack of
 relevance to the product, and in favor of a decreased memory footprint
  */
+@Serializable
 data class ProductData (
     val id: String,
     //val owner_id: String,
@@ -17,8 +20,8 @@ data class ProductData (
     //val visibility_tl: String,
     //val visibility_locked: Boolean,
     val name: String,
-    val short_description: String,
-    val variaton_type: String,
+    val short_description: String?,
+    //val variaton_type: String,
     val product_type: String,
     //Not used, also breaks the gson deserializer
     //val product_type_details: ProductTypeDetails,
@@ -32,10 +35,10 @@ data class ProductData (
     //val permalink: String,
     //val seo_page_description: String,
     //val seo_page_title: String,
-    val seo_page_image_id: Int,
+    //val seo_page_image_id: Int,
     //val og_title: String,
     //val og_description: String,
-    val avg_rating: String,
+    //val avg_rating: String,
     //val avg_rating_all: String,
     val inventory: InventoryData,
     //val measurement_unit_abbreviation: String,
@@ -43,7 +46,7 @@ data class ProductData (
     //val on_sale: Boolean,
     //val is_alcoholic: Boolean,
     //val import_source: String,
-    val per_order_max: Int,
+    val per_order_max: Int?,
     //val allow_order_item_quantities: Boolean,
     //val created_date: String,
     //val updated_date: String,
@@ -70,23 +73,25 @@ data class ProductTypeDetails(
     val ingredients_tl: List<String>,
 )
 
+@Serializable
 data class InventoryData(
     val total: Int,
-    val lowest: String,
+    val lowest: Int?,
     val enabled: Boolean,
     val all_variations_sold_out: Boolean,
     val some_variations_sold_out: Boolean,
-    val mark_sold_out_all_existing_locations: Boolean,
-    val mark_sold_out_skus_count: Int,
+    //val mark_sold_out_all_existing_locations: Boolean,
+    //val mark_sold_out_skus_count: Int,
     val all_inventory_total: Int,
 )
 
+@Serializable
 data class PriceData(
     val high: Float,
     val high_with_modifiers: Float,
     //val high_with_subscriptions: Float,
     val high_formatted: String,
-    val high_formmated_with_modifiers: String,
+    //val high_formmated_with_modifiers: String,
     //val high_formmated_with_subscriptions: String,
     val high_subunits: Int,
     //val high_with_subscriptions_subunits: Int,
@@ -94,7 +99,7 @@ data class PriceData(
     val low_with_modifiers: Float,
     val low_with_subscriptions: Float,
     val low_formatted: String,
-    val low_formmated_with_modifiers: String,
+    //val low_formmated_with_modifiers: String,
     //val low_formmated_with_subscriptions: String,
     val low_subunits: Int,
     //val low_with_subscriptions_subunits: Int,
@@ -102,7 +107,7 @@ data class PriceData(
     val regular_high_with_modifiers: Float,
     //val regular_high_with_subscriptions: Float,
     val regular_high_formatted: String,
-    val regular_high_formated_with_modifiers: String,
+    //val regular_high_formated_with_modifiers: String,
     //val regular_high_formated_with_subscriptions: String,
     val regular_high_subunits: Int,
     //val regular_high_with_subscriptions_subunits: Int,
@@ -110,12 +115,13 @@ data class PriceData(
     val regular_low_with_modifiers: Float,
     //val regular_low_with_subscriptions: Float,
     val regular_low_formatted: String,
-    val regular_low_formated_with_modifiers: String,
-    val regular_low_formated_with_subscriptions: String,
+    //val regular_low_formated_with_modifiers: String,
+    //val regular_low_formated_with_subscriptions: String,
     val regular_low_subunits: Int,
     //val regular_low_with_subscriptions_subunits: Int,
 )
 
+@Serializable
 data class BadgeData(
     val low_stock: Boolean,
     val out_of_stock: Boolean,
@@ -139,6 +145,7 @@ data class FulfillmentAvailability(
     val download: Boolean,
 )
 
+@Serializable
 data class ImageData(
     val id: String,
     val owner_id: String,
@@ -161,6 +168,7 @@ data class PlaceholderImageData(
     val absolute_url: String,
 )
 
+@Serializable
 data class BasicCategoryData(
     val site_category_id: String,
     val name: String,

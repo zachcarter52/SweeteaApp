@@ -29,6 +29,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.core.content.ContextCompat
@@ -66,7 +67,7 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
 
-class MainScreen : ComponentActivity() {
+class MainScreen : ComponentActivity(){
 
     private val appViewModel: AppViewModel by viewModels()
     private var userLocation: Location? = null
@@ -84,7 +85,7 @@ class MainScreen : ComponentActivity() {
         StoreLocation("TEST ", LatLng(38.931576120528206, -121.08846144717354))
     )
 
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -166,12 +167,12 @@ class MainScreen : ComponentActivity() {
                 }
             }
         }
-
         // Initialize Amplify / Cognito
         try {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
             Amplify.configure(applicationContext)
             Log.i("MyAmplifyApp", "Initialized Amplify")
+
         } catch (error: AmplifyException) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error)
         }
@@ -267,104 +268,100 @@ class MainScreen : ComponentActivity() {
 
 
 
-    @Composable
-    fun SweeteaApp(
-        modifier: Modifier = Modifier,
-        viewModel: AppViewModel,
-        cacheDir: File
-    ) {
-        LaunchedEffect(Unit) {
-            viewModel.updateInfo()
+@Composable
+fun SweeteaApp(
+    modifier:Modifier = Modifier,
+    viewModel: AppViewModel,
+    cacheDir: File
+){
+    LaunchedEffect(Unit){
+        viewModel.updateInfo()
+    }
+
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .memoryCache {
+                MemoryCache.Builder()
+                    .maxSizePercent(context, 0.20)
+                    .build()
+            }
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(cacheDir.resolve("image_cache"))
+                    .maxSizeBytes(5 * 1024 * 1024)
+                    .build()
+            }
+            .logger(DebugLogger())
+            .build()
+    }
+
+    AppTheme(
+        dynamicColor = false
+    ){
+
+        val navController = rememberNavController()
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        var currentRoute by remember{mutableStateOf("")}
+
+        var selectedItem by remember { mutableIntStateOf(0) }
+        var oldSelectedItem by remember { mutableIntStateOf(0) }
+
+        val navPageRoute = navBackStackEntry?.id
+        val navRoute = navBackStackEntry?.destination?.route
+        var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
+        if(navRoute != null && navRoute != currentRoute){
+            currentRoute = navRoute
+            val curRouteObj = destMap( navRoute )
+            if(curRouteObj != null && curRouteObj.index >= 0 ){
+                currentRouteObject = curRouteObj
+                oldSelectedItem = selectedItem
+                selectedItem = curRouteObj.index
+            }
         }
 
-        setSingletonImageLoaderFactory { context ->
-            ImageLoader.Builder(context)
-                .memoryCachePolicy(CachePolicy.ENABLED)
-                .memoryCache {
-                    MemoryCache.Builder()
-                        .maxSizePercent(context, 0.20)
-                        .build()
-                }
-                .diskCachePolicy(CachePolicy.ENABLED)
-                .networkCachePolicy(CachePolicy.ENABLED)
-                .diskCache {
-                    DiskCache.Builder()
-                        .directory(cacheDir.resolve("image_cache"))
-                        .maxSizeBytes(5 * 1024 * 1024)
-                        .build()
-                }
-                .logger(DebugLogger())
-                .build()
+        val enterTransition = {
+            when{
+                selectedItem > oldSelectedItem ->
+                    slideInHorizontally(initialOffsetX = { it }) +
+                            fadeIn()
+                selectedItem < oldSelectedItem ->
+                    slideInHorizontally(initialOffsetX = { -it }) +
+                            fadeIn()
+                else ->
+                    if(BaseDestinations.indexOf(currentRouteObject) == -1) {
+                        slideInVertically(initialOffsetY = { it }) +
+                                fadeIn()
+                    } else {
+                        slideInVertically(initialOffsetY = { -it }) +
+                                fadeIn()
+                    }
+            }
         }
 
-        AppTheme(
-            dynamicColor = false
-        ) {
-
-            val navController = rememberNavController()
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            var currentRoute by remember { mutableStateOf("") }
-
-            var selectedItem by remember { mutableIntStateOf(0) }
-            var oldSelectedItem by remember { mutableIntStateOf(0) }
-
-            val navPageRoute = navBackStackEntry?.id
-            val navRoute = navBackStackEntry?.destination?.route
-            var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
-            if (navRoute != null && navRoute != currentRoute) {
-                currentRoute = navRoute
-                val curRouteObj = destMap(navRoute)
-                if (curRouteObj != null && curRouteObj.index >= 0) {
-                    currentRouteObject = curRouteObj
-                    oldSelectedItem = selectedItem
-                    selectedItem = curRouteObj.index
-                }
-            }
-
-            val enterTransition = {
-                when {
-                    selectedItem > oldSelectedItem ->
-                        slideInHorizontally(initialOffsetX = { it }) +
-                                fadeIn()
-
-                    selectedItem < oldSelectedItem ->
-                        slideInHorizontally(initialOffsetX = { -it }) +
-                                fadeIn()
-
-                    else ->
-                        if (BaseDestinations.indexOf(currentRouteObject) == -1) {
-                            slideInVertically(initialOffsetY = { it }) +
-                                    fadeIn()
-                        } else {
-                            slideInVertically(initialOffsetY = { -it }) +
-                                    fadeIn()
-                        }
-                }
-            }
-
-            val exitTransition = {
-                when {
-                    selectedItem > oldSelectedItem ->
-                        slideOutHorizontally(targetOffsetX = { -it }) +
+        val exitTransition = {
+            when{
+                selectedItem > oldSelectedItem ->
+                    slideOutHorizontally(targetOffsetX = { -it }) +
+                            fadeOut()
+                selectedItem < oldSelectedItem ->
+                    slideOutHorizontally(targetOffsetX = { it }) +
+                            fadeOut()
+                else ->
+                    if(BaseDestinations.indexOf(currentRouteObject) == -1) {
+                        slideOutVertically(targetOffsetY = { -it }) +
                                 fadeOut()
-
-                    selectedItem < oldSelectedItem ->
-                        slideOutHorizontally(targetOffsetX = { it }) +
+                    } else{
+                        slideOutVertically(targetOffsetY = { it }) +
                                 fadeOut()
-
-                    else ->
-                        if (BaseDestinations.indexOf(currentRouteObject) == -1) {
-                            slideOutVertically(targetOffsetY = { -it }) +
-                                    fadeOut()
-                        } else {
-                            slideOutVertically(targetOffsetY = { it }) +
-                                    fadeOut()
-                        }
-                }
+                    }
             }
+        }
 
             //appViewModel.currentCategory = 3
-            val locationList by viewModel.locationList.observeAsState(emptyList())
+            val locationList by viewModel.locationList.collectAsState()
             println("LocationData $locationList")
             println("Current Categegory ${viewModel.currentCategory}")
             //val coroutineScope = rememberCoroutineScope()
@@ -421,7 +418,7 @@ class MainScreen : ComponentActivity() {
             }
         }
 
-    }
+}
 
 
 //    fun onPause() {
@@ -450,7 +447,7 @@ class MainScreen : ComponentActivity() {
     }*/
 
 //actions after success and failure need to be added
-    /*fun startPaymentActivity() {
+/*fun startPaymentActivity() {
     val paymentManager = MobilePaymentsSdk.paymentManager()
     // Configure the payment parameters
     val paymentParams = PaymentParameters.Builder(

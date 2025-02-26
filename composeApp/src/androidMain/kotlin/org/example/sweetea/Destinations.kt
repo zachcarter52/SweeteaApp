@@ -68,7 +68,7 @@ object Home : Destination(
     label = "Home",
     route = "home",
     pageRoute = "homepage",
-    page = {modifier, navController, _ -> HomePage(modifier, navController) },
+    page = {modifier, navController, appViewModel -> HomePage(modifier, navController, appViewModel) },
 )
 
 object Menu : Destination(
@@ -76,7 +76,7 @@ object Menu : Destination(
     label = "Menu",
     route = "menu",
     pageRoute = "menupage",
-    page = {modifier, navController, appViewMenu -> MenuPage(modifier, navController, appViewMenu) },
+    page = {modifier, navController, appViewModel -> MenuPage(modifier, navController, appViewModel) },
     subPages = listOf(
         SubMenu
     ),

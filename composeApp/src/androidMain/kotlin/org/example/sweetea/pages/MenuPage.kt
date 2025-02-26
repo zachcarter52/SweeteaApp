@@ -13,6 +13,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateMapOf
@@ -111,7 +112,7 @@ fun MenuPage(
 
     val imageCache = remember { mutableStateMapOf<Int, Painter>() }
 
-    val menuCategoryState by appViewModel.categoryList.observeAsState(emptyList())
+    val menuCategoryState by appViewModel.categoryList.collectAsState()
     println("Menu Categories $menuCategoryState")
 
     @Composable

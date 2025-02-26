@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.utils.IMPLEMENTATION
 
 plugins {
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
@@ -56,9 +57,7 @@ kotlin {
             //Amazon Cognito / Amplify dependencies
             implementation(libs.aws.amplify.core) //amplify library
             implementation(libs.aws.auth.cognito)  //cognito library
-            //Web Request dependency
-            implementation(libs.retrofit)
-            implementation(libs.retrofit.gson)
+
             implementation(libs.ktor.client.android)
             implementation(libs.kotlinx.coroutines.android)
         }
@@ -83,13 +82,16 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network)
             implementation(libs.coil.compose)
-            //Connectivity Status dependency
-            implementation(libs.connectivity.core)
-            implementation(libs.connectivity.device)
-            implementation(libs.connectivity.compose.device)
+            //ktor
 
             implementation (libs.maps.compose)
             implementation (libs.play.services.maps.v1800)
+            //ktor
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+
+            implementation(libs.multiplatform.paths)
         }
     }
 }
