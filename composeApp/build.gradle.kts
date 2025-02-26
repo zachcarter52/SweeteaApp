@@ -87,6 +87,9 @@ kotlin {
             implementation(libs.connectivity.core)
             implementation(libs.connectivity.device)
             implementation(libs.connectivity.compose.device)
+
+            implementation (libs.maps.compose)
+            implementation (libs.play.services.maps.v1800)
         }
     }
 }
@@ -130,6 +133,8 @@ android {
 
 dependencies {
 
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
