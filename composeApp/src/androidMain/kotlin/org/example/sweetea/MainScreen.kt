@@ -69,6 +69,8 @@ import kotlinx.coroutines.launch
 
 class MainScreen : ComponentActivity(){
 
+
+
     private val appViewModel: AppViewModel by viewModels()
     private var userLocation: Location? = null
 
@@ -88,6 +90,7 @@ class MainScreen : ComponentActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         installSplashScreen()
 
         setContent {
@@ -154,18 +157,18 @@ class MainScreen : ComponentActivity(){
             )
 
             // Button to manually request location permission, should be removed
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()  // Takes up the full screen size
-                    .padding(16.dp)
-            ) {
-                Button(
-                    onClick = { locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) },
-                    modifier = Modifier.align(Alignment.Center)  // Centers button, should be removed before pushing
-                ) {
-                    Text("Request Location Permission")
-                }
-            }
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()  // Takes up the full screen size
+//                    .padding(16.dp)
+//            ) {
+//                Button(
+//                    onClick = { locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) },
+//                    modifier = Modifier.align(Alignment.Center)  // Centers button, should be removed before pushing
+//                ) {
+//                    Text("Request Location Permission")
+//                }
+//            }
         }
         // Initialize Amplify / Cognito
         try {
@@ -240,7 +243,7 @@ class MainScreen : ComponentActivity(){
                         // Launch coroutine to call the suspend function
                         lifecycleScope.launch {
                             try {
-                                val (nearest, distance) = findNearestStoreRoadDistance(userLatLng, storeLocations, "AIzaSyBjQlMFFFXprfS1dCjGLfr1FMIbIm9nn20")
+                                val (nearest, distance) = findNearestStoreRoadDistance(userLatLng, storeLocations, "APIKEY")
                                 nearestStore = nearest
                                 // Handle the result here (e.g., log the nearest store and distance)
                                 Log.d("Location", "Nearest store: ${nearest.name}${nearest.location.latitude}, ${nearest.location.longitude}")

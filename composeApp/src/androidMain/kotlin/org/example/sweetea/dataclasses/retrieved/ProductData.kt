@@ -175,7 +175,7 @@ data class BasicCategoryData(
     val name: String,
     //val ancestor_site_category_ids: List<String>
 )
-
+@Serializable
 data class ModifierData(
     val id: String,
 //"square_id": "L7NF2TQKWYNBGLWLH777EGOP",
@@ -195,7 +195,7 @@ data class ModifierData(
     val choices: List<ChoiceData>,
 
 )
-
+@Serializable
 data class ChoiceData(
     val id: String,
     val name: String,
