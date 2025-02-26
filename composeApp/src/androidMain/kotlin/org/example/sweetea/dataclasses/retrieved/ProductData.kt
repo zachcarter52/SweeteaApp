@@ -61,6 +61,7 @@ data class ProductData (
     //val placeholder_image: Data<PlaceholderImageData>,
     val images: Data<List<ImageData>>,
     //val media_files: Data<List<String>>,
+    val modifiers: Data<List<ModifierData>>,
     val categories: Data<List<BasicCategoryData>>,
     //val discounts: Data<List<String>>,
 )
@@ -173,4 +174,32 @@ data class BasicCategoryData(
     val site_category_id: String,
     val name: String,
     //val ancestor_site_category_ids: List<String>
+)
+
+data class ModifierData(
+    val id: String,
+//"square_id": "L7NF2TQKWYNBGLWLH777EGOP",
+//"owner_id": "140236773",
+//"site_id": "568173742194551081",
+    val site_product_id: Int,
+                        //val site_product_modifier_id: Int,               THIS ONE DOESNT WORK MAYBE WE DONT NEED ITTTTT
+//"site_modifier_set_id": 4244388283,
+//"modifier_set_id": "11ec613d01278714862f5226a7fc24fd",
+
+    val name: String,
+    val min_selected: Int,
+    val max_selected: Int,
+    val type: String,
+    val display_order: Int,
+    val visible_on_invoice: Int,
+    val choices: List<ChoiceData>,
+
+)
+
+data class ChoiceData(
+    val id: String,
+    val name: String,
+    val price: Float,
+    val display_order: Int,
+    val sold_out: Boolean,
 )
