@@ -10,7 +10,6 @@ Sweetea is a boba company which serves high-quality boba drinks and desserts in 
 - Zach Carter https://github.com/zachcarter52
 - Chenbin Wu https://github.com/Megpoidgumi
 - Maria Flores-Rivera https://github.com/mariafloresrivera
-- Aditya Nori https://github.com/adityanori
 - Andrew Xu https://github.com/andy1xu
 - Samuel Rudey https://github.com/JesterSam
 

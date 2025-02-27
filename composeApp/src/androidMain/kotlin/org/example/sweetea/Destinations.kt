@@ -11,12 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
+import org.example.sweetea.pages.ProductPage
 import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
 import org.example.sweetea.pages.SubMenuPage
@@ -68,7 +70,7 @@ object Home : Destination(
     label = "Home",
     route = "home",
     pageRoute = "homepage",
-    page = {modifier, navController, _ -> HomePage(modifier, navController) },
+    page = {modifier, navController, appViewModel -> HomePage(modifier, navController, appViewModel) },
 )
 
 object Menu : Destination(
@@ -76,13 +78,20 @@ object Menu : Destination(
     label = "Menu",
     route = "menu",
     pageRoute = "menupage",
-    page = {modifier, navController, appViewMenu -> MenuPage(modifier, navController, appViewMenu) },
+    page = {modifier, navController, appViewModel -> MenuPage(modifier, navController, appViewModel) },
     subPages = listOf(
-        SubMenu
+        SubMenu,
+        ProductCustomPage
     ),
     topBarHeaderText = {
         Text("Featured Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
     }
+)
+
+object ProductCustomPage : BasicDestination(
+    route = "productPage",
+    page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },
+    topBarHeaderText = {null}
 )
 
 object SubMenu : BasicDestination(

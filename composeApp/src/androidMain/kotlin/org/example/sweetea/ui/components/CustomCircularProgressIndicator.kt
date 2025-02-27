@@ -25,7 +25,7 @@ fun CustomCircularProgressIndicator(
     primaryColor: Color,
     secondaryColor:Color,
     minValue:Int = 0,
-    maxValue:Int = 100,
+    maxValue:Int = 75,
     circleRadius:Float,
     positionValue: Int = 0,
     onPositionChange:(Int)->Unit = {}
