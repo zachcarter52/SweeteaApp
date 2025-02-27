@@ -9,7 +9,7 @@ import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.dataclasses.retrieved.SquareApiRequest
 
-class SquareService(private val ktor: HttpClient): SquareApiService{
+class SquareService(private val ktor: HttpClient): SquareApiService {
     private val BASEURL = Constants.BASE_URL
     override suspend fun getLocations(): Result<SquareApiRequest<LocationData>> {
         return runCatching {

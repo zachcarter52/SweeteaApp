@@ -25,7 +25,7 @@ data class ProductData (
     val product_type: String,
     //Not used, also breaks the gson deserializer
     //val product_type_details: ProductTypeDetails,
-    val taxable: Boolean,
+    val taxable: Boolean?, //keep this
     //val required_feature_to_sell: String
     //val min_prep_time: String,
     //val min_prep_time_duration_iso8601: String,
@@ -194,7 +194,7 @@ data class ModifierData(
     val visible_on_invoice: Int,
     val choices: List<ChoiceData>,
 
-)
+    )
 @Serializable
 data class ChoiceData(
     val id: String,

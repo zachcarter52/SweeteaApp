@@ -1,6 +1,5 @@
 package org.example.sweetea.dataclasses.local
 
-import android.content.Context
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData

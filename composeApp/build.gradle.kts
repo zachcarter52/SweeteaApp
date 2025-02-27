@@ -84,8 +84,6 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network)
             implementation(libs.coil.compose)
-            //ktor
-
             implementation (libs.maps.compose)
             implementation (libs.play.services.maps.v1800)
             //ktor
