@@ -7,11 +7,14 @@ object Constants {
     const val TEST_URL = "http://10.0.2.2"
     const val SERVER_HOST = "localhost"
     const val SERVER_URL = "http://${SERVER_HOST}"
-    const val EVENT_ENDPOINT = "/events/selected"
+    const val APP_STATUS_ENDPOINT = "/status"
+    const val IMAGES_ENDPOINT = "/uploads/"
     const val SERVER_PORT = 8080
+    const val DEFAULT_BEAR_VALUE = 75
     const val ACCOUNT_SAFE_PERIOD_DAYS = 4*7
     const val DATABASE_USERNAME = PrivateConstants.DATABASE_USERNAME
     const val DATABASE_PASSWORD = PrivateConstants.DATABASE_PASSWORD
+    const val DATABASE_DEFAULT_EMAIL_DOMAIN = "mail.com"
     const val SQUARE_USER_ID = PrivateConstants.SQUARE_USER_ID
     const val SITE_ID = PrivateConstants.SITE_ID
     const val BASE_URL = "https://cdn5.editmysite.com/app/store/api/v28/editor/users/${SQUARE_USER_ID}/sites/${SITE_ID}/"

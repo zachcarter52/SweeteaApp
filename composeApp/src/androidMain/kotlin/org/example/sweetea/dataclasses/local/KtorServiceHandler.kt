@@ -4,7 +4,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.cache.storage.FileStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import me.sujanpoudel.utils.paths.appCacheDirectory
@@ -12,7 +11,7 @@ import org.example.sweetea.Constants
 import java.io.File
 
 class KtorServiceHandler {
-    val ktor by lazy{
+    private val ktor by lazy{
         HttpClient(){
             expectSuccess = true
 
@@ -33,8 +32,8 @@ class KtorServiceHandler {
             }
         }
     }
-    val eventService: EventsApiService by lazy {
-        EventService(ktor)
+    val serverService: ServerApiService by lazy {
+        ServerService(ktor)
     }
     val squareService: SquareApiService by lazy {
         SquareService(ktor)

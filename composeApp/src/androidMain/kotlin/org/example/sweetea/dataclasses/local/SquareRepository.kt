@@ -10,13 +10,19 @@ import org.example.sweetea.dataclasses.retrieved.SquareApiRequest
 class SquareRepository {
     private val squareService = KtorServiceHandler().squareService
     suspend fun getLocations(): List<LocationData>?{
-        return squareService.getLocations().onFailure{println(it)}.getOrNull()?.data
+        val locationResult = squareService.getLocations()
+        println("Successfully got location: ${locationResult.isSuccess}")
+        return locationResult.onFailure{println(it)}.getOrNull()?.data
     }
     suspend fun getCategories(): List<CategoryData>?{
-        return squareService.getCategories().onFailure{println(it)}.getOrNull()?.data
+        val categoryResult = squareService.getCategories()
+        println("Successfully got category: ${categoryResult.isSuccess}")
+        return categoryResult.onFailure{println(it)}.getOrNull()?.data
     }
     suspend fun getProducts(locationID: String): List<ProductData>?{
-        return squareService.getProducts(locationID).onFailure{println(it)}.getOrNull()?.data
+        val productsResult = squareService.getProducts(locationID)
+        println("Successfully got products: ${productsResult.isSuccess}")
+        return productsResult.onFailure{println(it)}.getOrNull()?.data
     }
 
 }

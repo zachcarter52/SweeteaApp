@@ -3,18 +3,19 @@ package org.example.sweetea.database
 import io.ktor.http.*
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
-import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.example.sweetea.Constants
 import org.example.sweetea.database.model.Account
-import org.example.sweetea.database.model.Event
+import org.example.sweetea.ResponseClasses.Event
+import org.example.sweetea.database.model.AdminAccount
 import java.io.File
 
 private val database = Database.connect(
@@ -25,17 +26,15 @@ private val database = Database.connect(
 )
 
 val accountSchema = AccountSchema(database)
+val adminAccountSchema = AdminAccountSchema(database)
 val eventSchema = EventSchema(database)
-val selectedEventFile = File("selectedEvent")
-
-internal fun updateSelectedEventFile(event: Event){
-    if(!selectedEventFile.exists()) selectedEventFile.createNewFile()
-    selectedEventFile.writeText("${event.name}\n")
-    selectedEventFile.appendText("${event.buttonText}\n")
-    selectedEventFile.appendText("${Constants.TEST_URL}:${Constants.SERVER_PORT}/uploads/${event.filename}\n")
-    selectedEventFile.appendText("${event.link}\n")
-    selectedEventFile.appendText(event.linkIsRoute.toString())
+val rewardSchema = RewardSchema(database)
+internal var selectedEvent = Event.DefaultEvent
+public suspend fun getSelectedEvent(): Event{
+    if(selectedEvent.equals(Event.DefaultEvent)) selectedEvent = eventSchema.getSelectedEvent()!!
+    return selectedEvent
 }
+
 
 fun Application.configureDatabases() : Database {
     val l: String = File.separator
@@ -128,7 +127,7 @@ fun Application.configureDatabases() : Database {
                         val event = Event(0L, eventname, buttonText, filename, false, linkURL, linkIsRoute)
                         val eventID = eventSchema.createEvent(event)
                         if(eventID == 1L) {
-                            updateSelectedEventFile(event)
+                            selectedEvent = event
                         }
                         if(eventID != null) call.respond(HttpStatusCode.Created)
                     } else {

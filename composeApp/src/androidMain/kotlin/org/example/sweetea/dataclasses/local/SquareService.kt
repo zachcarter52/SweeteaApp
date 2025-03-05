@@ -13,6 +13,7 @@ class SquareService(private val ktor: HttpClient): SquareApiService{
     private val BASEURL = Constants.BASE_URL
     override suspend fun getLocations(): Result<SquareApiRequest<LocationData>> {
         return runCatching {
+            println("Locations URL:\n $BASEURL${Constants.LOCATIONS_ENDPOINT}")
             ktor.get("$BASEURL${Constants.LOCATIONS_ENDPOINT}").body()
         }
     }

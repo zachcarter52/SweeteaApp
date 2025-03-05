@@ -25,7 +25,7 @@ data class ProductData (
     val product_type: String,
     //Not used, also breaks the gson deserializer
     //val product_type_details: ProductTypeDetails,
-    val taxable: Boolean,
+    val taxable: Boolean?,
     //val required_feature_to_sell: String
     //val min_prep_time: String,
     //val min_prep_time_duration_iso8601: String,
@@ -175,6 +175,7 @@ data class BasicCategoryData(
     val name: String,
     //val ancestor_site_category_ids: List<String>
 )
+
 @Serializable
 data class ModifierData(
     val id: String,
@@ -195,6 +196,7 @@ data class ModifierData(
     val choices: List<ChoiceData>,
 
 )
+
 @Serializable
 data class ChoiceData(
     val id: String,

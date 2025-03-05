@@ -4,7 +4,6 @@ $(document).ready(async () => {
         return selectElement.find("option:selected").attr("name")
     }
     eventForm.ajaxForm({
-        target: "body",
         success: (responseText, statusText) =>{
             alert(statusText);
             location.reload();
@@ -137,4 +136,18 @@ $(document).ready(async () => {
             }
         }
     }
+
+    //Updating bear value
+    $("#set-bear-value").on("click", ()=>{
+        let newBearValue = $("#bear-value").val();
+        if(newBearValue > 0) $.ajax({
+            url: `/bear-value/${newBearValue}`,
+            method: "PUT",
+            success: () => {location.reload();},
+            error: (response, statusText) =>{
+                var errorText = `An error occured ${response.status}`
+                alert(errorText)
+            }
+        })
+    })
 });

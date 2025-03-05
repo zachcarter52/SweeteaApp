@@ -1,15 +1,18 @@
 package org.example.sweetea
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -27,6 +30,7 @@ import org.example.sweetea.pages.SubMenuPage
 Describes a basic destination within the NavController,
 allowing for configuration of the visible navigation elements
  */
+private val headerTextPadding = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp)
 open class BasicDestination (
     val route: String,
     val page: @Composable (
@@ -84,14 +88,25 @@ object Menu : Destination(
         ProductCustomPage
     ),
     topBarHeaderText = {
-        Text("Featured Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(
+            "Featured Menu Items",
+            modifier = headerTextPadding,
+            style = MaterialTheme.typography.headlineMedium
+        )
     }
 )
 
 object ProductCustomPage : BasicDestination(
     route = "productPage",
     page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },
-    topBarHeaderText = {null}
+    topBarHeaderText = {
+        viewModel ->
+        Text(
+            text = viewModel.currentProduct!!.name,
+            modifier = headerTextPadding,
+            style = MaterialTheme.typography.headlineMedium
+        )
+    }
 )
 
 object SubMenu : BasicDestination(
@@ -101,8 +116,8 @@ object SubMenu : BasicDestination(
         viewModel ->
         Text(
             viewModel.currentCategory!!.name,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold
+            modifier = headerTextPadding,
+            style = MaterialTheme.typography.headlineMedium
         )
     }
 )
@@ -112,10 +127,14 @@ object Rewards : Destination(
     label = "Rewards",
     route = "rewards",
     pageRoute = "rewardspage",
-    page = {modifier, navController, _ -> RewardsPage(modifier, navController) },
+    page = {modifier, navController, appViewModel -> RewardsPage(modifier, navController, appViewModel) },
     hideLocation = true,
     topBarHeaderText = {
-        Text("Rewards Program", fontSize = 34.sp, fontWeight = FontWeight.Bold)
+        Text(
+            "Rewards Program",
+            modifier = headerTextPadding,
+            style = MaterialTheme.typography.headlineMedium
+            )
     }
 )
 

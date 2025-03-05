@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.mariadb.jdbc)
+    implementation(libs.jbcrypt)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.kotlin.datetime)

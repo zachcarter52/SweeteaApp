@@ -41,9 +41,7 @@ kotlin {
             implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.ui.text.googlefonts)
             implementation(libs.androidx.compose.runtime.livedata)
-            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.material3.android)
             implementation(libs.androidx.navigation.runtime.ktx)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.legacy.support.v4)
@@ -70,6 +68,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -92,6 +91,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.multiplatform.paths)
+            implementation(libs.androidx.lifecycle.viewmodel)
         }
     }
 }
