@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
+import org.example.sweetea.pages.CheckoutPage
 import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
@@ -81,13 +82,19 @@ object Menu : Destination(
     page = {modifier, navController, appViewMenu -> MenuPage(modifier, navController, appViewMenu) },
     subPages = listOf(
         SubMenu,
-        ProductCustomPage
+        ProductCustomPage,
+        CheckPage
     ),
     topBarHeaderText = {
         Text("Featured Menu Items", fontSize = 28.sp, fontWeight = FontWeight.Bold)
     }
 )
 
+object CheckPage : BasicDestination(
+    route = "checkoutPage",
+    page = { modifier, navController, appViewModel -> CheckoutPage(modifier, navController, appViewModel) },
+    topBarHeaderText = {Text("Checkout Page", fontSize = 28.sp, fontWeight = FontWeight.Bold)}
+)
 object ProductCustomPage : BasicDestination(
     route = "productPage",
     page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },

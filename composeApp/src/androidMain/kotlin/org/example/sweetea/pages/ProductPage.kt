@@ -17,6 +17,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -42,7 +44,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import org.example.sweetea.CheckPage
+import org.example.sweetea.Home
 import org.example.sweetea.ProductCustomPage
+import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
 import org.example.sweetea.ui.components.BearPageTemplate
@@ -70,6 +75,19 @@ fun ProductPage(
                 .align(Alignment.CenterHorizontally),
             fontFamily = FontFamily.SansSerif
             )
+
+        Button(
+            onClick =
+            {
+                navController.navigate(CheckPage.route)
+            },
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Image(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "Checkout Bag"
+            )
+        }
 
         //Display price
         val price = appViewModel.currentProduct!!.price.regular_high_with_modifiers
@@ -201,6 +219,15 @@ fun ProductPage(
                             )
                         }
                     }
+                  /*  Button(
+                        onClick = { navController.navigate(CheckPage.route) },
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        Image(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = "Checkout Bag"
+                        )
+                    }*/
                 }
             }
         }
