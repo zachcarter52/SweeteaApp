@@ -15,6 +15,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,22 +24,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import org.example.sweetea.*
+import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
+import org.example.sweetea.ui.components.HomeCard
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun HomePage(modifier: Modifier=Modifier, navController: NavController) {
+fun HomePage(
+    modifier: Modifier=Modifier,
+    navController: NavController,
+    appViewModel: AppViewModel
+) {
+    LaunchedEffect(Unit){
+        appViewModel.updateInfo()
+    }
+
     val featuredItemsImage = painterResource(id = R.drawable.featured_items)
     var clicked by remember { mutableStateOf(false) }
 
+    val currentEvent by appViewModel.currentEvent.collectAsState()
     //Calculates top padding based on screen height.
     //Change the floating point value in calculatedPadding to change the image placement.
     val configuration = LocalConfiguration.current
@@ -48,55 +64,56 @@ fun HomePage(modifier: Modifier=Modifier, navController: NavController) {
     BearPageTemplate(
         modifier = modifier,
     ) {
-        ElevatedCard(
-            elevation = CardDefaults.cardElevation(10.dp),
-            modifier = Modifier.fillMaxWidth(0.90f)
-                .height(300.dp),
+        HomeCard(
+            image = {
+                Image(
+                    painter = featuredItemsImage,
+                    contentDescription = "Featured Items",
+                    contentScale = ContentScale.FillHeight,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize(Alignment.Center)
+                    //.padding(top = calculatedPadding)
+                )
+            },
+            imageHeader = "Featured Menu Items",
+            buttonText = "Order Now",
             onClick = {
                 navController.navigateSingleTopTo(
                     Menu.route
                 )
             }
-        ){
-            Column(
-                modifier = Modifier/*.border(
-                    width = (1).dp,
-                    color = MaterialTheme.colorScheme.outline,
-                    shape = RoundedCornerShape(16.dp))*/,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Featured Menu Items",
-                    textAlign = TextAlign.Center
+        )
+        val url = currentEvent.eventImageURL
+        val uriHandler = LocalUriHandler.current
+        println("eventUrl: $url")
+        HomeCard(
+            image = {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(url)
+                        .memoryCacheKey(url)
+                        .diskCacheKey(url)
+                        .build(),
+                    contentScale = ContentScale.FillHeight,
+                    contentDescription = currentEvent.eventName,
+                    placeholder = featuredItemsImage,
+                    fallback = featuredItemsImage,
+                    error = featuredItemsImage,
                 )
-                Box(
-                    modifier = Modifier.height((300-24).dp)
-                ){
-
-                    Image(
-                        painter = featuredItemsImage,
-                        contentDescription = "Featured Items",
-                        contentScale = ContentScale.FillHeight,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(Alignment.Center)
-                        //.padding(top = calculatedPadding)
-                    )
-                }
-            }
-        }
-        Column() {
-            Button(
-                elevation = ButtonDefaults.elevatedButtonElevation(),
-                onClick = {
+            },
+            imageHeader = currentEvent.eventName,
+            buttonText = currentEvent.buttonText,
+            onClick = {
+                if(currentEvent.linkIsRoute) {
                     navController.navigateSingleTopTo(
-                        Menu.route
+                        currentEvent.link
                     )
+                } else {
+                    uriHandler.openUri(currentEvent.link)
                 }
-            ) {
-                Text("Order Now")
             }
-        }
+        )
     }
 
 }

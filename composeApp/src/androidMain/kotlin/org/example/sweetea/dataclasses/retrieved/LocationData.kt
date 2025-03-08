@@ -1,5 +1,7 @@
 package org.example.sweetea.dataclasses.retrieved
 
+import kotlinx.serialization.Serializable
+
 /*
 Describes the json response to the store-locations query
 The class contains the a representation for the full response data,
@@ -7,6 +9,7 @@ with some potential inaccuracy due to null values in the available
 responses; many values have also been commented out to to their lack of
 relevance to the product, and in favor of a decreased memory footprint
  */
+@Serializable
 data class LocationData (
     val id: String,
     //val owner_id: String,
@@ -75,6 +78,7 @@ data class LocationData (
     //val square_id: String,
 )
 
+@Serializable
 data class WeeklyHours(
     val SUN: List<OpenClose>,
     val MON: List<OpenClose>,
@@ -85,6 +89,7 @@ data class WeeklyHours(
     val SAT: List<OpenClose>,
 )
 
+@Serializable
 data class OpenClose(
     val open: String,
     val close: String,
@@ -111,6 +116,7 @@ data class OrderMethodSettings(
     val fulfillment_prefrences_object_version: Int
 )
 
+@Serializable
 data class LocationAddressData(
     val id: String,
     val deleted: Boolean,

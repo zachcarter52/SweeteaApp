@@ -49,6 +49,7 @@ fun MenuDisplayImage(
     contentDescription: String,
     contentScale: ContentScale
 ){
+    val placeholder = painterResource(R.drawable.pearl_milk_tea)
     MenuDisplayImage(
         image = {AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -58,8 +59,9 @@ fun MenuDisplayImage(
                 .build(),
             contentDescription = contentDescription,
             contentScale = contentScale,
-            placeholder = painterResource(R.drawable.pearl_milk_tea)
-
+            placeholder = placeholder,
+            fallback = placeholder,
+            error = placeholder,
         )},
         imageHeight = imageHeight
     )

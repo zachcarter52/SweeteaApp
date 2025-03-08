@@ -1,13 +1,14 @@
 package org.example.sweetea.database
 
+import kotlinx.coroutines.Dispatchers
 import org.example.sweetea.database.model.Account
 import org.example.sweetea.database.model.AccountRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.example.sweetea.Constants
+import org.example.sweetea.database.model.DatabaseSchema
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
@@ -15,7 +16,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class AccountSchema(database: Database) : AccountRepository {
+class AccountSchema(val database: Database) : AccountRepository, DatabaseSchema() {
     object Accounts : Table(){
         val accountID = ulong("accountID").autoIncrement()
         val emailAddress = varchar("emailAddress", length = 254)
@@ -30,21 +31,23 @@ class AccountSchema(database: Database) : AccountRepository {
         }
     }
 
-    suspend fun createAccount( account: Account): ULong? = dbQuery {
-        if(Accounts.selectAll().where{ Accounts.emailAddress eq account.emailAddress}.singleOrNull() != null){
-            return@dbQuery null;
-        } else {
-            println(account.emailAddress)
-            return@dbQuery Accounts.insert {
-                it[emailAddress] = account.emailAddress
-                it[phoneNumber] = account.phoneNumber
-                it[dateClosed] = null
-            }[Accounts.accountID]
+    suspend fun createAccount( account: Account): ULong? {
+        return dbQuery {
+            if(Accounts.selectAll().where{ Accounts.emailAddress eq account.emailAddress}.singleOrNull() != null){
+                return@dbQuery null;
+            } else {
+                println(account.emailAddress)
+                return@dbQuery Accounts.insert {
+                    it[emailAddress] = account.emailAddress
+                    it[phoneNumber] = account.phoneNumber
+                    it[dateClosed] = null
+                }[Accounts.accountID]
+            }
         }
     }
 
     override suspend fun allAccounts(): List<Account> {
-        return dbQuery{
+        return dbQuery {
             Accounts.selectAll().map{
                 Account(
                     it[Accounts.accountID],
@@ -122,8 +125,4 @@ class AccountSchema(database: Database) : AccountRepository {
         }
         return rowsChanged > 0
     }
-
-    suspend fun <T> dbQuery(block: suspend () -> T): T =
-        newSuspendedTransaction(Dispatchers.IO) { block() }
-
 }
