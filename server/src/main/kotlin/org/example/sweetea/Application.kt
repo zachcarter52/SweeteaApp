@@ -1,6 +1,9 @@
 package org.example.sweetea
 
 import io.ktor.server.application.*
+import io.ktor.server.engine.ApplicationEngine
+import io.ktor.server.engine.applicationEnvironment
+import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
 import org.example.sweetea.plugins.configureRouting
 import org.example.sweetea.plugins.configureSecurity
@@ -8,20 +11,35 @@ import org.example.sweetea.plugins.configureSerialization
 import io.ktor.server.netty.*;
 import org.example.sweetea.database.configureDatabases
 import org.example.sweetea.plugins.configureWebPanel
-import org.mindrot.jbcrypt.BCrypt
-import java.util.concurrent.ThreadLocalRandom
-import kotlin.streams.asSequence
 
 fun main(args: Array<String>) {
-    embeddedServer(Netty, port = Constants.SERVER_PORT, host = Constants.SERVER_HOST, module = Application::module)
+
+    /*
+    val session = Session("acme://letsencrypt.org/staging")
+    val accountKeyPair = KeyPairUtils.createKeyPair()
+    val domainKeyPair = KeyPairUtils.createKeyPair()
+    val userKeyFile = File("user.key")
+    val domainKeyFile = File("domain.key")
+    KeyPairUtils.writeKeyPair(accountKeyPair, FileWriter(userKeyFile))
+    KeyPairUtils.writeKeyPair(domainKeyPair, FileWriter(domainKeyFile))
+     */
+
+    embeddedServer(Netty, applicationEnvironment{}, {configureEnvironment()}, module = Application::module)
         .start(wait = true)
     //io.ktor.server.netty.EngineMain.main(args)
 }
 
 fun Application.module() {
-    val database = configureDatabases()
     configureSecurity()
+    configureDatabases()
     configureSerialization()
     configureRouting()
-    configureWebPanel(database)
+    configureWebPanel()
+}
+
+fun ApplicationEngine.Configuration.configureEnvironment(){
+    connector {
+        port = Constants.SERVER_PORT
+        host = Constants.SERVER_HOST
+    }
 }

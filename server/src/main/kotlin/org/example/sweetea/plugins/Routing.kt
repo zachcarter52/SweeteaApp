@@ -5,6 +5,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.server.application.*
+import io.ktor.server.auth.authenticate
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -30,76 +31,83 @@ fun Application.configureRouting() {
         }
     }
     routing {
-        get("/status"){
-            call.respond(AppStatus(
-                getSelectedEvent().toEventResponse(),
-                rewardSchema.getBearValue()
-            ))
+        get("/status") {
+            call.respond(
+                AppStatus(
+                    getSelectedEvent().toEventResponse(),
+                    rewardSchema.getBearValue()
+                )
+            )
         }
-        get("/bear-value"){
-            call.respond(rewardSchema.getBearValue())
+        route("/bear-value") {
+            get("") {
+                call.respond(rewardSchema.getBearValue())
+            }
+            put("/{value}") {
+                val newBearValue = call.parameters["value"]!!.toInt()
+                rewardSchema.setBearValue(newBearValue)
+                call.respond(HttpStatusCode.OK)
+            }
         }
-        put("/bear-value/{value}") {
-            val newBearValue = call.parameters["value"]!!.toInt()
-            rewardSchema.setBearValue(newBearValue)
-            call.respond(HttpStatusCode.OK)
-        }
-        get("/events/selected"){
+        get("/events/selected") {
             call.respond(getSelectedEvent().toEventResponse())
         }
-        get("/{filename}"){
+        get("/{filename}") {
             val filename = call.parameters["filename"]!!
             call.respondFile("src/main/resources/templates/${filename}")
         }
-        get("/uploads/{filename}"){
+        get("/uploads/{filename}") {
             val filename = call.parameters["filename"]!!
             call.respondFile("uploads/${filename}")
         }
-        post("/upload/"){
-            if(call.request.contentType().match(ContentType.Image.Any)){
-                //regex testing done here:
-                // https://regex101.com/r/vhsAZl/1
-                //extracts the file name from Content-Disposition response header, into regex group 2
-                val dispositionRegex = Regex("""filename[^;=\n]*=[ \t]*(?:(\\?['"])?((?:[^;=\n]|\\\1)*)\1|(?:[^;=\s]+'.*?')?([^;=\s]*))""", )
-                val disposition = call.request.header("Content-Disposition")
-                val dateString = Date().time.toString() + ".jpg"
-                var name = ""
-                if (disposition != null) {
-                    val receivedFileName:String =
-                        dispositionRegex.find(disposition)?.groups?.get(2)?.value.toString()
-                    if(receivedFileName != "null") name = receivedFileName
-                } else {
-                    name = dateString
-                }
-                val file = File("uploads$l$name")
-                if(!file.exists()) {
-                    file.createNewFile()
-                    call.receiveChannel().copyTo(file.writeChannel())
-                    call.respondText("Upload Completed")
-                } else {
-                    call.respond(HttpStatusCode.Conflict)
-                }
-            } else if(call.request.contentType().match(ContentType.MultiPart.FormData)){
-                call.receiveMultipart().forEachPart { part ->
-                    if(part is PartData.FileItem) {
-                        val name = part.originalFileName!!
-                        val file = File("uploads$l$name")
-                        if (!file.exists()) {
-                            file.createNewFile()
-                            part.provider.invoke().copyTo(file.writeChannel())
-                            call.respond(HttpStatusCode.OK)
-                        } else {
-                            call.respond(HttpStatusCode.Conflict)
-                        }
-                    } else if(part is PartData.FormItem){
-                        println("${part.name}: ${part.value}")
+        authenticate("admin-auth-session") {
+            post("/upload/") {
+                if (call.request.contentType().match(ContentType.Image.Any)) {
+                    //regex testing done here:
+                    // https://regex101.com/r/vhsAZl/1
+                    //extracts the file name from Content-Disposition response header, into regex group 2
+                    val dispositionRegex =
+                        Regex("""filename[^;=\n]*=[ \t]*(?:(\\?['"])?((?:[^;=\n]|\\\1)*)\1|(?:[^;=\s]+'.*?')?([^;=\s]*))""",)
+                    val disposition = call.request.header("Content-Disposition")
+                    val dateString = Date().time.toString() + ".jpg"
+                    var name = ""
+                    if (disposition != null) {
+                        val receivedFileName: String =
+                            dispositionRegex.find(disposition)?.groups?.get(2)?.value.toString()
+                        if (receivedFileName != "null") name = receivedFileName
                     } else {
-                        println(part.toString())
+                        name = dateString
                     }
+                    val file = File("uploads$l$name")
+                    if (!file.exists()) {
+                        file.createNewFile()
+                        call.receiveChannel().copyTo(file.writeChannel())
+                        call.respondText("Upload Completed")
+                    } else {
+                        call.respond(HttpStatusCode.Conflict)
+                    }
+                } else if (call.request.contentType().match(ContentType.MultiPart.FormData)) {
+                    call.receiveMultipart().forEachPart { part ->
+                        if (part is PartData.FileItem) {
+                            val name = part.originalFileName!!
+                            val file = File("uploads$l$name")
+                            if (!file.exists()) {
+                                file.createNewFile()
+                                part.provider.invoke().copyTo(file.writeChannel())
+                                call.respond(HttpStatusCode.OK)
+                            } else {
+                                call.respond(HttpStatusCode.Conflict)
+                            }
+                        } else if (part is PartData.FormItem) {
+                            println("${part.name}: ${part.value}")
+                        } else {
+                            println(part.toString())
+                        }
+                    }
+                } else {
+                    println("Upload Failed")
+                    call.respondText("Upload failed")
                 }
-            } else {
-                println("Upload Failed")
-                call.respondText("Upload failed")
             }
         }
     }

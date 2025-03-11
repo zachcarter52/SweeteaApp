@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mindrot.jbcrypt.BCrypt
 
-
 class AdminAccountSchema(database: Database) : AdminAccountRepository, DatabaseSchema() {
     object AdminAccounts: Table(){
         val adminID = long("adminID").autoIncrement()
@@ -60,6 +59,13 @@ class AdminAccountSchema(database: Database) : AdminAccountRepository, DatabaseS
         }
     }
 
+    override suspend fun getSalt(email: String): String? {
+        return dbQuery {
+            AdminAccounts.selectAll().where { AdminAccounts.emailAddress eq email }
+                .map { it -> it[AdminAccounts.passwordSalt] }.singleOrNull()
+        }
+    }
+
     private suspend fun getAccount(email: String): AdminAccount? {
         return dbQuery {
             AdminAccounts.selectAll().where { AdminAccounts.emailAddress eq email }.map {
@@ -73,36 +79,31 @@ class AdminAccountSchema(database: Database) : AdminAccountRepository, DatabaseS
         }
     }
 
-    override suspend fun createAccount(email: String, password: String): Long? {
+    override suspend fun createAccount(email: String, hashedPassword: String, salt: String): Long? {
         return dbQuery {
             if(getAccount(email) != null) return@dbQuery null
-            val salt = BCrypt.gensalt()
             return@dbQuery AdminAccounts.insert {
                 it[emailAddress] = email
                 it[passwordSalt] = salt
-                it[hashedPassword] = BCrypt.hashpw(password, salt)
+                it[AdminAccounts.hashedPassword] = hashedPassword
             }[AdminAccounts.adminID]
         }
     }
 
-    private fun validatePassword(password: String, salt: String, hashToCompare: String): Boolean{
-        return BCrypt.hashpw(password, salt) == hashToCompare
-    }
-
-    override suspend fun validateLogin(email: String, password: String): Boolean {
+    override suspend fun validateLogin(email: String, hashedPassword: String): Boolean {
         return dbQuery {
             val account = getAccount(email)
             if(account != null){
-                return@dbQuery validatePassword(password, account.salt, account.hashedPassword)
+                return@dbQuery hashedPassword == account.hashedPassword
             }
             return@dbQuery false
         }
     }
 
-    override suspend fun updatePassword(email:String, oldPassword: String, newPassword: String): Boolean {
+    override suspend fun updatePassword(email:String, oldHashedPassword: String, newPassword: String): Boolean {
         return dbQuery {
             val account = getAccount(email)
-            if(account != null && validatePassword(oldPassword, account.salt, account.hashedPassword)){
+            if(account != null && oldHashedPassword == account.hashedPassword){
                 AdminAccounts.update({AdminAccounts.adminID eq account.adminID}){
                     it[hashedPassword] = BCrypt.hashpw(newPassword, account.salt)
                 }

@@ -11,7 +11,7 @@ import org.example.sweetea.database.rewardSchema
 import org.jetbrains.exposed.sql.Database
 import org.thymeleaf.templateresolver.*
 
-fun Application.configureWebPanel(database: Database) {
+fun Application.configureWebPanel() {
     install(Thymeleaf){
         setTemplateResolver((if (developmentMode) {
             FileTemplateResolver().apply{
@@ -29,10 +29,10 @@ fun Application.configureWebPanel(database: Database) {
     } 
     routing {
         //pageRoutes are manually copied from composeApp/src/androidMain/kotlin/org/example/sweetea/Destinations
-        authenticate("auth-form") {
-            post("/login"){
-                call.respond(ThymeleafContent(template = "login", model = mapOf()))
-            }
+        get("/login"){
+            call.respond(ThymeleafContent(template = "login", model = mapOf()))
+        }
+        authenticate("admin-auth-session") {
             get("/index") {
                 call.respond(
                     ThymeleafContent(

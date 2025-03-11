@@ -1,5 +1,5 @@
 $(document).ready(async () => {
-    let eventForm = $("#eventForm")
+    let eventForm = $("#event-form")
     let getNameOfSelectedOption = (selectElement) => {
         return selectElement.find("option:selected").attr("name")
     }
@@ -126,13 +126,13 @@ $(document).ready(async () => {
                 case deleteRowIndex:
                     cell.on("click", deleteClicks[j])
                     cell.css("cursor", "pointer");
-                break;
+                    break;
                 default:
                     if(j != selectedCellIndex){
                         cell.on("click", selectClicks[j]);
                         cell.css("cursor", "pointer");
                     }
-                break;
+                    break;
             }
         }
     }
@@ -150,4 +150,19 @@ $(document).ready(async () => {
             }
         })
     })
+
+    $("#log-out").on("click", () => {
+        if(confirm("Are you sure you would like to log out?")){
+            $.ajax({
+                url: "/logout",
+                method: "GET",
+                success: () => {location.reload();},
+                error: (response, statusText) => {
+                    var errorText = `An error occured ${response.status}`
+                    alert(errorText)
+
+                }
+            })
+        }
+    });
 });
