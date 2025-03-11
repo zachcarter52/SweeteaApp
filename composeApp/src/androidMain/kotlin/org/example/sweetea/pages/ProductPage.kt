@@ -55,12 +55,13 @@ fun ProductPage(
     navController: NavController,
     appViewModel: AppViewModel
 ) {
-    BearPageTemplate(
-        modifier = modifier,
-        showBear = false,
+    Column(
+        modifier = modifier.fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
-            modifier = modifier.fillMaxWidth(.9f).fillMaxHeight(),
+            modifier = modifier.fillMaxWidth(.9f),
             horizontalAlignment = Alignment.Start
         ) {
             //Display Product name
@@ -89,8 +90,10 @@ fun ProductPage(
             HorizontalDivider(
                 modifier = Modifier
                     .padding(0.dp, 0.dp, 0.dp, 20.dp)
+                    .align(Alignment.CenterHorizontally),
             )
             Surface(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(12.dp),
                 elevation = 10.dp
             ) {
@@ -98,8 +101,7 @@ fun ProductPage(
                     model = url,
                     contentDescription = appViewModel.currentProduct!!.name,
                     modifier = Modifier.height(itemHeight.dp)
-                        .width(itemHeight.dp)
-                        .align(Alignment.CenterHorizontally),
+                        .width(itemHeight.dp),
                     contentScale = ContentScale.FillHeight,
                 )
             }
