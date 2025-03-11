@@ -10,11 +10,13 @@ import com.amplifyframework.auth.result.step.AuthSignInStep
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.configuration.AmplifyOutputsData
 
+//Authentication options / utilities
 object UserPool {
 
-    fun signUpUser(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+    fun signUpUser(email: String, password: String, username: String, onResult: (Boolean, String?) -> Unit) {
         val options = AuthSignUpOptions.builder()
             .userAttribute(AuthUserAttributeKey.email(), email)
+            .userAttribute(AuthUserAttributeKey.preferredUsername(), username) // Store username
             .build()
 
         Amplify.Auth.signUp(email, password, options,

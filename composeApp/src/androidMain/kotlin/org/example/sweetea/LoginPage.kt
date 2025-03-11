@@ -46,6 +46,7 @@ import org.example.sweetea.UserPool.signUpUser
 fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit = {}) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
@@ -69,20 +70,31 @@ fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete:
         )
 
         Button(onClick = {
+            // Handle login logic here
             loginUser(email,password) { success, error ->
                 if(success){
                    onLoginComplete()
                 }else {
                     errorMessage = error
                 }
-
             }
+            // Fetch user attributes (username)
+            Amplify.Auth.fetchUserAttributes(
+                { attributes ->
+                    val fetchUsername =
+                        attributes.find { it.key.keyString == "preferred_username" }?.value
+                    username = fetchUsername ?: ""
+                    Log.i("AuthQuickstart", "Username: $username")
+                },
+                { error -> Log.e("AuthQuickstart", "Failed to fetch attributes", error) }
+            )
         }) {
             Text("Sign In")
         }
 
         errorMessage?.let {
             Text(text = it, color = Color.Red)
+            Text(text = "Welcome, $username!")
         }
 
         TextButton(onClick = {
@@ -130,7 +142,7 @@ fun SignupPage(modifier: Modifier, navController: NavController, onSignUpComplet
         )
 
         Button(onClick = {
-            signUpUser(email,password)
+            signUpUser(email, password, username)
             { success, error ->
                 if (success) {
                     onSignUpComplete()

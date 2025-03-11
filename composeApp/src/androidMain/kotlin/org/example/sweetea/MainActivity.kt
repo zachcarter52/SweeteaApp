@@ -41,7 +41,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.AmplifyConfiguration
@@ -59,6 +61,13 @@ import androidx.navigation.compose.rememberNavController
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            // Initialize view model
+            val authViewModel: AuthViewModel = viewModel() //
+            LaunchedEffect(Unit) {
+                authViewModel.fetchUsername() //
+            }
+        }
 
         // Initialize Amplify / Cognito
         try {
@@ -78,7 +87,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SweeteaApp(modifier: Modifier=Modifier){
+fun SweeteaApp(modifier: Modifier=Modifier, viewModel: AuthViewModel = viewModel()){
     MaterialTheme{
         val navController = rememberNavController()
         Scaffold(
@@ -93,7 +102,6 @@ fun SweeteaApp(modifier: Modifier=Modifier){
     }
 
 }
-
 
 //navhost function of Navigation
 @Composable

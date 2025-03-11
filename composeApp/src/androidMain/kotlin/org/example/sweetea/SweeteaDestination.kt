@@ -33,7 +33,7 @@ object Home : Destination(
     label = "Home",
     route = "homemain",
     pageRoute = "homepage",
-    page = {modifier, navController -> HomePage(modifier, navController)},
+    page = {modifier, navController -> HomePage(modifier, navController, AuthViewModel())},
     onClick = { null },
     subPages = null
 )
