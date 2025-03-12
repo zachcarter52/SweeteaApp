@@ -41,7 +41,8 @@ kotlin {
             implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.ui.text.googlefonts)
             implementation(libs.androidx.compose.runtime.livedata)
-            implementation(libs.androidx.lifecycle.runtime.compose)
+
+            implementation(libs.androidx.material3.android)
             implementation(libs.androidx.navigation.runtime.ktx)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.legacy.support.v4)
@@ -72,6 +73,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
             //Mobile payments sdk dependency
             implementation(libs.mobile.payments.sdk)
@@ -81,8 +84,6 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network)
             implementation(libs.coil.compose)
-            //ktor
-
             implementation (libs.maps.compose)
             implementation (libs.play.services.maps.v1800)
             //ktor
@@ -91,7 +92,6 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.multiplatform.paths)
-            implementation(libs.androidx.lifecycle.viewmodel)
         }
     }
 }
