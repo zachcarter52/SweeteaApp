@@ -29,23 +29,6 @@ $(document).ready(async () => {
                   document.body.append($submissionForm[0]);
                   $submissionForm.submit();
                   $submissionForm.remove();
-                  /*
-                  $.ajax({
-                     url: "/login",
-                     method: "POST",
-                     contentType: "application/x-www-form-urlencoded",
-                     body: $submissionForm.serialize(),
-                     success: (response, status) => {
-                        console.log(response);
-                        console.log(status);
-                        alert(status);
-                     },
-                     error: (response, statusText) =>{
-                        var errorText = `An error occured ${response.status}`
-                        alert(errorText)
-                     }
-                  })
-                  */
                }
             )
          },
@@ -55,16 +38,4 @@ $(document).ready(async () => {
          }
       })
    });
-   /*
-   loginForm.ajaxForm({
-      success: (responseText, statusText) =>{
-         alert(responseText,  statusText);
-         location.reload();
-      },
-      error: (response, statusText) =>{
-         var errorText = `An error occured ${response.status}`
-         alert(errorText)
-      }
-   });
-   */
 })
