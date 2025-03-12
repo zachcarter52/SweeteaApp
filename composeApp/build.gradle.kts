@@ -41,8 +41,7 @@ kotlin {
             implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.ui.text.googlefonts)
             implementation(libs.androidx.compose.runtime.livedata)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
+
             implementation(libs.androidx.material3.android)
             implementation(libs.androidx.navigation.runtime.ktx)
             implementation(libs.androidx.navigation.compose)
@@ -70,9 +69,12 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
             //Mobile payments sdk dependency
             implementation(libs.mobile.payments.sdk)
@@ -82,6 +84,8 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network)
             implementation(libs.coil.compose)
+            implementation (libs.maps.compose)
+            implementation (libs.play.services.maps.v1800)
             //ktor
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -131,6 +135,22 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.core)
+
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
+
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    implementation(libs.androidx.ui.v143)
+    implementation(libs.androidx.material.v143)
+    implementation(libs.androidx.ui.tooling.preview.v143)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.accompanist.permissions)
+
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 }
+

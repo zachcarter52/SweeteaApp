@@ -1,7 +1,7 @@
 package org.example.sweetea.database
 
 import org.example.sweetea.database.model.DatabaseSchema
-import org.example.sweetea.database.model.Event
+import org.example.sweetea.ResponseClasses.Event
 import org.example.sweetea.database.model.EventRepository
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -25,6 +25,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
             SchemaUtils.create(Events)
         }
     }
+
     override suspend fun createEvent(event: Event): Long? {
        return dbQuery {
            if(Events.selectAll().where{Events.name eq event.name}.singleOrNull() != null){
@@ -40,10 +41,10 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                }[Events.id]
                if(newEventID == 1L){
                   Events.update({ Events.id eq newEventID }){
-                      it[isSelected] = true;
+                      it[isSelected] = true
                   }
                }
-               return@dbQuery newEventID;
+               return@dbQuery newEventID
            }
        }
     }
@@ -132,9 +133,9 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                 if(previouslySelectedEvent != null) Events.update({ Events.id eq previouslySelectedEvent.id  }){
                     it[isSelected] = false
                 }
-                val selectedEvent = getEvent(id)
-                if(selectedEvent != null) {
-                    updateSelectedEventFile(selectedEvent)
+                val curEvent = getEvent(id)
+                if(curEvent != null) {
+                    selectedEvent = curEvent
                     return@dbQuery selectedEvent
                 }
                 return@dbQuery null
