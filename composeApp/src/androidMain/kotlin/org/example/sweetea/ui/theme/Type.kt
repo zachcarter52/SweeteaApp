@@ -3,91 +3,89 @@ package org.example.sweetea.ui.theme
 import org.example.sweetea.R
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.text.googlefonts.Font
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
+import org.jetbrains.compose.resources.Font
+import sweetea.composeapp.generated.resources.Res
+import sweetea.composeapp.generated.resources.*
 
-val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
-
-val bodyFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("Courier Prime"),
-        fontProvider = provider,
-    ),
-    Font(
-        R.font.courier_prime,
-        FontWeight.Normal
-    ),
-    Font(
-        R.font.courier_prime_bold,
-        FontWeight.Bold
-    ),
-    Font(
-        R.font.courier_prime_italic,
-        FontWeight.Normal,
-        FontStyle.Italic
-    ),
-    Font(
-        R.font.courier_prime_bold_italic,
-        FontWeight.Bold,
-        FontStyle.Italic
+@Composable
+fun SweeteaTypography(): Typography {
+    val provider = GoogleFont.Provider(
+        providerAuthority = "com.google.android.gms.fonts",
+        providerPackage = "com.google.android.gms",
+        certificates = R.array.com_google_android_gms_fonts_certs
     )
 
-)
-
-val displayFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("Courier Prime"),
-        fontProvider = provider,
-    ),
-    Font(
-        R.font.courier_prime,
-        FontWeight.Normal
-    ),
-    Font(
-        R.font.courier_prime_bold,
-        FontWeight.Bold
-    ),
-    Font(
-        R.font.courier_prime_italic,
-        FontWeight.Normal,
-        FontStyle.Italic
-    ),
-    Font(
-        R.font.courier_prime_bold_italic,
-        FontWeight.Bold,
-        FontStyle.Italic
+    val Zain = FontFamily(
+        Font(
+            Res.font.Zain_Black,
+            FontWeight.Black
+        ),
+        Font(
+            Res.font.Zain_Bold,
+            FontWeight.Bold
+        ),
+        Font(
+            Res.font.Zain_ExtraBold,
+            FontWeight.ExtraBold
+        ),
+        Font(
+            Res.font.Zain_ExtraLight,
+            FontWeight.ExtraLight
+        ),
+        Font(
+            Res.font.Zain_Italic,
+            FontWeight.Normal,
+            FontStyle.Italic
+        ),
+        Font(
+            Res.font.Zain_Light,
+            FontWeight.Light
+        ),
+        Font(
+            Res.font.Zain_LightItalic,
+            FontWeight.Light,
+            FontStyle.Italic
+        ),
+        Font(
+            Res.font.Zain_Regular,
+            FontWeight.Normal
+        ),
     )
-)
+
+    val CherryBomb = FontFamily(
+        Font(
+            Res.font.CherryBombOne_Regular,
+            FontWeight.Normal
+        )
+    )
 
 // Default Material 3 typography values
-val baseline = Typography()
+    val baseline = Typography()
 
-val CourierPrimeTypography = Typography(
-    displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
-    displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
-    displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
-    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
-    titleLarge = baseline.titleLarge.copy(fontFamily = displayFontFamily),
-    titleMedium = baseline.titleMedium.copy(fontFamily = displayFontFamily),
-    titleSmall = baseline.titleSmall.copy(fontFamily = displayFontFamily),
-    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
-    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
-    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
-    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
-    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
-    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
-)
-
+    val sweeteaTypography = Typography(
+        displayLarge = baseline.displayLarge.copy(fontFamily = CherryBomb),
+        displayMedium = baseline.displayMedium.copy(fontFamily = CherryBomb),
+        displaySmall = baseline.displaySmall.copy(fontFamily = CherryBomb),
+        headlineLarge = baseline.headlineLarge.copy(fontFamily = CherryBomb),
+        headlineMedium = baseline.headlineMedium.copy(fontFamily = CherryBomb),
+        headlineSmall = baseline.headlineSmall.copy(fontFamily = CherryBomb),
+        titleLarge = baseline.titleLarge.copy(fontFamily = CherryBomb),
+        titleMedium = baseline.titleMedium.copy(fontFamily = CherryBomb),
+        titleSmall = baseline.titleSmall.copy(fontFamily = CherryBomb),
+        bodyLarge = baseline.bodyLarge.copy(fontFamily = Zain),
+        bodyMedium = baseline.bodyMedium.copy(fontFamily = Zain),
+        bodySmall = baseline.bodySmall.copy(fontFamily = Zain),
+        labelLarge = baseline.labelLarge.copy(fontFamily = Zain),
+        labelMedium = baseline.labelMedium.copy(fontFamily = Zain),
+        labelSmall = baseline.labelSmall.copy(fontFamily = Zain),
+    )
+    return sweeteaTypography
+}

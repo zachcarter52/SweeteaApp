@@ -6,7 +6,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import org.example.sweetea.Menu
+import org.example.sweetea.ProductCustomPage
+import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.MenuItem
 
@@ -34,7 +38,11 @@ fun SubMenuPage(
                 contentScale = ContentScale.FillHeight,
                 itemName = product.name,
                 imageHeight = itemHeight,
-                price = product.price.regular_high_with_modifiers
+                price = product.price.regular_high_with_modifiers,
+                onClick = {
+                    appViewModel.setProduct(product)
+                    navController.navigate(ProductCustomPage.route)
+                }
             )
             if (index != currentCategoryProducts.size -1) HorizontalDivider()
         }

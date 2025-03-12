@@ -25,7 +25,7 @@ fun CustomCircularProgressIndicator(
     primaryColor: Color,
     secondaryColor:Color,
     minValue:Int = 0,
-    maxValue:Int = 100,
+    maxValue:Int = 75,
     circleRadius:Float,
     positionValue: Int = 0,
     onPositionChange:(Int)->Unit = {}
@@ -51,8 +51,8 @@ fun CustomCircularProgressIndicator(
             drawCircle(
                 brush = Brush.radialGradient(
                     listOf(
-                        primaryColor.copy(0.45f),
-                        secondaryColor.copy(0.15f)
+                        primaryColor,//.copy(0.45f),
+                        secondaryColor//.copy(0.15f)
                     )
                 ),
                 radius = circleRadius,
@@ -92,7 +92,7 @@ fun CustomCircularProgressIndicator(
             val outerRadius = circleRadius + circleThickness/2f
             val gap = 15f
             for (i in 0 .. (maxValue-minValue)){
-                val color = if(i < positionValue-minValue) primaryColor else primaryColor.copy(alpha = 0.3f)
+                val color = if(i < positionValue-minValue) primaryColor else secondaryColor
                 val angleInDegrees = i*360f/(maxValue-minValue).toFloat()
                 val angleInRad = angleInDegrees * PI / 180f + PI/2f
 

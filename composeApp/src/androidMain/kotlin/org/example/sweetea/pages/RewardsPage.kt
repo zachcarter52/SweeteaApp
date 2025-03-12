@@ -14,6 +14,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -24,13 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import org.example.sweetea.dataclasses.local.AppViewModel
 
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.CustomCircularProgressIndicator
 
 @Composable
-fun RewardsPage(modifier: Modifier, navController: NavController){
+fun RewardsPage(modifier: Modifier, navController: NavController, appViewModel: AppViewModel){
     var positionValue by remember {mutableIntStateOf(0)}
+    val appStatus by appViewModel.appStatus.collectAsState()
     BearPageTemplate(
         modifier = modifier,
     ){
@@ -45,23 +48,23 @@ fun RewardsPage(modifier: Modifier, navController: NavController){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "$1 / 1 Star",
+                    "$1 / 1 Bear",
                     modifier = Modifier.padding(16.dp),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                 )
                 CustomCircularProgressIndicator(
                     modifier = Modifier
-                        .size(250.dp)
-                        .background(MaterialTheme.colorScheme.inverseSurface),
+                        .size(250.dp),
                     primaryColor = MaterialTheme.colorScheme.primary,
                     secondaryColor = MaterialTheme.colorScheme.secondary,
+                    maxValue = appStatus.bearValue,
                     circleRadius = 230f,
                     positionValue = positionValue,
                 )
             }
         }
-        Text("Free drink at 75 stars!",
+        Text("Free drink at ${appStatus.bearValue} bears!",
             modifier = Modifier.padding(16.dp),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
