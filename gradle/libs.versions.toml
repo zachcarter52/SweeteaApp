@@ -17,7 +17,7 @@ authCognito = "2.0.0"
 authenticator = "1.2.0"
 compose-plugin = "1.6.11"
 amplify-core = "2.24.0"
-coil = "3.1.0"
+coil = "3.0.4"
 desugar_jdk_libs = "2.1.2"
 junit = "4.13.2"
 kotlin = "2.0.21"
@@ -134,5 +134,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+# kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+
 
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }

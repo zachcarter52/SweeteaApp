@@ -6,7 +6,7 @@ import io.ktor.client.request.get
 import org.example.sweetea.Constants
 import org.example.sweetea.EventResponse
 
-class EventService(private val ktor: HttpClient): EventsApiService{
+class EventService(private val ktor: HttpClient): EventsApiService {
     private val BASEURL = "${Constants.TEST_URL}:${Constants.SERVER_PORT}"
     override suspend fun getCurrentEvent(): Result<EventResponse> {
         return runCatching{
