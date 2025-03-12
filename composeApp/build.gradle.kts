@@ -135,9 +135,22 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.core)
+
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    implementation(libs.androidx.ui.v143)
+    implementation(libs.androidx.material.v143)
+    implementation(libs.androidx.ui.tooling.preview.v143)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.accompanist.permissions)
+
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 }
 

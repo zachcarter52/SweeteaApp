@@ -32,6 +32,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
 import androidx.core.content.ContextCompat
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
@@ -48,9 +50,11 @@ import coil3.request.CachePolicy
 import coil3.util.DebugLogger
 import com.google.android.gms.location.LocationServices
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.notifications.Notifications
 
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
+import org.example.sweetea.viewmodel.OrderViewModel
 import java.io.File
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -72,8 +76,8 @@ class MainScreen : ComponentActivity(){
 
 
     private val appViewModel: AppViewModel by viewModels()
+    private lateinit var orderViewModel: OrderViewModel
     private var userLocation: Location? = null
-
     private var nearestStore by mutableStateOf<StoreLocation?>(null)
 
     data class StoreLocation(
@@ -90,6 +94,11 @@ class MainScreen : ComponentActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //create notification channel
+        Notifications.createNotificationChannel(this)
+        orderViewModel = ViewModelProvider(this)[OrderViewModel::class.java]
+        //orderViewModel.listenForNewOrders() //start listening for orders
 
         installSplashScreen()
 
