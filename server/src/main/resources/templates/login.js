@@ -2,7 +2,6 @@ $(document).ready(async () => {
    let loginForm = $("#login-form");
    let emailAddressInput = $("#email-address");
    let passwordInput = $("#password");
-   let hashedPasswordInput = $("#hashed-password");
    loginForm.on("submit", (e) => {
       e.preventDefault();
       var _this = $(this);
@@ -14,8 +13,39 @@ $(document).ready(async () => {
             bcrypt.hash(passwordInput.val(), salt).then(
                (hashedPassword) => {
                   console.log(`salt: ${salt}, password = ${hashedPassword}`)
-                  hashedPasswordInput.val(hashedPassword);
-                  loginForm.unbind('submit').submit();
+                  var $submissionForm = $("<form>", {target: "_self", action: "/login", method: "POST", enctype: "application/x-www-form-urlencoded"});
+                  $submissionForm.append($("<input>", {value: emailAddressInput.val(), name: "email-address"}));
+                  $submissionForm.append($("<input>", {value: hashedPassword, name: "hashed-password"}));
+                  $submissionForm.hide();
+                  $submissionForm.ajaxForm({
+                     success: (responseURL) =>{
+                        location.replace(responseURL);
+                     },
+                     error: (response, statusText) =>{
+                        var errorText = `An error occured ${response.status}`
+                        alert(errorText)
+                     }
+                  });
+                  document.body.append($submissionForm[0]);
+                  $submissionForm.submit();
+                  $submissionForm.remove();
+                  /*
+                  $.ajax({
+                     url: "/login",
+                     method: "POST",
+                     contentType: "application/x-www-form-urlencoded",
+                     body: $submissionForm.serialize(),
+                     success: (response, status) => {
+                        console.log(response);
+                        console.log(status);
+                        alert(status);
+                     },
+                     error: (response, statusText) =>{
+                        var errorText = `An error occured ${response.status}`
+                        alert(errorText)
+                     }
+                  })
+                  */
                }
             )
          },
@@ -25,6 +55,7 @@ $(document).ready(async () => {
          }
       })
    });
+   /*
    loginForm.ajaxForm({
       success: (responseText, statusText) =>{
          alert(responseText,  statusText);
@@ -35,4 +66,5 @@ $(document).ready(async () => {
          alert(errorText)
       }
    });
+   */
 })

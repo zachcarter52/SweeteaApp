@@ -15,7 +15,7 @@
         <a class="navbar-brand bg-swt" href="">Sweetea Admin</a>
     </div>
 </header>
-<form class="container container-border col" id="login-form" method="post" action="/login" enctype="application/x-www-form-urlencoded">
+<form class="container container-border col" id="login-form">
     <div class="mb-2">
         <label class="form-label" for="email-address">Email Address</label>
         <input class="form-control" type="text" id="email-address" placeholder="email@address.web" name="email-address"/>
@@ -24,7 +24,6 @@
         <label class="form-label" for="password">Password</label>
         <input class="form-control" type="password" id="password" placeholder="Password:" name="password"/>
     </div>
-    <input type="hidden" id="hashed-password" name="hashed-password"/>
     <div class="d-md-flex justify-content-md-end">
         <button class="btn btn-sweetea me-md-2" id="submit">Submit</button>
     </div>
