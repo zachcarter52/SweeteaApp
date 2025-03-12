@@ -42,9 +42,12 @@ fun RestaurantSelection(){
             restaurants = restaurants,
             selectedLocation = selectedLocation
         )
+        /*
         RestaurantList(restaurants) { restaurant ->
             selectedLocation = restaurant.location
         }
+        */
+
     }
 
 }
@@ -76,7 +79,7 @@ fun RestaurantMap(restaurants: List<Restaurant>, selectedLocation: LatLng?) {
 
     }
 }
-
+/*
 //Restaurant list:
 @Composable
 fun RestaurantList(restaurants: List<Restaurant>, onRestaurantSelected: (Restaurant) -> Unit){
@@ -103,6 +106,8 @@ fun RestaurantItem(restaurant: Int, onRestaurantSelected: (Restaurant) -> Unit) 
         )
     }
 }
+*/
+
 
 
 

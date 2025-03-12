@@ -24,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
@@ -39,17 +40,26 @@ import coil3.memory.MemoryCache
 import coil3.request.CachePolicy
 import coil3.util.DebugLogger
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.notifications.Notifications
 
 import org.example.sweetea.ui.theme.AppTheme
 import org.example.sweetea.ui.components.*
+import org.example.sweetea.viewmodel.OrderViewModel
 import java.io.File
 
 class MainScreen : ComponentActivity(){
 
     private val appViewModel: AppViewModel by viewModels()
+    private lateinit var orderViewModel: OrderViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //create notification channel
+        Notifications.createNotificationChannel(this)
+        orderViewModel = ViewModelProvider(this)[OrderViewModel::class.java]
+        //orderViewModel.listenForNewOrders() //start listening for orders
+
         installSplashScreen()
         //parameter of the function needs to be solved
         //MobilePaymentsSdk.initialize(getId(), this)

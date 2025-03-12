@@ -130,6 +130,10 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.core)
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
