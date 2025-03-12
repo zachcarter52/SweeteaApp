@@ -54,7 +54,7 @@ fun HomePage(
     val featuredItemsImage = painterResource(id = R.drawable.featured_items)
     var clicked by remember { mutableStateOf(false) }
 
-    val currentEvent by appViewModel.currentEvent.collectAsState()
+    val appStatus by appViewModel.appStatus.collectAsState()
     //Calculates top padding based on screen height.
     //Change the floating point value in calculatedPadding to change the image placement.
     val configuration = LocalConfiguration.current
@@ -84,7 +84,7 @@ fun HomePage(
                 )
             }
         )
-        val url = currentEvent.eventImageURL
+        val url = appStatus.currentEvent.eventImageURL
         val uriHandler = LocalUriHandler.current
         println("eventUrl: $url")
         HomeCard(
@@ -96,21 +96,21 @@ fun HomePage(
                         .diskCacheKey(url)
                         .build(),
                     contentScale = ContentScale.FillHeight,
-                    contentDescription = currentEvent.eventName,
+                    contentDescription = appStatus.currentEvent.eventName,
                     placeholder = featuredItemsImage,
                     fallback = featuredItemsImage,
                     error = featuredItemsImage,
                 )
             },
-            imageHeader = currentEvent.eventName,
-            buttonText = currentEvent.buttonText,
+            imageHeader = appStatus.currentEvent.eventName,
+            buttonText = appStatus.currentEvent.buttonText,
             onClick = {
-                if(currentEvent.linkIsRoute) {
+                if(appStatus.currentEvent.linkIsRoute) {
                     navController.navigateSingleTopTo(
-                        currentEvent.link
+                        appStatus.currentEvent.link
                     )
                 } else {
-                    uriHandler.openUri(currentEvent.link)
+                    uriHandler.openUri(appStatus.currentEvent.link)
                 }
             }
         )

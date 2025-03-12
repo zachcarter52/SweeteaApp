@@ -1,5 +1,7 @@
 package org.example.sweetea.database.model
 
+import org.example.sweetea.ResponseClasses.Event
+
 interface EventRepository {
     suspend fun createEvent(event: Event): Long?
     suspend fun allEvents(): List<Event>

@@ -36,8 +36,9 @@ fun AppHeader(
     val visible = hideTopBarHeader != null && !hideTopBarHeader
     Column(modifier = modifier.fillMaxWidth(1f)) {
         Row(
-            modifier = Modifier.height(28.dp).
-            align(Alignment.End)
+            modifier = Modifier.height(30.dp)
+                .align(Alignment.End),
+            verticalAlignment = Alignment.Bottom
         ) {
             AnimatedVisibility(
                 visible = !hideLocation && visible,
@@ -61,7 +62,6 @@ fun AppHeader(
         }
 
         Row(
-            modifier = Modifier.height(38.dp),
             verticalAlignment = Alignment.Bottom
         ){
             AnimatedVisibility(
@@ -75,8 +75,7 @@ fun AppHeader(
                     Text(
                         modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
                         text = "Hi, <username>",
-                        fontSize = 34.sp,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.headlineLarge
                     )
                 }
             }

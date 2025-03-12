@@ -1,10 +1,9 @@
 $(document).ready(async () => {
-    let eventForm = $("#eventForm")
+    let eventForm = $("#event-form")
     let getNameOfSelectedOption = (selectElement) => {
         return selectElement.find("option:selected").attr("name")
     }
     eventForm.ajaxForm({
-        target: "body",
         success: (responseText, statusText) =>{
             alert(statusText);
             location.reload();
@@ -127,14 +126,43 @@ $(document).ready(async () => {
                 case deleteRowIndex:
                     cell.on("click", deleteClicks[j])
                     cell.css("cursor", "pointer");
-                break;
+                    break;
                 default:
                     if(j != selectedCellIndex){
                         cell.on("click", selectClicks[j]);
                         cell.css("cursor", "pointer");
                     }
-                break;
+                    break;
             }
         }
     }
+
+    //Updating bear value
+    $("#set-bear-value").on("click", ()=>{
+        let newBearValue = $("#bear-value").val();
+        if(newBearValue > 0) $.ajax({
+            url: `/bear-value/${newBearValue}`,
+            method: "PUT",
+            success: () => {location.reload();},
+            error: (response, statusText) =>{
+                var errorText = `An error occured ${response.status}`
+                alert(errorText)
+            }
+        })
+    })
+
+    $("#log-out").on("click", () => {
+        if(confirm("Are you sure you would like to log out?")){
+            $.ajax({
+                url: "/logout",
+                method: "GET",
+                success: () => {location.reload();},
+                error: (response, statusText) => {
+                    var errorText = `An error occured ${response.status}`
+                    alert(errorText)
+
+                }
+            })
+        }
+    });
 });
