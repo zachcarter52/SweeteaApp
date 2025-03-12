@@ -42,4 +42,8 @@ data class PaginationData (
 @Serializable
 data class Data<DataType>(
     val data: DataType
-)
+) : Cloneable {
+    public override fun clone() = Data(
+        this.data
+    )
+}
