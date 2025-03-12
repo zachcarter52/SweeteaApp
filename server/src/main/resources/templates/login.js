@@ -2,7 +2,6 @@ $(document).ready(async () => {
    let loginForm = $("#login-form");
    let emailAddressInput = $("#email-address");
    let passwordInput = $("#password");
-   let hashedPasswordInput = $("#hashed-password");
    loginForm.on("submit", (e) => {
       e.preventDefault();
       var _this = $(this);
@@ -14,8 +13,20 @@ $(document).ready(async () => {
             bcrypt.hash(passwordInput.val(), salt).then(
                (hashedPassword) => {
                   console.log(`salt: ${salt}, password = ${hashedPassword}`)
-                  hashedPasswordInput.val(hashedPassword);
-                  loginForm.unbind('submit').submit();
+                  var $submissionForm = $("<form>");
+                  $submissionForm.append($("<input>", {value: emailAddressInput.val(), name: "email-address"}));
+                  $submissionForm.append($("<input>", {value: hashedPassword, name: "hashed-password"}));
+                  $.ajax({
+                     url: "/login",
+                     method: "POST",
+                     contentType: "application/x-www-form-urlencoded",
+                     body: $submissionForm.serialize(),
+                     success: () => {location.replace("/index");},
+                     error: (response, statusText) =>{
+                        var errorText = `An error occured ${response.status}`
+                        alert(errorText)
+                     }
+                  })
                }
             )
          },
@@ -25,6 +36,7 @@ $(document).ready(async () => {
          }
       })
    });
+   /*
    loginForm.ajaxForm({
       success: (responseText, statusText) =>{
          alert(responseText,  statusText);
@@ -35,4 +47,5 @@ $(document).ready(async () => {
          alert(errorText)
       }
    });
+   */
 })
