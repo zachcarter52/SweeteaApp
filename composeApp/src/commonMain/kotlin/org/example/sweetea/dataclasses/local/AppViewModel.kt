@@ -28,8 +28,11 @@ class AppViewModel: ViewModel() {
     val appStatus: StateFlow<AppStatus> = _appStatus
 
     var currentLocation: LocationData? by mutableStateOf(null)
+        private set
     var currentCategory: CategoryData? by mutableStateOf(null)
+        private set
     var currentProduct: ProductData? by mutableStateOf(null)
+        private set
     var categoryMap: MutableMap<String, CategoryData> = mutableMapOf()
         private set
     private var productMapLocation: LocationData? by mutableStateOf(null)

@@ -2,34 +2,25 @@ package org.example.sweetea.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,22 +28,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.compose.ui.util.fastRoundToInt
 import coil3.compose.AsyncImage
+import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.dataclasses.local.AppViewModel
-import org.example.sweetea.ui.components.BearPageTemplate
+import kotlin.math.pow
+
+fun Float.toString(decimalPrecision: Int): String{
+    val integerValue = this.fastRoundToInt()
+
+    if(decimalPrecision > 0){
+        val remainder = this - integerValue
+        val decimalAsInt = (remainder * 10f.pow(decimalPrecision)).fastRoundToInt()
+        return "$integerValue.$decimalAsInt"
+    }
+    return integerValue.toString()
+
+}
 
 @Composable
 fun ProductPage(
     modifier: Modifier = Modifier,
-    navController: NavController,
+    navigator: Navigator,
     appViewModel: AppViewModel
 ) {
     Column(
@@ -76,7 +78,7 @@ fun ProductPage(
             //Display price
             val price = appViewModel.currentProduct!!.price.regular_high_with_modifiers
             Text(
-                "$%.2f".format(price),
+                "\$${price.toString(2)}",
                 fontSize = 20.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
@@ -164,7 +166,7 @@ fun ProductPage(
                                 androidx.compose.material3.DropdownMenuItem(text = {
                                     if (choiceData.price != 0.0f) { //if the mod is an extra cost, display that cost
                                         Text(
-                                            choiceData.name + " - " + "$%.2f".format(choiceData.price),
+                                            "${choiceData.name} - \$${choiceData.price.toString(2)}",
                                             fontFamily = FontFamily.SansSerif
                                         )
                                     } else { //else just show the name
@@ -204,7 +206,7 @@ fun ProductPage(
                                     onCheckedChange = { checked = it }
                                 )
                                 Text(
-                                    choiceData.name + " - " + "$%.2f".format(choiceData.price), //next to box show name and price of mod
+                                    "${choiceData.name} - \$${choiceData.price.toString(2)}",
                                     fontFamily = FontFamily.SansSerif
                                 )
                             }

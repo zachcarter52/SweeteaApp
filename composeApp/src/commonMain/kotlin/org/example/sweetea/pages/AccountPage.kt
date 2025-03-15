@@ -23,12 +23,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.*
 import org.example.sweetea.ui.components.BearPageTemplate
+import org.jetbrains.compose.resources.painterResource
+import sweetea.composeapp.generated.resources.Res
+import sweetea.composeapp.generated.resources.group_add
+import sweetea.composeapp.generated.resources.instagram_glyph_white
+import sweetea.composeapp.generated.resources.mail
+import sweetea.composeapp.generated.resources.orders_icon
 import kotlin.math.ceil
 
 open class AccountPageCard(
@@ -38,27 +43,27 @@ open class AccountPageCard(
 )
 
 @Composable
-fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
+fun AccountPage(modifier: Modifier=Modifier, navigator: Navigator){
     val uriHandler = LocalUriHandler.current
     val openLink = {link: String -> uriHandler.openUri(link)}
     val cards = listOf(
         AccountPageCard(
             text = "Email us",
-            icon = painterResource(id = R.drawable.mail),
+            icon = painterResource(Res.drawable.mail),
             onClick = {openLink("mailto:contact@sweetea.us")},
         ),
         AccountPageCard(
             text = "My Orders",
-            icon = painterResource(id = R.drawable.orders_icon)
+            icon = painterResource(Res.drawable.orders_icon)
         ),
         AccountPageCard(
             text = "Join us",
-            icon = painterResource(id = R.drawable.group_add),
+            icon = painterResource(Res.drawable.group_add),
             onClick = {openLink("https://forms.gle/7tyrVvi9SW17pZJc9")}
         ),
         AccountPageCard(
             text ="Instagram",
-            icon = painterResource(id = R.drawable.instagram_glyph_white),
+            icon = painterResource(Res.drawable.instagram_glyph_white),
             onClick = {openLink("https://www.instagram.com/sweeteaus")},
         ),
     )
@@ -73,14 +78,14 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
             Button(
                 elevation = ButtonDefaults.elevatedButtonElevation(),
                 onClick = {
-                    navController.navigate(Login.route)
+                    navigator.navigate(Login.route)
                 }
             ) {
                 Text("Log In")
             }
             ElevatedButton(
                 onClick = {
-                    navController.navigate(SignUp.route)
+                    navigator.navigate(SignUp.route)
                 }
             ) {
                 Text("Sign Up")

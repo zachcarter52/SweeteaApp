@@ -17,18 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
-import androidx.navigation.NavController
-import android.util.Log
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
+import moe.tlaster.precompose.navigation.Navigator
+/*
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.core.Amplify
+ */
 
 import org.example.sweetea.*
 
 @Composable
-fun LoginPage(modifier: Modifier, navController: NavController) {
+fun LoginPage(modifier: Modifier, navigator: Navigator) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -55,7 +55,7 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
         }
 
         TextButton(onClick = {
-            navController.navigate(SignUp.route)
+            navigator.navigate(SignUp.route)
         }) {
             Text("Don't have an account? Sign Up")
         }
@@ -69,7 +69,7 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
 }
 
 @Composable
-fun SignupPage(modifier: Modifier, navController: NavController) {
+fun SignupPage(modifier: Modifier, navigator: Navigator) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -100,7 +100,7 @@ fun SignupPage(modifier: Modifier, navController: NavController) {
             Text("Sign Up")
         }
 
-        TextButton(onClick = { navController.navigate(Login.route) }) {
+        TextButton(onClick = { navigator.navigate(Login.route) }) {
             Text("Already have an account? Log in")
         }
     }
@@ -129,6 +129,8 @@ fun VerificationPage() {
     }
 
 
+
+    /*
     fun signup(username: String, password: String, email: String) {
         val options = AuthSignUpOptions.builder()
             .userAttribute(AuthUserAttributeKey.email(), email)
@@ -163,5 +165,8 @@ fun VerificationPage() {
         }
 
     }
+    :w
+
+     */
 }
 

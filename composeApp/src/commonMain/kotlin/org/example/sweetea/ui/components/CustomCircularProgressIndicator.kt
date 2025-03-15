@@ -1,6 +1,5 @@
 package org.example.sweetea.ui.components
 
-import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +12,12 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.PI
@@ -33,6 +38,7 @@ fun CustomCircularProgressIndicator(
     var circleCenter by remember {
         mutableStateOf(Offset.Zero)
     }
+    var textMeasurer = rememberTextMeasurer()
     val colorScheme = MaterialTheme.colorScheme
     Box(
         modifier = modifier
@@ -126,15 +132,14 @@ fun CustomCircularProgressIndicator(
             drawContext.canvas.nativeCanvas.apply {
                 drawIntoCanvas {
                     drawText(
-                        "$positionValue",
-                        circleCenter.x,
-                        circleCenter.y + 45.dp.toPx()/3f,
-                        Paint().apply {
-                            textSize = 38.sp.toPx()
-                            textAlign = Paint.Align.CENTER
-                            color = colorScheme.inverseOnSurface.toArgb()
-                            isFakeBoldText = true
-                        }
+                        textMeasurer = textMeasurer,
+                        text = "$positionValue",
+                        topLeft = Offset(circleCenter.x - 38.sp.toPx() / 3, circleCenter.y - 38.sp.toPx() / 2),
+                        style = TextStyle(
+                            fontSize = 38.sp,
+                            textAlign = TextAlign.Center,
+                            color = colorScheme.inverseOnSurface,
+                        )
                     )
                 }
             }

@@ -36,32 +36,32 @@ kotlin {
 
             implementation(compose.preview)
             implementation(compose.uiTooling)
-            implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.appcompat)
-            implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.ui.text.googlefonts)
             implementation(libs.androidx.compose.runtime.livedata)
 
             implementation(libs.androidx.material3.android)
-            implementation(libs.androidx.navigation.runtime.ktx)
-            implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.legacy.support.v4)
             implementation(libs.androidx.cardview)
             implementation(libs.core.splashscreen)
             //Jetpack Compose dependencies
             implementation(libs.androidx.compose.ui.tooling.preview) // Preview support
             implementation(libs.androidx.compose.material) // Material Design components
-            implementation(libs.androidx.activity.compose) // Integration with Activities
-            implementation(libs.androidx.navigation.compose)
+
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.android)
+            implementation(libs.play.services.location)
+            implementation(libs.play.services.maps)
             //Amazon Cognito / Amplify dependencies
             implementation(libs.aws.amplify.core) //amplify library
             implementation(libs.aws.auth.cognito)  //cognito library
-
-            implementation(libs.ktor.client.android)
-            implementation(libs.kotlinx.coroutines.android)
+            //koin
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
         }
 
         iosMain.dependencies {
+            implementation(compose.ui)
             implementation(libs.ktor.client.ios)
         }
 
@@ -73,6 +73,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.animation)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
@@ -91,7 +92,13 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
 
+            implementation(libs.kotlinx.coroutines)
             implementation(libs.multiplatform.paths)
+            implementation(libs.precompose)
+            //koin
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
     }
 }
@@ -135,8 +142,6 @@ android {
 
 dependencies {
 
-    implementation(libs.play.services.location)
-    implementation(libs.play.services.maps)
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

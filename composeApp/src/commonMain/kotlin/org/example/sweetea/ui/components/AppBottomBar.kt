@@ -6,14 +6,13 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.BaseDestinations
-import org.example.sweetea.navigateSingleTopTo
 
 @Composable
-fun AppBottomBar(navController: NavHostController,
-                         modifier: Modifier = Modifier,
-                         selectedItem: Int,
+fun AppBottomBar(navigator: Navigator,
+                 modifier: Modifier = Modifier,
+                 selectedItem: Int,
 ) {
     NavigationBar(modifier = modifier) {
         BaseDestinations.forEachIndexed { index, destination ->
@@ -29,7 +28,7 @@ fun AppBottomBar(navController: NavHostController,
                 },
                 selected = index == selectedItem,
                 onClick = {
-                    navController.navigateSingleTopTo(destination.route)
+                    navigator.navigate(destination.route)
                     destination.onClick!!()
                 }
             )

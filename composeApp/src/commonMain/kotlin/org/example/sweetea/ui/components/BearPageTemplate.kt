@@ -14,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import org.example.sweetea.R
+import org.jetbrains.compose.resources.painterResource
+import sweetea.composeapp.generated.resources.Res
+import sweetea.composeapp.generated.resources.sweetealogo_homepage_dark
+import sweetea.composeapp.generated.resources.sweetealogo_homepage_light
 
 @Composable
 fun BearPageTemplate(
@@ -24,9 +26,9 @@ fun BearPageTemplate(
     showBear: Boolean = true,
     content: @Composable () -> Unit = {}){
     val logo = if (!isSystemInDarkTheme()){
-        painterResource(id = R.drawable.sweetealogo_homepage_light)
+        painterResource(Res.drawable.sweetealogo_homepage_light)
     } else {
-        painterResource(id = R.drawable.sweetealogo_homepage_dark)
+        painterResource(Res.drawable.sweetealogo_homepage_dark)
     }
 
     Column(

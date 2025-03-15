@@ -11,11 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.HomePage
@@ -35,7 +32,7 @@ open class BasicDestination (
     val route: String,
     val page: @Composable (
         modifier: Modifier,
-        navController: NavController,
+        navigator: Navigator,
         appViewModel: AppViewModel
         ) -> Unit,
     val subPages: List<BasicDestination>? = null,
@@ -56,7 +53,7 @@ open class Destination (
     val pageRoute: String,
     page: @Composable (
         modifier: Modifier,
-        navController: NavController,
+        navigator: Navigator,
         appViewModel: AppViewModel
     ) -> Unit,
     val onClick: (() -> Unit)? = {},

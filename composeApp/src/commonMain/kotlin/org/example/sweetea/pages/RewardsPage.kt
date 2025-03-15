@@ -1,14 +1,10 @@
 package org.example.sweetea.pages
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
@@ -24,14 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.dataclasses.local.AppViewModel
 
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.CustomCircularProgressIndicator
 
 @Composable
-fun RewardsPage(modifier: Modifier, navController: NavController, appViewModel: AppViewModel){
+fun RewardsPage(modifier: Modifier, navigator: Navigator, appViewModel: AppViewModel){
     var positionValue by remember {mutableIntStateOf(0)}
     val appStatus by appViewModel.appStatus.collectAsState()
     BearPageTemplate(
