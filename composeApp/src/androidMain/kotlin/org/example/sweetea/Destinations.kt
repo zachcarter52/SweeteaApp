@@ -13,8 +13,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.android.libraries.places.api.model.SubDestination
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
+import org.example.sweetea.pages.ForgotPasswordPage
 import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
@@ -22,6 +24,7 @@ import org.example.sweetea.pages.ProductPage
 import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
 import org.example.sweetea.pages.SubMenuPage
+import org.example.sweetea.pages.VerificationPage
 
 /*
 Describes a basic destination within the NavController,
@@ -127,22 +130,50 @@ object Account : Destination(
     page = { modifier, navController, _ -> AccountPage(modifier, navController) },
     subPages = listOf(
         Login,
-        SignUp
+        SignUp,
+        ForgotPassword,
+        Verification
     ),
     hideLocation = true,
 )
 
 object Login : BasicDestination(
     route = "login",
-    page = { modifier, navController, _ -> LoginPage(modifier, navController) },
+    page = { modifier, navController, _ -> LoginPage(modifier, navController, {}, viewModel()) },
     hideTopBarHeader = true,
 )
 
 object SignUp : BasicDestination(
     route = "signup",
-    page = { modifier, navController, _ -> SignupPage(modifier, navController) },
+    page = { modifier, navController, _ -> SignupPage(modifier, navController, {}, viewModel())  },
     hideTopBarHeader = true,
 )
+
+object ForgotPassword : BasicDestination(
+    route = "forgotpassword/{email}",
+    page = { modifier, navController, _ ->
+        val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
+           ForgotPasswordPage(modifier, navController)
+    },
+    hideTopBarHeader = true,
+)
+
+object Verification : BasicDestination(
+    route = "verification/{email}",
+    page = { modifier, navController, _ ->
+        val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
+        VerificationPage(modifier, navController, email) },
+    hideTopBarHeader = true,
+)
+
+/*
+object LogOut : BasicDestination(
+    route = "logout",
+    page = {modifier, navController -> LogOutPage(modifier, navController) },
+    subPages = null
+)
+*/
+
 
 val BaseDestinations = listOf(
     Home,

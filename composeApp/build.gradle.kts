@@ -137,6 +137,8 @@ dependencies {
 
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.volley)
+    implementation(libs.places)
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

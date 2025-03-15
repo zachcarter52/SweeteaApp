@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+//import com.android.volley.toolbox.ImageRequest
 import org.example.sweetea.*
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
@@ -90,7 +91,7 @@ fun HomePage(
         HomeCard(
             image = {
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
+                    model = coil3.request.ImageRequest.Builder(LocalContext.current)
                         .data(url)
                         .memoryCacheKey(url)
                         .diskCacheKey(url)
