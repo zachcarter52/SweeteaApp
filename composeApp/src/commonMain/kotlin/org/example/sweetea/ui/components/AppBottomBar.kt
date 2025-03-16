@@ -6,11 +6,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import moe.tlaster.precompose.navigation.Navigator
+import androidx.navigation.NavHostController
 import org.example.sweetea.BaseDestinations
 
 @Composable
-fun AppBottomBar(navigator: Navigator,
+fun AppBottomBar(navHostController: NavHostController,
                  modifier: Modifier = Modifier,
                  selectedItem: Int,
 ) {
@@ -28,7 +28,7 @@ fun AppBottomBar(navigator: Navigator,
                 },
                 selected = index == selectedItem,
                 onClick = {
-                    navigator.navigate(destination.route)
+                    navHostController.navigate(destination.route)
                     destination.onClick!!()
                 }
             )

@@ -83,8 +83,7 @@ androidx-compose-ui-text-googlefonts = { module = "androidx.compose.ui:ui-text-g
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose"}
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraint-layout" }
 androidx-material3-android = { module = "androidx.compose.material3:material3-android", version.ref = "material3Android" }
-androidx-navigation-runtime-ktx = { module = "androidx.navigation:navigation-runtime", version.ref = "navigation-compose" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
@@ -114,7 +113,6 @@ koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", ver
 sublime-fuzzy-search = { module = "com.github.android-password-store:sublime-fuzzy", version.ref = "sublime-fuzzy-search"}
 
 multiplatform-paths = { module = "me.sujanpoudel.multiplatform.utils:multiplatform-paths", version.ref = "multiplatform-paths"}
-precompose = { module = "moe.tlaster:precompose", version.ref = "precompose"}
 
 #server
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }

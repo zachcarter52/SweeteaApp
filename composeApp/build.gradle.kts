@@ -74,6 +74,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(compose.animation)
+            implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
@@ -92,10 +93,8 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
 
-            implementation(kotlin("reflect"))
             implementation(libs.kotlinx.coroutines)
             implementation(libs.multiplatform.paths)
-            implementation(libs.precompose)
             //koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)

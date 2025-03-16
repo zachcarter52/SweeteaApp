@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.*
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
@@ -31,7 +31,7 @@ import sweetea.composeapp.generated.resources.featured_items
 @Composable
 fun HomePage(
     modifier: Modifier=Modifier,
-    navigator: Navigator,
+    navHostController: NavHostController,
     appViewModel: AppViewModel
 ) {
     LaunchedEffect(Unit){
@@ -63,7 +63,7 @@ fun HomePage(
             imageHeader = "Featured Menu Items",
             buttonText = "Order Now",
             onClick = {
-                navigator.navigate(Menu.route)
+                navHostController.navigate(Menu.route)
             }
         )
         val url = appStatus.currentEvent.eventImageURL
@@ -88,7 +88,7 @@ fun HomePage(
             buttonText = appStatus.currentEvent.buttonText,
             onClick = {
                 if(appStatus.currentEvent.linkIsRoute) {
-                    navigator.navigate(appStatus.currentEvent.link)
+                    navHostController.navigate(appStatus.currentEvent.link)
                 } else {
                     uriHandler.openUri(appStatus.currentEvent.link)
                 }

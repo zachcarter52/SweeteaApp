@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import moe.tlaster.precompose.navigation.Navigator
+import androidx.navigation.NavHostController
 import org.example.sweetea.*
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.jetbrains.compose.resources.painterResource
@@ -43,7 +43,7 @@ open class AccountPageCard(
 )
 
 @Composable
-fun AccountPage(modifier: Modifier=Modifier, navigator: Navigator){
+fun AccountPage(modifier: Modifier=Modifier, navHostController: NavHostController){
     val uriHandler = LocalUriHandler.current
     val openLink = {link: String -> uriHandler.openUri(link)}
     val cards = listOf(
@@ -78,14 +78,14 @@ fun AccountPage(modifier: Modifier=Modifier, navigator: Navigator){
             Button(
                 elevation = ButtonDefaults.elevatedButtonElevation(),
                 onClick = {
-                    navigator.navigate(Login.route)
+                    navHostController.navigate(Login.route)
                 }
             ) {
                 Text("Log In")
             }
             ElevatedButton(
                 onClick = {
-                    navigator.navigate(SignUp.route)
+                    navHostController.navigate(SignUp.route)
                 }
             ) {
                 Text("Sign Up")
