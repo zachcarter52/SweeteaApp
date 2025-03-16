@@ -16,14 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.PlatformContext
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import org.example.sweetea.R
+import org.example.sweetea.pages.toString
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import sweetea.composeapp.generated.resources.Res
+import sweetea.composeapp.generated.resources.taro_milk_tea
 
 @Composable
 fun MenuDisplayImage(
@@ -48,10 +51,10 @@ fun MenuDisplayImage(
     contentDescription: String,
     contentScale: ContentScale
 ){
-    val placeholder = painterResource(R.drawable.pearl_milk_tea)
+    val placeholder = painterResource(Res.drawable.taro_milk_tea)
     MenuDisplayImage(
         image = {AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
+            model = ImageRequest.Builder(LocalPlatformContext.current)
                 .data(url)
                 .memoryCacheKey(url)
                 .diskCacheKey(url)
@@ -112,7 +115,7 @@ fun MenuItem(
                 )
                 if(!isHeader){
                     Text(
-                        text = "$%.2f".format(price),
+                        text = "\$${price?.toString(2)}",
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
