@@ -4,7 +4,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import moe.tlaster.precompose.navigation.Navigator
+import androidx.navigation.NavHostController
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
@@ -13,7 +13,7 @@ import org.example.sweetea.ui.components.MenuItem
 @Composable
 fun SubMenuPage(
     modifier: Modifier = Modifier,
-    navigator: Navigator,
+    navHostController: NavHostController,
     appViewModel: AppViewModel
 ){
     val itemHeight = 120
@@ -37,7 +37,7 @@ fun SubMenuPage(
                 price = product.price.regular_high_with_modifiers,
                 onClick = {
                     appViewModel.setProduct(product)
-                    navigator.navigate(ProductCustomPage.route)
+                    navHostController.navigate(ProductCustomPage.route)
                 }
             )
             if (index != currentCategoryProducts.size -1) HorizontalDivider()

@@ -34,8 +34,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastRoundToInt
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
-import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.dataclasses.local.AppViewModel
 import kotlin.math.floor
 import kotlin.math.pow
@@ -55,7 +55,7 @@ fun Float.toString(decimalPrecision: Int): String{
 @Composable
 fun ProductPage(
     modifier: Modifier = Modifier,
-    navigator: Navigator,
+    navHostController: NavHostController,
     appViewModel: AppViewModel
 ) {
     Column(

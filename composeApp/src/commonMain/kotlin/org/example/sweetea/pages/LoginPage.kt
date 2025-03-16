@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import moe.tlaster.precompose.navigation.Navigator
+import androidx.navigation.NavHostController
 /*
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
@@ -28,7 +28,7 @@ import com.amplifyframework.core.Amplify
 import org.example.sweetea.*
 
 @Composable
-fun LoginPage(modifier: Modifier, navigator: Navigator) {
+fun LoginPage(modifier: Modifier, navHostController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -55,7 +55,7 @@ fun LoginPage(modifier: Modifier, navigator: Navigator) {
         }
 
         TextButton(onClick = {
-            navigator.navigate(SignUp.route)
+            navHostController.navigate(SignUp.route)
         }) {
             Text("Don't have an account? Sign Up")
         }
@@ -69,7 +69,7 @@ fun LoginPage(modifier: Modifier, navigator: Navigator) {
 }
 
 @Composable
-fun SignupPage(modifier: Modifier, navigator: Navigator) {
+fun SignupPage(modifier: Modifier, navHostController: NavHostController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -100,7 +100,7 @@ fun SignupPage(modifier: Modifier, navigator: Navigator) {
             Text("Sign Up")
         }
 
-        TextButton(onClick = { navigator.navigate(Login.route) }) {
+        TextButton(onClick = { navHostController.navigate(Login.route) }) {
             Text("Already have an account? Log in")
         }
     }

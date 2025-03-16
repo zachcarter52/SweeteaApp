@@ -20,14 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import moe.tlaster.precompose.navigation.Navigator
+import androidx.navigation.NavHostController
 import org.example.sweetea.dataclasses.local.AppViewModel
 
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.CustomCircularProgressIndicator
 
 @Composable
-fun RewardsPage(modifier: Modifier, navigator: Navigator, appViewModel: AppViewModel){
+fun RewardsPage(
+    modifier: Modifier,
+    navHostController: NavHostController,
+    appViewModel: AppViewModel
+){
     var positionValue by remember {mutableIntStateOf(0)}
     val appStatus by appViewModel.appStatus.collectAsState()
     BearPageTemplate(

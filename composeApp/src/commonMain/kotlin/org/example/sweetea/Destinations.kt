@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import moe.tlaster.precompose.navigation.Navigator
+import androidx.navigation.NavHostController
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.HomePage
@@ -32,7 +32,7 @@ open class BasicDestination (
     val route: String,
     val page: @Composable (
         modifier: Modifier,
-        navigator: Navigator,
+        navHostController: NavHostController,
         appViewModel: AppViewModel
         ) -> Unit,
     val subPages: List<BasicDestination>? = null,
@@ -53,7 +53,7 @@ open class Destination (
     val pageRoute: String,
     page: @Composable (
         modifier: Modifier,
-        navigator: Navigator,
+        navHostController: NavHostController,
         appViewModel: AppViewModel
     ) -> Unit,
     val onClick: (() -> Unit)? = {},

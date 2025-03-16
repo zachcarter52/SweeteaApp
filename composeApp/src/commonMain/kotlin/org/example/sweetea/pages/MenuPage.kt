@@ -44,8 +44,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMapNotNull
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
-import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.ProductCustomPage
 
 import org.example.sweetea.SubMenu
@@ -125,7 +125,7 @@ val featuredItems = listOf(
 @Composable
 fun MenuPage(
     modifier: Modifier = Modifier,
-    navigator: Navigator,
+    navHostController: NavHostController,
     appViewModel: AppViewModel,
 ){
     LaunchedEffect(Unit){
@@ -222,7 +222,7 @@ fun MenuPage(
                         onClick = {
                             //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
                             appViewModel.setCategory(menuCategory)
-                            navigator.navigate(SubMenu.route)
+                            navHostController.navigate(SubMenu.route)
                         }
                     )
                     if (index != menuCategoryState.size - 1) HorizontalDivider()
@@ -240,7 +240,7 @@ fun MenuPage(
                         price = product.price.regular_high_with_modifiers,
                         onClick = {
                             appViewModel.setProduct(product)
-                            navigator.navigate(ProductCustomPage.route)
+                            navHostController.navigate(ProductCustomPage.route)
                         }
                     )
                     if (index != searchedProducts.size - 1) HorizontalDivider()
