@@ -92,6 +92,7 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
 
+            implementation(kotlin("reflect"))
             implementation(libs.kotlinx.coroutines)
             implementation(libs.multiplatform.paths)
             implementation(libs.precompose)
