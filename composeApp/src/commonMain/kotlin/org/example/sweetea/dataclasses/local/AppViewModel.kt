@@ -23,7 +23,7 @@ class AppViewModel: ViewModel() {
     private val _categoryList = MutableStateFlow<List<CategoryData>>(listOf())
     val categoryList: StateFlow<List<CategoryData>> = _categoryList
     private val _productList = MutableStateFlow<List<ProductData>>(listOf())
-    private val productList: StateFlow<List<ProductData>> = _productList
+    val productList: StateFlow<List<ProductData>> = _productList
     private val _appStatus = MutableStateFlow(AppStatus.DefaultStatus)
     val appStatus: StateFlow<AppStatus> = _appStatus
 
@@ -39,7 +39,7 @@ class AppViewModel: ViewModel() {
     var productMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
         private set
 
-    suspend fun updateInfo(){
+    fun updateInfo(){
         getAppStatus()
         if(currentLocation == null) getLocations()
         if(currentCategory == null) getCategories()

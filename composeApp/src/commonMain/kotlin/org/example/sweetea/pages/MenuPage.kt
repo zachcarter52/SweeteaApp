@@ -45,7 +45,7 @@ fun FeaturedItem(
     imageHeight: Int,
     onClick: () -> Unit = {},
 ){
-    val paddingRatio = 0.05f;
+    val paddingRatio = 0.05f
     val fontSize = imageHeight / 10
     Column(
         modifier = Modifier.clickable { onClick() }

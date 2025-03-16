@@ -17,10 +17,8 @@ import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
 import coil3.request.CachePolicy
 import coil3.util.DebugLogger
-import kotlinx.coroutines.flow.MutableStateFlow
 import me.sujanpoudel.utils.paths.appCacheDirectory
 import moe.tlaster.precompose.PreComposeApp
-import moe.tlaster.precompose.navigation.BackStackEntry
 import moe.tlaster.precompose.navigation.rememberNavigator
 import okio.Path.Companion.toPath
 import org.example.sweetea.dataclasses.local.AppViewModel
@@ -51,8 +49,9 @@ fun SweeteaApp(
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .networkCachePolicy(CachePolicy.ENABLED)
                 .diskCache {
+                    println("appCacheDir: ${appCacheDirectory(Constants.PACKAGE_NAME)}/image_cache")
                     DiskCache.Builder()
-                        .directory((appCacheDirectory(Constants.PACKAGE_NAME).toString() + "image_cache").toPath())
+                        .directory((appCacheDirectory(Constants.PACKAGE_NAME).toString() + "/image_cache").toPath())
                         .maxSizeBytes(5 * 1024 * 1024)
                         .build()
                 }
@@ -182,8 +181,10 @@ fun SweeteaApp(
                         viewModel = viewModel,
                         navigator = navigator,
                         modifier = Modifier.padding(padding),
-                        enterTransition = enterTransition,
-                        exitTransition = exitTransition
+                        navTransition = SweeteaNavTransition(
+                            createTransition = enterTransition,
+                            destroyTransition = exitTransition,
+                        ),
                     )
                 }
             }

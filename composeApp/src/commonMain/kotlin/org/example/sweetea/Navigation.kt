@@ -2,16 +2,15 @@ package org.example.sweetea
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.singleOrNull
 import moe.tlaster.precompose.navigation.NavHost
-import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.PopUpTo
+import moe.tlaster.precompose.navigation.transition.NavTransition
 import org.example.sweetea.dataclasses.local.AppViewModel
 
 //navhost function of Navigation
@@ -20,17 +19,12 @@ fun SweetTeaNavHost(
     viewModel: AppViewModel,
     navigator: Navigator,
     modifier: Modifier = Modifier,
-    enterTransition: () -> EnterTransition,
-    exitTransition: () -> ExitTransition,
+    navTransition: NavTransition,
 ){
     NavHost(
         navigator = navigator,
         initialRoute = BaseDestinations[0].route,
-        /*
-        enterTransition = {enterTransition()},
-        exitTransition = {exitTransition()},
-
-         */
+        navTransition = navTransition
     ) {
         BaseDestinations.forEach {
                 destination ->
@@ -56,4 +50,26 @@ fun SweetTeaNavHost(
             }
         }
     }
+}
+
+fun SweeteaNavTransition(
+    createTransition: () -> EnterTransition = {fadeIn() + scaleIn(initialScale = 0.9f)},
+    destroyTransition: () -> ExitTransition = {fadeOut() + scaleOut(targetScale = 0.9f)},
+    pauseTransition: ()  -> ExitTransition = {fadeOut() + scaleOut(targetScale = 1.1f)},
+    resumeTransition: () -> EnterTransition = {fadeIn() + scaleIn(initialScale = 1.1f)},
+    enterTargetContentZIndex: () -> Float = {0f},
+    exitTargetContentZIndex: () -> Float = {0f},
+) = object : NavTransition {
+    override val createTransition: EnterTransition
+        get() = createTransition()
+    override val destroyTransition: ExitTransition
+        get() = destroyTransition()
+    override val pauseTransition: ExitTransition
+        get() = pauseTransition()
+    override val resumeTransition: EnterTransition
+        get() = resumeTransition()
+    override val enterTargetContentZIndex: Float
+        get() = enterTargetContentZIndex()
+    override val exitTargetContentZIndex: Float
+        get() = exitTargetContentZIndex()
 }
