@@ -99,6 +99,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            //fuzzy search
+            implementation(libs.sublime.fuzzy.search)
         }
     }
 }
