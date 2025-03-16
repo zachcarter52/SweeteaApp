@@ -37,14 +37,15 @@ import androidx.compose.ui.util.fastRoundToInt
 import coil3.compose.AsyncImage
 import moe.tlaster.precompose.navigation.Navigator
 import org.example.sweetea.dataclasses.local.AppViewModel
+import kotlin.math.floor
 import kotlin.math.pow
 
 fun Float.toString(decimalPrecision: Int): String{
-    val integerValue = this.fastRoundToInt()
+    val integerValue = floor(this).fastRoundToInt()
 
     if(decimalPrecision > 0){
         val remainder = this - integerValue
-        val decimalAsInt = (remainder * 10f.pow(decimalPrecision)).fastRoundToInt()
+        val decimalAsInt: Int = (remainder * 10f.pow(decimalPrecision)).fastRoundToInt()
         return "$integerValue.$decimalAsInt"
     }
     return integerValue.toString()

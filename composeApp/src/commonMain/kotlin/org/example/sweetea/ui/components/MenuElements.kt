@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.PlatformContext
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
@@ -38,7 +37,6 @@ fun MenuDisplayImage(
         elevation = CardDefaults.cardElevation(20.dp),
         modifier = Modifier.height(imageHeight.dp)
             .width(imageHeight.dp * imageRatio),
-        shape = RoundedCornerShape(12.dp),
     ) {
         image()
     }
