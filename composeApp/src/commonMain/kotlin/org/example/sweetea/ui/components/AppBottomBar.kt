@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import org.example.sweetea.BaseDestinations
+import org.example.sweetea.navigateSingleTopTo
 
 @Composable
 fun AppBottomBar(navHostController: NavHostController,
@@ -28,7 +29,7 @@ fun AppBottomBar(navHostController: NavHostController,
                 },
                 selected = index == selectedItem,
                 onClick = {
-                    navHostController.navigate(destination.route)
+                    navHostController.navigateSingleTopTo(destination.route)
                     destination.onClick!!()
                 }
             )

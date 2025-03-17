@@ -95,6 +95,7 @@ kotlin {
 
             implementation(libs.kotlinx.coroutines)
             implementation(libs.multiplatform.paths)
+            implementation(libs.androidx.lifecycle.viewmodel)
             //koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)

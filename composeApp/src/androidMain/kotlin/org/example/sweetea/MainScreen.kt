@@ -85,9 +85,6 @@ class MainScreen : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initKoin{
-            androidContext(this@MainScreen)
-        }
         installSplashScreen()
 
         setContent {

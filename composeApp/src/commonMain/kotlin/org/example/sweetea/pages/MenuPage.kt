@@ -168,23 +168,6 @@ fun MenuPage(
         modifier = modifier,
         showBear = false,
     ){
-        Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState()),
-        ){
-            featuredItems.forEach{
-                FeaturedItem(
-                    image = {
-                        Image(
-                            painter = cachedImage(it.imageImageResource),
-                            contentDescription = it.itemName,
-                            contentScale = ContentScale.FillHeight
-                        )},
-                    itemName = it.itemName,
-                    imageHeight = itemHeight
-                )
-            }
-        }
-        HorizontalDivider()
         Column(Modifier.fillMaxWidth()) {
             TextField(
                 value = searchTerms,
@@ -209,6 +192,23 @@ fun MenuPage(
                 shape = RectangleShape
             )
         }
+        Row(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+        ){
+            featuredItems.forEach{
+                FeaturedItem(
+                    image = {
+                        Image(
+                            painter = cachedImage(it.imageImageResource),
+                            contentDescription = it.itemName,
+                            contentScale = ContentScale.FillHeight
+                        )},
+                    itemName = it.itemName,
+                    imageHeight = itemHeight
+                )
+            }
+        }
+        HorizontalDivider()
         Column(Modifier.fillMaxWidth()) {
             if(searchTerms.isEmpty()) {
                 menuCategoryState.forEachIndexed { index, menuCategory ->
