@@ -7,6 +7,7 @@ import io.ktor.server.auth.form
 import io.ktor.server.auth.principal
 import io.ktor.server.auth.session
 import io.ktor.server.response.respondRedirect
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
@@ -74,7 +75,7 @@ fun Application.configureSecurity() {
                 val session = call.principal<AdminSession>()
                 if(session != null){
                     call.sessions.set(session)
-                    call.respondRedirect("/index")
+                    call.respondText("/index")
                 }
             }
         }

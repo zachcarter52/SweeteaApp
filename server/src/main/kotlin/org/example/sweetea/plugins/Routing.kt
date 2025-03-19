@@ -11,9 +11,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
-import kotlinx.serialization.Serializable
 import org.example.sweetea.ResponseClasses.AppStatus
-import org.example.sweetea.database.getSelectedEvent
+import org.example.sweetea.database.eventSchema
 import org.example.sweetea.database.rewardSchema
 import java.io.File
 import java.util.Date
@@ -34,7 +33,7 @@ fun Application.configureRouting() {
         get("/status") {
             call.respond(
                 AppStatus(
-                    getSelectedEvent().toEventResponse(),
+                    eventSchema.getSelectedEvents().map{it.toEventResponse()},
                     rewardSchema.getBearValue()
                 )
             )
@@ -49,8 +48,18 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.OK)
             }
         }
-        get("/events/selected") {
-            call.respond(getSelectedEvent().toEventResponse())
+        route("/events"){
+            get("/selected") {
+                call.respond(eventSchema.getSelectedEvents().map{it.toEventResponse()})
+            }
+            put("/decrement/{selectionIndex}"){
+                val selectionIndex = call.parameters["selectionIndex"]!!.toInt()
+                call.respond(eventSchema.swapSelections(selectionIndex, selectionIndex-1))
+            }
+            put("/increment/{selectionIndex}"){
+                val selectionIndex = call.parameters["selectionIndex"]!!.toInt()
+                call.respond(eventSchema.swapSelections(selectionIndex, selectionIndex+1))
+            }
         }
         get("/{filename}") {
             val filename = call.parameters["filename"]!!

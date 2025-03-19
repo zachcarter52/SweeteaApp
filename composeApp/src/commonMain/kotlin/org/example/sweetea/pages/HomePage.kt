@@ -48,6 +48,7 @@ fun HomePage(
     BearPageTemplate(
         modifier = modifier,
     ) {
+        if(appStatus.currentEvents.size < 2)
         HomeCard(
             image = {
                 Image(
@@ -63,37 +64,38 @@ fun HomePage(
             imageHeader = "Featured Menu Items",
             buttonText = "Order Now",
             onClick = {
-                navHostController.navigate(Menu.route)
+                navHostController.navigateSingleTopTo(Menu.route)
             }
         )
-        val url = appStatus.currentEvent.eventImageURL
         val uriHandler = LocalUriHandler.current
-        println("eventUrl: $url")
-        HomeCard(
-            image = {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalPlatformContext.current)
-                        .data(url)
-                        .memoryCacheKey(url)
-                        .diskCacheKey(url)
-                        .build(),
-                    contentScale = ContentScale.FillHeight,
-                    contentDescription = appStatus.currentEvent.eventName,
-                    placeholder = featuredItemsImage,
-                    fallback = featuredItemsImage,
-                    error = featuredItemsImage,
-                )
-            },
-            imageHeader = appStatus.currentEvent.eventName,
-            buttonText = appStatus.currentEvent.buttonText,
-            onClick = {
-                if(appStatus.currentEvent.linkIsRoute) {
-                    navHostController.navigate(appStatus.currentEvent.link)
-                } else {
-                    uriHandler.openUri(appStatus.currentEvent.link)
+        for(event in appStatus.currentEvents){
+            val url = event.eventImageURL
+            HomeCard(
+                image = {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalPlatformContext.current)
+                            .data(url)
+                            .memoryCacheKey(url)
+                            .diskCacheKey(url)
+                            .build(),
+                        contentScale = ContentScale.FillHeight,
+                        contentDescription = event.eventName,
+                        placeholder = featuredItemsImage,
+                        fallback = featuredItemsImage,
+                        error = featuredItemsImage,
+                    )
+                },
+                imageHeader = event.eventName,
+                buttonText = event.buttonText,
+                onClick = {
+                    if(event.linkIsRoute) {
+                        navHostController.navigateSingleTopTo(event.link)
+                    } else {
+                        uriHandler.openUri(event.link)
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
 }

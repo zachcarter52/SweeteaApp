@@ -3,7 +3,6 @@ package org.example.sweetea.database
 import io.ktor.http.*
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
-import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
 import io.ktor.server.request.*
@@ -11,12 +10,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
-import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.*
 import org.example.sweetea.Constants
 import org.example.sweetea.database.model.Account
 import org.example.sweetea.ResponseClasses.Event
-import org.example.sweetea.database.model.AdminAccount
 import java.io.File
 
 private val database = Database.connect(
@@ -30,12 +27,6 @@ val accountSchema = AccountSchema(database)
 val adminAccountSchema = AdminAccountSchema(database)
 val eventSchema = EventSchema(database)
 val rewardSchema = RewardSchema(database)
-internal var selectedEvent = Event.DefaultEvent
-public suspend fun getSelectedEvent(): Event{
-    if(selectedEvent.equals(Event.DefaultEvent)) selectedEvent = eventSchema.getSelectedEvent()!!
-    return selectedEvent
-}
-
 
 fun Application.configureDatabases() : Database {
     val l: String = File.separator
@@ -147,14 +138,11 @@ fun Application.configureDatabases() : Database {
                                 eventname,
                                 buttonText,
                                 filename,
-                                false,
+                                -1,
                                 linkURL,
                                 linkIsRoute
                             )
                             val eventID = eventSchema.createEvent(event)
-                            if (eventID == 1L) {
-                                selectedEvent = event
-                            }
                             if (eventID != null) call.respond(HttpStatusCode.Created)
                         } else {
                             call.respond(HttpStatusCode.BadRequest)

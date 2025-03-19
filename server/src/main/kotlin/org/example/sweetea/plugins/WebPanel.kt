@@ -6,9 +6,7 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.response.*
 import io.ktor.server.thymeleaf.*
 import org.example.sweetea.database.eventSchema
-import org.example.sweetea.database.getSelectedEvent
 import org.example.sweetea.database.rewardSchema
-import org.jetbrains.exposed.sql.Database
 import org.thymeleaf.templateresolver.*
 
 fun Application.configureWebPanel() {
@@ -37,9 +35,9 @@ fun Application.configureWebPanel() {
                 call.respond(
                     ThymeleafContent(
                         template = "index", model = mapOf(
-                            "events" to eventSchema.allEvents(),
+                            "events" to eventSchema.getEventsBySelected(),
                             "currentBearValue" to rewardSchema.getBearValue().toString(),
-                            "selectedEventName" to getSelectedEvent().name,
+                            "selectedEventCount" to eventSchema.getSelectedEventCount().toString(),
                             "pageRoutes" to listOf(
                                 "home",
                                 "menu",
