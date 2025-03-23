@@ -18,6 +18,7 @@ import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.ForgotPasswordPage
 import org.example.sweetea.pages.HomePage
+import org.example.sweetea.pages.LogOutPage
 import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
 import org.example.sweetea.pages.ProductPage
@@ -73,7 +74,7 @@ object Home : Destination(
     label = "Home",
     route = "home",
     pageRoute = "homepage",
-    page = {modifier, navController, appViewModel -> HomePage(modifier, navController, appViewModel) },
+    page = {modifier, navController, appViewModel -> HomePage(modifier, navController, appViewModel, viewModel()) },
 )
 
 object Menu : Destination(
@@ -132,7 +133,8 @@ object Account : Destination(
         Login,
         SignUp,
         ForgotPassword,
-        Verification
+        Verification,
+        LogOut
     ),
     hideLocation = true,
 )
@@ -166,14 +168,11 @@ object Verification : BasicDestination(
     hideTopBarHeader = true,
 )
 
-/*
 object LogOut : BasicDestination(
     route = "logout",
-    page = {modifier, navController -> LogOutPage(modifier, navController) },
-    subPages = null
+    page = {modifier, navController, _ -> LogOutPage(modifier, navController) },
+    hideTopBarHeader = true,
 )
-*/
-
 
 val BaseDestinations = listOf(
     Home,

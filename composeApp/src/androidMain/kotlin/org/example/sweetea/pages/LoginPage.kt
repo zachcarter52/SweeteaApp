@@ -65,29 +65,19 @@ fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete:
             // Handle login logic here
             viewModel.loginUser(email,password) { success, error ->
                 if(success){
+                    viewModel.fetchUsername()
                     onLoginComplete()
                 }else {
                     errorMessage = error
                 }
             }
-
-            // Fetch user attributes (username)
-            Amplify.Auth.fetchUserAttributes(
-                { attributes ->
-                    val fetchUsername =
-                        attributes.find { it.key.keyString == "preferred_username" }?.value
-                    username = fetchUsername ?: ""
-                    Log.i("AuthQuickstart", "Username: $username")
-                },
-                { error -> Log.e("AuthQuickstart", "Failed to fetch attributes", error) }
-            )
         }) {
             Text("Sign In")
         }
 
         errorMessage?.let {
             Text(text = it, color = Color.Red)
-            Text(text = "Welcome, $username!")
+            Text(text = "Welcome, ${viewModel.username.value}!")
         }
 
         TextButton(onClick = {
@@ -147,6 +137,10 @@ fun SignupPage(modifier: Modifier, navController: NavController, onSignUpComplet
             }
         }) {
             Text("Sign Up")
+        }
+
+        if(shouldNavigate){
+            navController.navigate("verification/$email")
         }
 
         errorMessage?.let {
@@ -223,7 +217,7 @@ fun LogOutPage (modifier: Modifier, navController: NavController){
         Button(onClick = {
             Amplify.Auth.signOut() {
             }
-            navController.navigate("accountmain")
+            navController.navigate("account")
         }) {
             Text("Log Out")
         }
@@ -329,5 +323,16 @@ fun ForgotPasswordPage(modifier: Modifier, navController: NavController, onPassw
     }
 }
 
-
-
+/*
+fun fetchUserAttributes(callback: (String) -> Unit) {
+    Amplify.Auth.fetchUserAttributes(
+        { attributes ->
+            val username =
+                attributes.find { it.key.keyString == "preferred_username" }?.value
+                callback(username.toString())
+            Log.i("AuthQuickstart", "Username: $username")
+        },
+        { error -> Log.e("AuthQuickstart", "Failed to fetch attributes", error) }
+    )
+}
+*/

@@ -46,7 +46,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun HomePage(
     modifier: Modifier=Modifier,
     navController: NavController,
-    appViewModel: AppViewModel
+    appViewModel: AppViewModel,
+    authViewModel: AuthViewModel
 ) {
     LaunchedEffect(Unit){
         appViewModel.updateInfo()
@@ -54,13 +55,18 @@ fun HomePage(
 
     val featuredItemsImage = painterResource(id = R.drawable.featured_items)
     var clicked by remember { mutableStateOf(false) }
-
     val currentEvent by appViewModel.currentEvent.collectAsState()
-    //Calculates top padding based on screen height.
-    //Change the floating point value in calculatedPadding to change the image placement.
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
+    val username by remember { authViewModel.username }
+    val isLoggedIn by remember { authViewModel.isUserLoggedIn }
+
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn) {
+            authViewModel.fetchUsername()
+        }
+    }
 
     BearPageTemplate(
         modifier = modifier,

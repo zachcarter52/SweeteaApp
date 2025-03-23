@@ -41,11 +41,8 @@ class AuthViewModel : ViewModel() {
                 when (result.nextStep.signInStep) {
                     AuthSignInStep.DONE -> {
                         onResult(false, "Sign in succeeded")
-
+                        fetchUsername()
                     }
-                    //AuthSignInStep.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD
-                    //-> {onResult(false, "Sign in succeeded")}
-
                     else -> onResult(false, "Sign-in not complete")
                 }
             },
@@ -70,6 +67,7 @@ class AuthViewModel : ViewModel() {
             { attributes ->
                 val fetchedUsername = attributes.find { it.key.keyString == "preferred_username" }?.value ?: "Unknown"
                 username.value = fetchedUsername ?: "User"
+                Log.e("AuthViewModel", "Username: $fetchedUsername")
             },
             { error -> Log.e("AuthViewModel", "Failed to fetch attributes", error) }
         )
