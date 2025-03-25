@@ -72,6 +72,7 @@ class MainScreen : ComponentActivity(){
 
 
     private val appViewModel: AppViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private var userLocation: Location? = null
 
     private var nearestStore by mutableStateOf<StoreLocation?>(null)
@@ -152,8 +153,8 @@ class MainScreen : ComponentActivity(){
 
             SweeteaApp(
                 viewModel = appViewModel,
+                authViewModel = authViewModel,
                 cacheDir = cacheDir
-
             )
 
             // Button to manually request location permission, should be removed
@@ -275,6 +276,7 @@ class MainScreen : ComponentActivity(){
 fun SweeteaApp(
     modifier:Modifier = Modifier,
     viewModel: AppViewModel,
+    authViewModel: AuthViewModel,
     cacheDir: File
 ){
     LaunchedEffect(Unit){
@@ -389,6 +391,7 @@ fun SweeteaApp(
                         AppHeader(
                             modifier = modifier,
                             viewModel = viewModel,
+                            authViewModel = authViewModel,
                             headerText = currentRouteObject!!.topBarHeaderText,
                             hideLocation = currentRouteObject!!.hideLocation,
                             hideTopBarHeader = currentRouteObject!!.hideTopBarHeader,
@@ -399,6 +402,7 @@ fun SweeteaApp(
                         AppHeader(
                             modifier = modifier,
                             viewModel = viewModel,
+                            authViewModel = authViewModel,
                             enterTransition = enterTransition,
                             exitTransition = exitTransition
                         )

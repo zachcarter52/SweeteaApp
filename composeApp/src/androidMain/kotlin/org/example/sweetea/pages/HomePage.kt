@@ -59,14 +59,6 @@ fun HomePage(
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
-    val username by remember { authViewModel.username }
-    val isLoggedIn by remember { authViewModel.isUserLoggedIn }
-
-    LaunchedEffect(isLoggedIn) {
-        if (isLoggedIn) {
-            authViewModel.fetchUsername()
-        }
-    }
 
     BearPageTemplate(
         modifier = modifier,

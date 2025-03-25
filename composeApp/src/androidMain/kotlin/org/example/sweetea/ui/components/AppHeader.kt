@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -20,12 +24,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.example.sweetea.AuthViewModel
 import org.example.sweetea.dataclasses.local.AppViewModel
 
 @Composable
 fun AppHeader(
     modifier: Modifier = Modifier,
     viewModel: AppViewModel,
+    authViewModel: AuthViewModel,
     headerText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     hideLocation: Boolean = false,
     hideTopBarHeader: Boolean? = false,
@@ -34,6 +40,15 @@ fun AppHeader(
     content: @Composable (() -> Unit)? = null,
 ) {
     val visible = hideTopBarHeader != null && !hideTopBarHeader
+    val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
+    val username by authViewModel.username.collectAsState()
+
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn) {
+            authViewModel.fetchUsername()
+        }
+    }
+
     Column(modifier = modifier.fillMaxWidth(1f)) {
         Row(
             modifier = Modifier.height(28.dp).
@@ -74,7 +89,7 @@ fun AppHeader(
                 } else {
                     Text(
                         modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
-                        text = "Hi, <username>",
+                        text = if (isLoggedIn) "Welcome, $username" else "Welcome",
                         fontSize = 34.sp,
                         fontWeight = FontWeight.Bold
                     )

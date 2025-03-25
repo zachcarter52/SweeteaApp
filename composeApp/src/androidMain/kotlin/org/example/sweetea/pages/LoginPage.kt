@@ -24,10 +24,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
@@ -40,8 +42,10 @@ import org.example.sweetea.*
 fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit,viewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
+    //var username by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    val isLoggedIn by viewModel.isUserLoggedIn.collectAsState()
+    val username by viewModel.username.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
@@ -70,6 +74,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete:
                 }else {
                     errorMessage = error
                 }
+
             }
         }) {
             Text("Sign In")
@@ -77,7 +82,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete:
 
         errorMessage?.let {
             Text(text = it, color = Color.Red)
-            Text(text = "Welcome, ${viewModel.username.value}!")
+            Text(text = "Welcome, $username!")
         }
 
         TextButton(onClick = {
@@ -171,7 +176,9 @@ fun VerificationPage(modifier: Modifier, navController: NavController, email: St
         modifier = Modifier.fillMaxSize()
     )
     {
-        Text(text = "Enter the verification code sent to $email")
+        Text(text = "Enter the verification code sent to: \n$email",
+            textAlign = TextAlign.Center, // Centers the text itself
+            modifier = Modifier.fillMaxWidth())
         TextField(
             value = code,
             onValueChange = { code = it },
@@ -240,20 +247,21 @@ fun ForgotPasswordPage(modifier: Modifier, navController: NavController, onPassw
     ) {
         Text(
             text = when (step) {
-                1 -> "Enter the email address associated with your account."
-                2 -> "Enter the verification code sent to $email"
+                1 -> "Enter the email address associated \nwith your account."
+                2 -> "Enter the verification code sent to \n$email"
                 3 -> "Password reset successful!"
                 else -> ""
-            }
+            },
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
-
         errorMessage?.let {
             Text(text = it, color = Color.Red)
         }
 
         if (step == 1) {
             //Enter your email to reset your password
-            OutlinedTextField(
+            TextField(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") }
@@ -280,14 +288,13 @@ fun ForgotPasswordPage(modifier: Modifier, navController: NavController, onPassw
             }
 
         } else if (step == 2) {
-
             //enter verification code and new Password
-            OutlinedTextField(
+            TextField(
                 value = code,
                 onValueChange = { code = it },
                 label = { Text("Verification Code") },
             )
-            OutlinedTextField(
+            TextField(
                 value = newPassword,
                 onValueChange = { newPassword = it },
                 label = { Text("New Password") },
@@ -323,16 +330,3 @@ fun ForgotPasswordPage(modifier: Modifier, navController: NavController, onPassw
     }
 }
 
-/*
-fun fetchUserAttributes(callback: (String) -> Unit) {
-    Amplify.Auth.fetchUserAttributes(
-        { attributes ->
-            val username =
-                attributes.find { it.key.keyString == "preferred_username" }?.value
-                callback(username.toString())
-            Log.i("AuthQuickstart", "Username: $username")
-        },
-        { error -> Log.e("AuthQuickstart", "Failed to fetch attributes", error) }
-    )
-}
-*/

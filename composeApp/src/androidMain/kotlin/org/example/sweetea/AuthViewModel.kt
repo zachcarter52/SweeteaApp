@@ -7,12 +7,19 @@ import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.step.AuthSignInStep
 import com.amplifyframework.core.Amplify
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class AuthViewModel : ViewModel() {
-    var isUserLoggedIn = mutableStateOf(false)
+    var isUserLoggedIn = MutableStateFlow(false)
         private set
+    val isUserLoggedInState: StateFlow<Boolean> = isUserLoggedIn.asStateFlow()
 
-    var username = mutableStateOf("") // Stores username across UI screens
+    val username = MutableStateFlow("")
+    val usernameState: StateFlow<String> = username.asStateFlow()
+
+    //var username = mutableStateOf("") // Stores username across UI screens
 
     init {
         checkUserLoginStatus() // check login status when the ViewModel is initialized
@@ -41,7 +48,7 @@ class AuthViewModel : ViewModel() {
                 when (result.nextStep.signInStep) {
                     AuthSignInStep.DONE -> {
                         onResult(false, "Sign in succeeded")
-                        fetchUsername()
+                        checkUserLoginStatus()
                     }
                     else -> onResult(false, "Sign-in not complete")
                 }
