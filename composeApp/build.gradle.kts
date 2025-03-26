@@ -20,7 +20,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-
+    
     listOf(
         iosX64(),
         iosArm64(),
@@ -31,9 +31,9 @@ kotlin {
             isStatic = true
         }
     }
-
+    
     sourceSets {
-
+        
         androidMain.dependencies {
 
             implementation(compose.preview)
@@ -107,6 +107,8 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network)
             implementation(libs.coil.compose)
+            //ktor
+
             implementation (libs.maps.compose)
             implementation (libs.play.services.maps.v1800)
             //ktor
@@ -159,7 +161,6 @@ android {
 dependencies {
 
     implementation(libs.androidx.core)
-
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
 
@@ -167,6 +168,10 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
+
+    implementation(libs.volley)
+    implementation(libs.places)
+
     implementation(libs.androidx.ui.test.junit4.android)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
