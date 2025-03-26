@@ -1,6 +1,7 @@
 [versions]
 agp = "8.7.2"
 amplifyframeworkAwsAuthCognito = "2.16.0"
+amplifyIos = "1.0.0"
 android-compileSdk = "35"
 android-minSdk = "25"
 android-targetSdk = "35"
@@ -50,6 +51,7 @@ playServicesLocation = "21.3.0"
 playServicesMaps = "19.1.0"
 
 [libraries]
+amplify-ios = { module = "com.amplifyframework:amplify-ios", version.ref = "amplifyIos" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }

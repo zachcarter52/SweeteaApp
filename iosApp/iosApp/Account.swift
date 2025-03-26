@@ -49,7 +49,7 @@ struct Account: View {
                 }
                 .padding()
                 Spacer()
-                NavigationLink(destination: StoreSelection()) {
+                NavigationLink(destination: LoginView()) {
                     Text("Logout")
                         .font(.headline)
                         .padding()

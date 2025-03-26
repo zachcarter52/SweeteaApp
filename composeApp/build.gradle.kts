@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     //alias(libs.plugins.kotlinCocoapods)
+
 }
 
 kotlin {
@@ -64,6 +65,7 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.ktor.client.ios)
+            //implementation(libs.amplify.ios)
         }
 
         commonMain.dependencies {
