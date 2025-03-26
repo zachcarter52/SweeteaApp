@@ -120,5 +120,5 @@ fabric.properties
 /shared/src/commonMain/kotlin/org/example/sweetea/PrivateConstants.kt
 
 .DS_Store
-
-/iosApp/amplifyconfiguration.json
+Pods/
+amplifyconfiguration.json
