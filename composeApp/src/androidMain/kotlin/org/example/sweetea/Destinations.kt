@@ -100,7 +100,7 @@ object Menu : Destination(
 
 object CheckPage : BasicDestination(
     route = "checkoutPage",
-    page = { modifier, navController, appViewModel -> CheckoutPage(modifier, navController, appViewModel) },
+    page = { modifier, navController, appViewModel -> CheckoutPage(modifier, navController, appViewModel )},
     topBarHeaderText = {Text("Checkout Page", fontSize = 28.sp, fontWeight = FontWeight.Bold)}
 )
 object ProductCustomPage : BasicDestination(
@@ -108,11 +108,7 @@ object ProductCustomPage : BasicDestination(
     page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },
     topBarHeaderText = {
         viewModel ->
-        Text(
-            text = viewModel.currentProduct!!.name,
-            modifier = headerTextPadding,
-            style = MaterialTheme.typography.headlineMedium
-        )
+        Text("")
     }
 )
 
@@ -121,11 +117,7 @@ object SubMenu : BasicDestination(
     page = { modifier, navController, appViewModel -> SubMenuPage(modifier, navController, appViewModel) },
     topBarHeaderText = {
         viewModel ->
-        Text(
-            viewModel.currentCategory!!.name,
-            modifier = headerTextPadding,
-            style = MaterialTheme.typography.headlineMedium
-        )
+        Text("")
     }
 )
 

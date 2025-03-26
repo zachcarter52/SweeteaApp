@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -139,6 +140,11 @@ dependencies {
 
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    //implementation(libs.androidx.room.compiler)
+    implementation(libs.androidx.ui.test.junit4.android)
+    androidTestImplementation(libs.ui.test.junit4)
+    // Needed for createComposeRule(), but not for createAndroidComposeRule<YourActivity>():
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -152,5 +158,10 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+    // Test rules and transitive dependencies:
+
+
+
+
 }
 

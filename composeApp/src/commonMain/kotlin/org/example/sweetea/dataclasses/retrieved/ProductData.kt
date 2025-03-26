@@ -65,24 +65,24 @@ data class ProductData (
     val modifiers: Data<MutableList<ModifierData>>,
     val categories: Data<List<BasicCategoryData>>,
     //val discounts: Data<List<String>>,
-) : Cloneable {
-    public override fun clone() = ProductData(
-        this.id,
-        this.site_product_id,
-        this.visibility,
-        this.name,
-        this.short_description,
-        this.product_type,
-        this.taxable,
-        this.site_link,
-        this.inventory.clone(),
-        this.price.clone(),
-        this.per_order_max,
-        this.badges.clone(),
-        this.thumbnail,
-        this.images.clone(),
-        this.modifiers.clone(),
-        this.categories.clone()
+){
+    constructor(productData: ProductData) : this(
+        id = productData.id,
+        site_product_id = productData.site_product_id,
+        visibility = productData.visibility,
+        name = productData.name,
+        short_description = productData.short_description,
+        product_type = productData.product_type,
+        taxable = productData.taxable,
+        site_link = productData.site_link,
+        inventory = InventoryData(productData.inventory),   // COPIER
+        price = PriceData(productData.price),               // COPIER
+        per_order_max = productData.per_order_max,
+        badges = BadgeData(productData.badges),             //COPIER
+        thumbnail = Data(ImageData(productData.thumbnail.data)), //COPIER
+        images = Data(productData.images.data.map { ImageData(it.copy()) }),                              //COPIER
+        modifiers = Data(productData.modifiers.data.map { ModifierData(it.copy()) }.toMutableList()),                  //COPIER
+        categories = Data(productData.categories.data.map { BasicCategoryData( it.copy()) }),                //COPIER
     )
 }
 
@@ -92,15 +92,7 @@ data class ProductTypeDetails(
     val dietary_prefrences_tl: List<String>,
     val ingredients: List<String>,
     val ingredients_tl: List<String>,
-) : Cloneable {
-    public override fun clone() = ProductTypeDetails(
-        this.calorie_count,
-        this.dietary_prefrences,
-        this.dietary_prefrences_tl,
-        this.ingredients,
-        this.ingredients_tl
-    )
-}
+)
 
 @Serializable
 data class InventoryData(
@@ -112,21 +104,21 @@ data class InventoryData(
     //val mark_sold_out_all_existing_locations: Boolean,
     //val mark_sold_out_skus_count: Int,
     val all_inventory_total: Int,
-) : Cloneable{
-    public override fun clone() = InventoryData(
-        this.total,
-        this.lowest,
-        this.enabled,
-        this.all_variations_sold_out,
-        this.some_variations_sold_out,
-        this.all_inventory_total
+){
+    constructor(inventoryData: InventoryData) : this(
+        total = inventoryData.total,
+        lowest = inventoryData.lowest,
+        enabled = inventoryData.enabled,
+        all_variations_sold_out = inventoryData.all_variations_sold_out,
+        some_variations_sold_out = inventoryData.some_variations_sold_out,
+        all_inventory_total = inventoryData.all_inventory_total
     )
 }
 
 @Serializable
 data class PriceData(
     val high: Float,
-    val high_with_modifiers: Float,
+    var high_with_modifiers: Float,
     //val high_with_subscriptions: Float,
     val high_formatted: String,
     //val high_formmated_with_modifiers: String,
@@ -157,25 +149,25 @@ data class PriceData(
     //val regular_low_formated_with_subscriptions: String,
     val regular_low_subunits: Int,
     //val regular_low_with_subscriptions_subunits: Int,
-): Cloneable{
-    public override fun clone() = PriceData(
-        this.high,
-        this.high_with_modifiers,
-        this.high_formatted,
-        this.high_subunits,
-        this.low,
-        this.low_with_modifiers,
-        this.low_with_subscriptions,
-        this.low_formatted,
-        this.low_subunits,
-        this.regular_high,
-        this.regular_high_with_modifiers,
-        this.regular_high_formatted,
-        this.regular_high_subunits,
-        this.regular_low,
-        this.regular_low_with_modifiers,
-        this.regular_low_formatted,
-        this.regular_low_subunits
+){
+    constructor(priceData: PriceData): this(
+        high = priceData.high,
+        high_with_modifiers = priceData.high_with_modifiers,
+        high_formatted = priceData.high_formatted,
+        high_subunits = priceData.high_subunits,
+        low = priceData.low,
+        low_with_modifiers = priceData.low_with_modifiers,
+        low_with_subscriptions = priceData.low_with_subscriptions,
+        low_formatted = priceData.low_formatted,
+        low_subunits = priceData.low_subunits,
+        regular_high = priceData.regular_high,
+        regular_high_with_modifiers = priceData.regular_high_with_modifiers,
+        regular_high_formatted = priceData.regular_high_formatted,
+        regular_high_subunits = priceData.regular_high_subunits,
+        regular_low = priceData.regular_low,
+        regular_low_with_modifiers = priceData.regular_low_with_modifiers,
+        regular_low_formatted = priceData.regular_low_formatted,
+        regular_low_subunits = priceData.regular_low_subunits
     )
 }
 
@@ -184,11 +176,11 @@ data class BadgeData(
     val low_stock: Boolean,
     val out_of_stock: Boolean,
     val on_sale: Boolean,
-) : Cloneable{
-    public override fun clone() = BadgeData(
-        this.low_stock,
-        this.out_of_stock,
-        this.on_sale
+){
+    constructor(badgeData: BadgeData) : this(
+        low_stock = badgeData.low_stock,
+        out_of_stock = badgeData.out_of_stock,
+        on_sale = badgeData.on_sale
     )
 }
 
@@ -198,15 +190,7 @@ data class PreorderingData(
     val shipping: Boolean,
     val manual: Boolean,
     val download: Boolean,
-) : Cloneable{
-    public override fun clone() = PreorderingData(
-        this.pickup,
-        this.delivery,
-        this.shipping,
-        this.manual,
-        this.download
-    )
-}
+)
 
 data class FulfillmentAvailability(
     //Type to be determined
@@ -215,15 +199,7 @@ data class FulfillmentAvailability(
     val shipping: Boolean,
     val manual: Boolean,
     val download: Boolean,
-): Cloneable{
-    public override fun clone() = FulfillmentAvailability(
-        this.pickup,
-        this.delivery,
-        this.shipping,
-        this.manual,
-        this.download
-    )
-}
+)
 
 @Serializable
 data class ImageData(
@@ -240,21 +216,21 @@ data class ImageData(
     val created_at: String,
     val updated_at: String,
     val absolute_urls: Map<String, String>,
-): Cloneable{
-    public override fun clone() = ImageData(
-        this.id,
-        this.owner_id,
-        this.site_id,
-        this.site_product_image_id,
-        this.url,
-        this.absolute_url,
-        this.urls,
-        this.width,
-        this.height,
-        this.format,
-        this.created_at,
-        this.updated_at,
-        this.absolute_urls
+){
+    constructor(imageData: ImageData) : this(
+        id = imageData.id,
+        owner_id = imageData.owner_id,
+        site_id = imageData.site_id,
+        site_product_image_id = imageData.site_product_image_id,
+        url = imageData.url,
+        absolute_url = imageData.absolute_url,
+        urls = imageData.urls.toMap(),
+        width = imageData.width,
+        height = imageData.height,
+        format = imageData.format,
+        created_at = imageData.created_at,
+        updated_at = imageData.updated_at,
+        absolute_urls = imageData.absolute_urls.toMap()
     )
 }
 
@@ -262,23 +238,17 @@ data class PlaceholderImageData(
     val placeholder: Boolean,
     val url: String,
     val absolute_url: String,
-): Cloneable{
-    public override fun clone() = PlaceholderImageData(
-        this.placeholder,
-        this.url,
-        this.absolute_url
-    )
-}
+)
 
 @Serializable
 data class BasicCategoryData(
     val site_category_id: String,
     val name: String,
     //val ancestor_site_category_ids: List<String>
-): Cloneable{
-    public override fun clone() = BasicCategoryData(
-        this.site_category_id,
-        this.name
+){
+    constructor(basicCategoryData: BasicCategoryData) : this(
+        site_category_id = basicCategoryData.site_category_id,
+        name = basicCategoryData.name
     )
 }
 
@@ -300,19 +270,17 @@ data class ModifierData(
     val display_order: Int,
     val visible_on_invoice: Int,
     var choices: MutableList<ChoiceData>
-): Cloneable{
-    public override fun clone() = ModifierData(
-        this.id,
-        this.site_product_id,
-        this.name,
-        this.min_selected,
-        this.max_selected,
-        this.type,
-        this.display_order,
-        this.visible_on_invoice,
-        this.choices.map{
-            it.clone()
-        }.toMutableList()
+){
+    constructor(modifierData: ModifierData) : this(
+            id = modifierData.id,
+            site_product_id = modifierData.site_product_id,
+            name = modifierData.name,
+            min_selected = modifierData.min_selected,
+            max_selected = modifierData.max_selected,
+            type = modifierData.type,
+            display_order = modifierData.display_order,
+            visible_on_invoice = modifierData.visible_on_invoice,
+            choices = modifierData.choices.map { ChoiceData(it.copy()) }.toMutableList()
     )
 }
 
@@ -323,12 +291,12 @@ data class ChoiceData(
     val price: Float,
     val display_order: Int,
     val sold_out: Boolean,
-): Cloneable{
-    public override fun clone() = ChoiceData(
-        this.id,
-        this.name,
-        this.price,
-        this.display_order,
-        this.sold_out
+){
+    constructor(choiceData: ChoiceData) : this(
+        id = choiceData.id,
+        name = choiceData.name,
+        price = choiceData.price,
+        display_order = choiceData.display_order,
+        sold_out = choiceData.sold_out
     )
 }

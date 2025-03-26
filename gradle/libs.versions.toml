@@ -55,13 +55,19 @@ multiplatform-paths = "0.2.2"
 retrofit = "2.11.0"
 connectivity = "1.2.0"
 ui = "1.4.3"
+uiTestJunit4 = "1.7.8"
+uiTestManifest = "1.7.8"
 uiToolingPreview = "1.4.3"
 core = "1.13.0"
+roomCompiler = "2.6.1"
+uiTestJunit4Android = "1.7.8"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-material-v143 = { module = "androidx.compose.material:material", version.ref = "material" }
+androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
 androidx-ui-tooling-preview-v143 = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 androidx-ui-v143 = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -146,6 +152,9 @@ mockreader-ui = { module = "com.squareup.sdk:mockreader-ui", version.ref = "squa
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
 
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
+ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
