@@ -33,6 +33,8 @@ class AppViewModel: ViewModel() {
         private set
     var currentProduct: ProductData? by mutableStateOf(null)
         private set
+    var shoppingCart: ProductData? by mutableStateOf(null)
+        private set
     var categoryMap: MutableMap<String, CategoryData> = mutableMapOf()
         private set
     private var productMapLocation: LocationData? by mutableStateOf(null)

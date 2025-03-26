@@ -31,6 +31,7 @@ fun SweeteaApp(
     modifier:Modifier = Modifier,
 ){
     val viewModel:AppViewModel = viewModel{AppViewModel()}
+    val authViewModel:
     LaunchedEffect(Unit){
         viewModel.updateInfo()
     }

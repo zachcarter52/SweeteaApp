@@ -144,7 +144,9 @@ fun AccountPage(modifier: Modifier=Modifier, navHostController: NavHostControlle
         }
         Button(
             elevation = ButtonDefaults.elevatedButtonElevation(),
-            onClick = {}
+            onClick = {
+                navController.navigate(LogOut.route)
+            }
         ) {
             Text(
                 text = "Log Out"

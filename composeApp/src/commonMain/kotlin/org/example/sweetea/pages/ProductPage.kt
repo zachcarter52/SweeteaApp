@@ -2,6 +2,7 @@ package org.example.sweetea.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,13 +14,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.Checkbox
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +41,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastRoundToInt
 import androidx.navigation.NavHostController
+import androidx.navigation.NavController
+//import aws.smithy.kotlin.runtime.util.length
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import org.example.sweetea.CheckPage
+import org.example.sweetea.Home
+import org.example.sweetea.ProductCustomPage
+import org.example.sweetea.SubMenu
+import org.example.sweetea.dataclasses.retrieved.ChoiceData
+import org.example.sweetea.dataclasses.retrieved.ProductData
+import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.dataclasses.local.AppViewModel
 import kotlin.math.floor
 import kotlin.math.pow
@@ -58,6 +74,22 @@ fun ProductPage(
     navHostController: NavHostController,
     appViewModel: AppViewModel
 ) {
+
+    // workingItem : ProductData - a copy of what we clicked on
+    // when a custom choice is selected, change the workingItem choice to match
+    val workingItem: ProductData? = appViewModel.currentProduct?.clone()
+    workingItem?.modifiers?.data?.forEach { modifierData ->
+        if (modifierData.max_selected == 1) {
+            // Drink will have the default "[0]" option saved for single modifier choices
+
+            // WORKING ITEM NEEDS TO BE CLONED, IT STILL REFERNCES THE CURRENT PRODUCT
+            modifierData.choices = mutableListOf(modifierData.choices[0])
+        } else {
+            // Drink will have no checkbox options selected
+            modifierData.choices = mutableListOf()
+        }
+    }
+
     Column(
         modifier = modifier.fillMaxWidth()
             .verticalScroll(rememberScrollState()),
@@ -76,10 +108,42 @@ fun ProductPage(
                     .align(Alignment.CenterHorizontally),
             )
 
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth().padding(16.dp, 0.dp, 16.dp, 0.dp),
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+
+                        },
+
+                        ) {
+                        Image(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add to Shopping Cart"
+                        )
+                    }
+                }
+                Column {
+                    Button(
+                        onClick =
+                        {
+                            navHostController.navigate(CheckPage.route)
+                        },
+                    ) {
+                        Image(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = "Checkout Bag"
+                        )
+                    }
+                }
+            }
+
             //Display price
             val price = appViewModel.currentProduct!!.price.regular_high_with_modifiers
             Text(
-                "\$${price.toString(2)}",
+                text = "\$${price.toString(2)}",
                 fontSize = 20.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
@@ -95,10 +159,9 @@ fun ProductPage(
                     .padding(0.dp, 0.dp, 0.dp, 20.dp)
                     .align(Alignment.CenterHorizontally),
             )
-            Surface(
+            ElevatedCard(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                shape = RoundedCornerShape(12.dp),
-                elevation = 10.dp
+                elevation = CardDefaults.elevatedCardElevation(10.dp)
             ) {
                 AsyncImage(
                     model = url,
@@ -114,23 +177,23 @@ fun ProductPage(
             )
 
             //Display options
-            appViewModel.currentProduct?.modifiers?.data?.forEach { modifierData ->
-                if (modifierData.max_selected == 1) { //if only one choice allowed use a dropdown
-                    val dropExpand = remember {
-                        mutableStateOf(false)
-                    }
-                    val dropDownText = remember {
-                        mutableStateOf(modifierData.choices[0].name)
-                    }
+            appViewModel.currentProduct?.modifiers?.data?.forEachIndexed { modidx, modifierData ->
+                val dropExpand = remember {
+                    mutableStateOf(false)
+                }
+                val dropDownText = remember {
+                    mutableStateOf(modifierData.choices[0].name)
+                }
 
-                    val position = remember {
-                        mutableStateOf(0)
-                    }
+                val position = remember {
+                    mutableStateOf(0)
+                }
+                if (modifierData.max_selected == 1) { //if only one choice allowed use a dropdown
                     Column(
                         horizontalAlignment = AbsoluteAlignment.Left,
                     ) {
                         Text(
-                            modifierData.name, //Display Modification name (Size, Milk, etc.)
+                            modifierData.name, //Display Modification name (Ice Level, Sugar Level, Milk, etc.)
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily.SansSerif
@@ -147,14 +210,11 @@ fun ProductPage(
                             }
                                 .padding(0.dp, 20.dp, 0.dp, 20.dp),
                         ) {
-
                             Text(
-                                dropDownText.value, //Display standard option in the dropdown box (100% ice, whole milk, etc)
+                                modifierData.name, //Display Modification name (Size, Milk, etc.)
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
                                 fontFamily = FontFamily.SansSerif
-                            )
-                            Image(
-                                imageVector = Icons.Default.ArrowDropDown,
-                                contentDescription = "DropDown Arrow",
                             )
                         }
                         DropdownMenu(
@@ -163,11 +223,15 @@ fun ProductPage(
                                 dropExpand.value = false
                             }
                         ) {
-                            modifierData.choices.forEachIndexed { index, choiceData ->
-                                androidx.compose.material3.DropdownMenuItem(text = {
+                            modifierData.choices.forEachIndexed { choiceidx, choiceData ->
+                                DropdownMenuItem(text = {
                                     if (choiceData.price != 0.0f) { //if the mod is an extra cost, display that cost
                                         Text(
-                                            "${choiceData.name} - \$${choiceData.price.toString(2)}",
+                                            "${choiceData.name} - \$${
+                                                choiceData.price.toString(
+                                                    2
+                                                )
+                                            }",
                                             fontFamily = FontFamily.SansSerif
                                         )
                                     } else { //else just show the name
@@ -181,7 +245,14 @@ fun ProductPage(
                                         dropDownText.value =
                                             choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
                                         dropExpand.value = false
-                                        position.value = index
+                                        position.value = choiceidx
+
+                                        // wokingItem updated
+                                        workingItem?.modifiers?.data?.forEachIndexed { wiModIdx, wiMod ->
+                                            if (wiModIdx == modidx) {
+                                                wiMod.choices = mutableListOf(choiceData)
+                                            }
+                                        }
                                     })
                             }
                         }
@@ -204,12 +275,59 @@ fun ProductPage(
 
                                 Checkbox(
                                     checked = checked,
-                                    onCheckedChange = { checked = it }
+                                    onCheckedChange = { isChecked ->
+                                        checked = isChecked
+                                        workingItem?.modifiers?.data?.forEachIndexed { wiModIdx, wiMod ->
+                                            if (wiModIdx == modidx) {
+                                                if (isChecked) {
+                                                    wiMod.choices.add(choiceData)
+                                                } else {
+                                                    wiMod.choices.remove(choiceData)
+                                                }
+                                            }
+                                        }
+                                    }
                                 )
                                 Text(
-                                    "${choiceData.name} - \$${choiceData.price.toString(2)}",
+                                    dropDownText.value, //Display standard option in the dropdown box (100% ice, whole milk, etc)
                                     fontFamily = FontFamily.SansSerif
                                 )
+                                Image(
+                                    imageVector = Icons.Default.ArrowDropDown,
+                                    contentDescription = "DropDown Arrow",
+                                )
+                            }
+                            DropdownMenu(
+                                expanded = dropExpand.value,
+                                onDismissRequest = {
+                                    dropExpand.value = false
+                                }
+                            ) {
+                                modifierData.choices.forEachIndexed { index, choiceData ->
+                                    androidx.compose.material3.DropdownMenuItem(text = {
+                                        if (choiceData.price != 0.0f) { //if the mod is an extra cost, display that cost
+                                            Text(
+                                                "${choiceData.name} - \$${
+                                                    choiceData.price.toString(
+                                                        2
+                                                    )
+                                                }",
+                                                fontFamily = FontFamily.SansSerif
+                                            )
+                                        } else { //else just show the name
+                                            Text(
+                                                choiceData.name,
+                                                fontFamily = FontFamily.SansSerif
+                                            )
+                                        }
+                                    },
+                                        onClick = {
+                                            dropDownText.value =
+                                                choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
+                                            dropExpand.value = false
+                                            position.value = index
+                                        })
+                                }
                             }
                         }
                     }
