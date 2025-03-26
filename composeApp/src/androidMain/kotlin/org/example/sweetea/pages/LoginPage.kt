@@ -39,13 +39,13 @@ import com.amplifyframework.core.Amplify
 import org.example.sweetea.*
 
 @Composable
-fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit,viewModel: AuthViewModel) {
+fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit,authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     //var username by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    val isLoggedIn by viewModel.isUserLoggedIn.collectAsState()
-    val username by viewModel.username.collectAsState()
+    val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
+    val username by authViewModel.username.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
@@ -67,9 +67,9 @@ fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete:
 
         Button(onClick = {
             // Handle login logic here
-            viewModel.loginUser(email,password) { success, error ->
+            authViewModel.loginUser(email,password) { success, error ->
                 if(success){
-                    viewModel.fetchUsername()
+                    authViewModel.fetchUsername()
                     onLoginComplete()
                 }else {
                     errorMessage = error
@@ -82,6 +82,10 @@ fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete:
 
         errorMessage?.let {
             Text(text = it, color = Color.Red)
+            Text(text = "Welcome, $username!")
+        }
+
+        if (isLoggedIn && username.isNotBlank()) {
             Text(text = "Welcome, $username!")
         }
 

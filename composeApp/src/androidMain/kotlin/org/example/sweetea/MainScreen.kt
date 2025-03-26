@@ -69,8 +69,6 @@ import kotlinx.coroutines.launch
 
 class MainScreen : ComponentActivity(){
 
-
-
     private val appViewModel: AppViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private var userLocation: Location? = null
@@ -87,7 +85,6 @@ class MainScreen : ComponentActivity(){
         StoreLocation("FootHills Blvd ", LatLng(38.753687,-121.311063)),
         StoreLocation("TEST ", LatLng(38.931576120528206, -121.08846144717354))
     )
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

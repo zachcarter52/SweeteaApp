@@ -1,8 +1,10 @@
 package org.example.sweetea
 
 import android.util.Log
+import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.step.AuthSignInStep
@@ -10,6 +12,8 @@ import com.amplifyframework.core.Amplify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.lang.reflect.Modifier
 
 class AuthViewModel : ViewModel() {
     var isUserLoggedIn = MutableStateFlow(false)
@@ -47,13 +51,20 @@ class AuthViewModel : ViewModel() {
             { result ->
                 when (result.nextStep.signInStep) {
                     AuthSignInStep.DONE -> {
-                        onResult(false, "Sign in succeeded")
-                        checkUserLoginStatus()
+                        Log.e("AuthDebug", "Login DONE - updating state")
+                        isUserLoggedIn.value = true
+                        fetchUsername()
+                        onResult(true, "Sign in succeeded")
                     }
-                    else -> onResult(false, "Sign-in not complete")
+                    else -> {
+                        Log.d("AuthDebug", "Login requires additional steps")
+                        onResult(false, "Sign-in not complete")
+                    }
                 }
             },
-            { error -> onResult(false, error.message) }
+            { error ->
+                Log.e("AuthDebug", "Login failed", error)
+                onResult(false, error.message) }
         )
     }
 
@@ -63,6 +74,8 @@ class AuthViewModel : ViewModel() {
                 isUserLoggedIn.value = session.isSignedIn
                 if (session.isSignedIn) {
                     fetchUsername()
+                } else {
+                    username.value = "" // Reset username when logged out
                 }
             },
             { error -> Log.e("AuthViewModel", "Error checking login status", error) }
@@ -70,15 +83,17 @@ class AuthViewModel : ViewModel() {
     }
 
     fun fetchUsername() {
-        Amplify.Auth.fetchUserAttributes(
-            { attributes ->
-                val fetchedUsername = attributes.find { it.key.keyString == "preferred_username" }?.value ?: "Unknown"
-                username.value = fetchedUsername ?: "User"
-                Log.e("AuthViewModel", "Username: $fetchedUsername")
-            },
-            { error -> Log.e("AuthViewModel", "Failed to fetch attributes", error) }
-        )
+        viewModelScope.launch {
+            Amplify.Auth.fetchUserAttributes(
+                { attributes ->
+                    username.value =
+                        attributes.find { it.key.keyString == "preferred_username" }?.value
+                            ?: "Unknown"
+                    Log.e("AuthViewModel", "Username updated to: ${username.value}")
+                },
+                { error -> Log.e("AuthViewModel", "Failed to fetch attributes", error) }
+            )
+        }
     }
-
 
 }

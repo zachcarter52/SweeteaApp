@@ -1,5 +1,6 @@
 package org.example.sweetea.ui.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -43,11 +44,16 @@ fun AppHeader(
     val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val username by authViewModel.username.collectAsState()
 
-    LaunchedEffect(isLoggedIn) {
-        if (isLoggedIn) {
+    LaunchedEffect(isLoggedIn, username) {
+        if (isLoggedIn && username.isBlank()) {
             authViewModel.fetchUsername()
+            Log.e("AuthDebug", "User logged in, fetching username")
+        } else if (!isLoggedIn) {
+            Log.d("AuthDebug", "User not logged in or username is blank")
         }
     }
+
+    Log.e("HeaderDebug", "Recomposing. isLoggedIn: $isLoggedIn, username: $username")
 
     Column(modifier = modifier.fillMaxWidth(1f)) {
         Row(
