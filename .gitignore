@@ -121,4 +121,5 @@ fabric.properties
 
 .DS_Store
 iosApp/Pods/
-amplifyconfiguration.json
+iosApp/amplifyconfiguration.json
+
