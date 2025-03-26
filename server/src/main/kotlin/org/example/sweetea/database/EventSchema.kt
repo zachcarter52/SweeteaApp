@@ -91,7 +91,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         }
     }
 
-    override suspend fun getSelectedEventCount(): Int? {
+    override suspend fun getSelectedEventCount(): Int {
         return dbQuery {
             Events.selectAll().where{Events.selectionIndex greater -1}.count().toInt()
         }
@@ -123,14 +123,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                             it[Events.link],
                             it[Events.linkIsRoute],
                         )
-                    }
-                selectedEvents = selectedEvents.sortedBy {
-                    if(it.selectionIndex == -1){
-                        Int.MAX_VALUE
-                    } else {
-                        it.selectionIndex
-                    }
-                }
+                    }.sorted()
                 return@dbQuery selectedEvents
             }
         } else {
@@ -159,7 +152,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         return dbQuery {
             val eventA = getEventBySelection(selectionIndexA)
             val eventB = getEventBySelection(selectionIndexB)
-            if(eventA != null && eventB != null){
+            if(eventA != null && eventB != null && eventA != eventB){
                 val updatedA = Events.update({ Events.id eq eventA.id}){
                     it[selectionIndex] = selectionIndexB
                 }

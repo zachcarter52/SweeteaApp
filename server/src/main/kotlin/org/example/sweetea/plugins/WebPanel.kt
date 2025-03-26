@@ -5,11 +5,14 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
 import io.ktor.server.response.*
 import io.ktor.server.thymeleaf.*
-import org.example.sweetea.database.eventSchema
-import org.example.sweetea.database.rewardSchema
+import org.example.sweetea.database.model.EventRepository
+import org.example.sweetea.database.model.RewardRepository
 import org.thymeleaf.templateresolver.*
 
-fun Application.configureWebPanel() {
+fun Application.configureWebPanel(
+    eventSchema: EventRepository,
+    rewardSchema: RewardRepository,
+) {
     install(Thymeleaf){
         setTemplateResolver((if (developmentMode) {
             FileTemplateResolver().apply{

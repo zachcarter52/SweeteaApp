@@ -54,6 +54,7 @@ playServicesLocation = "21.3.0"
 playServicesMaps = "19.1.0"
 navigationRuntimeKtxVersion = "2.8.8"
 animationAndroid = "1.7.8"
+junitJupiter = "5.8.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -144,6 +145,7 @@ play-services-location = { group = "com.google.android.gms", name = "play-servic
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtxVersion" }
 androidx-animation-android = { group = "androidx.compose.animation", name = "animation-android", version.ref = "animationAndroid" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

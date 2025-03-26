@@ -12,12 +12,15 @@ import io.ktor.server.routing.*
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
 import org.example.sweetea.ResponseClasses.AppStatus
-import org.example.sweetea.database.eventSchema
-import org.example.sweetea.database.rewardSchema
+import org.example.sweetea.database.model.EventRepository
+import org.example.sweetea.database.model.RewardRepository
 import java.io.File
 import java.util.Date
 
-fun Application.configureRouting() {
+fun Application.configureRouting(
+    eventSchema: EventRepository,
+    rewardSchema: RewardRepository
+) {
     val l: String = File.separator
     suspend fun RoutingCall.respondFile(filepath: String){
         //${l} is equivalent to "/" on linux and "\" on windows
@@ -40,12 +43,14 @@ fun Application.configureRouting() {
         }
         route("/bear-value") {
             get("") {
-                call.respond(rewardSchema.getBearValue())
+                call.respond(rewardSchema.getBearValue().toString())
             }
-            put("/{value}") {
-                val newBearValue = call.parameters["value"]!!.toInt()
-                rewardSchema.setBearValue(newBearValue)
-                call.respond(HttpStatusCode.OK)
+            authenticate("admin-auth-session"){
+                put("/{value}") {
+                    val newBearValue = call.parameters["value"]!!.toInt()
+                    rewardSchema.setBearValue(newBearValue)
+                    call.respond(HttpStatusCode.OK)
+                }
             }
         }
         route("/events"){

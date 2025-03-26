@@ -1,5 +1,6 @@
 package org.example.sweetea.plugins
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.authenticate
@@ -15,7 +16,8 @@ import io.ktor.server.sessions.*
 import io.ktor.server.sessions.cookie
 import io.ktor.server.sessions.maxAge
 import kotlinx.serialization.Serializable
-import org.example.sweetea.database.adminAccountSchema
+import org.example.sweetea.database.AdminAccountSchema
+import org.example.sweetea.database.model.AdminAccountRepository
 import org.mindrot.jbcrypt.BCrypt
 import java.util.TreeMap
 import kotlin.time.DurationUnit
@@ -25,7 +27,9 @@ import kotlin.time.toDuration
 data class AdminSession(val name: String, val salt: String){
     public fun getHashedValue() = BCrypt.hashpw(name, salt)
 }
-fun Application.configureSecurity() {
+fun Application.configureSecurity(
+    adminAccountSchema: AdminAccountRepository
+) {
     val hashes = TreeMap<String, String>()
     install(Sessions){
         cookie<AdminSession>("admin_session"){

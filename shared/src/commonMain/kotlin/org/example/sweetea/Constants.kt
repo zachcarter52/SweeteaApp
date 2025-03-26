@@ -15,6 +15,7 @@ object Constants {
     const val DATABASE_USERNAME = PrivateConstants.DATABASE_USERNAME
     const val DATABASE_PASSWORD = PrivateConstants.DATABASE_PASSWORD
     const val DATABASE_DEFAULT_EMAIL_DOMAIN = "mail.com"
+    const val ADMIN_EMAIL_ADDRESS = "$DATABASE_USERNAME@$DATABASE_DEFAULT_EMAIL_DOMAIN"
     const val SQUARE_USER_ID = PrivateConstants.SQUARE_USER_ID
     const val SITE_ID = PrivateConstants.SITE_ID
     const val BASE_URL = "https://cdn5.editmysite.com/app/store/api/v28/editor/users/${SQUARE_USER_ID}/sites/${SITE_ID}/"
