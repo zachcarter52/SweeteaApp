@@ -120,6 +120,6 @@ fabric.properties
 /shared/src/commonMain/kotlin/org/example/sweetea/PrivateConstants.kt
 
 .DS_Store
-iosApp/Pods/
-iosApp/Podfile.lock
-iosApp/amplifyconfiguration.json
+/iosApp/Pods/
+/iosApp/Podfile.lock
+/iosApp/amplifyconfiguration.json
