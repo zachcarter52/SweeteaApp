@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -169,8 +169,11 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
 
-    implementation(libs.volley)
-    implementation(libs.places)
+    implementation("com.android.volley:volley:1.2.1")
+
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:${libs.versions.kotlin}"))
+    implementation("com.google.android.libraries.places:places:3.5.0")
+    implementation("com.google.maps.android:places-ktx:3.3.1")
 
     implementation(libs.androidx.ui.test.junit4.android)
     androidTestImplementation(platform(libs.androidx.compose.bom))
