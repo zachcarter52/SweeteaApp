@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    id("com.google.devtools.ksp")
 }
 
 kotlin {
@@ -60,6 +61,22 @@ kotlin {
 
             implementation(libs.ktor.client.android)
             implementation(libs.kotlinx.coroutines.android)
+
+            // Square In-App Payments SDK: see ( https://developer.squareup.com/docs/in-app-payments-sdk )
+            implementation(libs.card.entry)
+
+            //Retrofit
+            implementation(libs.retrofit)
+
+            // Moshi
+            implementation(libs.moshi)
+            implementation(libs.moshi.kotlin)
+            implementation(libs.com.squareup.moshi.moshi.kotlin.codegen)
+            implementation(libs.okhttp3.logging.interceptor)
+            implementation(libs.squareup.converter.moshi)
+            //implementation(libs.moshi.adapters)
+            //implementation(libs.converter.moshi)
+            //implementation("com.squareup.retrofit2:converter-moshi")
         }
 
         iosMain.dependencies {
@@ -77,8 +94,13 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
-            //Mobile payments sdk dependency
-            implementation(libs.mobile.payments.sdk)
+
+
+            //Mobile payments sdk dependency - This API only applies to In-Person Payments: see ( https://developer.squareup.com/docs/mobile-payments-sdk )
+            // We will use In-App Payments SDK in the androidMain dependency section
+            //implementation(libs.mobile.payments.sdk)
+
+
             //mockreader ui dependency
             implementation(libs.mockreader.ui)
             //Image loader dependency
@@ -140,8 +162,14 @@ dependencies {
 
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
-    //implementation(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.test.junit4.android)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.ui.test.junit4)
     // Needed for createComposeRule(), but not for createAndroidComposeRule<YourActivity>():
     debugImplementation(libs.androidx.ui.test.manifest)
@@ -158,10 +186,16 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+
     // Test rules and transitive dependencies:
 
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
-
-
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    ksp(libs.com.squareup.moshi.moshi.kotlin.codegen)
+    //implementation("com.squareup.moshi:moshi-kotlin-codegen")
+    //ksp("com.squareup.moshi:moshi-kotlin-codegen")
 }
 

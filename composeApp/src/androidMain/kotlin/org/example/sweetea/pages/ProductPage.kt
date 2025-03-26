@@ -30,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,9 +46,7 @@ import coil3.compose.AsyncImage
 import org.example.sweetea.CheckPage
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.dataclasses.local.AppViewModel
-import org.example.sweetea.dataclasses.retrieved.ModifierData
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
-import org.example.sweetea.dataclasses.retrieved.ProductData
 
 data class K (val data: String) : Cloneable {
 
@@ -61,11 +58,10 @@ fun ProductPage(
     navController: NavController,
     appViewModel: AppViewModel
 ) {
-
-
     // workingItem : ProductData - a copy of what we clicked on
     // when a custom choice is selected, change the workingItem choice to match
-   /* val workingItem = ProductData(productData);// appViewModel.currentProduct?.clone()
+    /*
+    val workingItem = ProductData(productData);// appViewModel.currentProduct?.clone()
     workingItem?.modifiers?.data?.forEach { modifierData ->
         if (modifierData.max_selected == 1) {
             // Drink will have the default "[0]" option saved for single modifier choices
@@ -76,14 +72,11 @@ fun ProductPage(
             // Drink will have no checkbox options selected
             //modifierData.choices = mutableListOf()
         }
-    }*/
-
-    // workingItem : ProductData - a copy of what we clicked on
-    // when a custom choice is selected, change the workingItem choice to match
+    }
+    */
 
     println("DBG: Working Item: " + appViewModel.workingItem?.modifiers?.data + appViewModel.workingItem?.modifiers?.data?.size)
     println("DBG: Current Product: " + appViewModel.currentProduct?.modifiers?.data + appViewModel.currentProduct?.modifiers?.data?.size)
-
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -122,9 +115,11 @@ fun ProductPage(
                 Column {
                     Button(
                         onClick =
-                        {
-                            navController.navigate(CheckPage.route)
-                        },
+                            {
+                                //appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                                println("DBG: Shopping Cart" + appViewModel.shoppingCart)
+                                navController.navigate(CheckPage.route)
+                            },
                     ) {
                         Image(
                             imageVector = Icons.Default.ShoppingCart,
@@ -139,7 +134,6 @@ fun ProductPage(
 
             //Display product image
             DisplayProductImage(navController, appViewModel)
-
 
             //Display options
             appViewModel.currentProduct?.modifiers?.data?.forEachIndexed { modidx, modifierData ->
@@ -210,7 +204,7 @@ fun ProductPage(
                                         }
                                     },
                                     onClick = {
-                                       //println("working item before click: " +  userMods.toString() + " " + userMods.size)
+                                        //println("working item before click: " +  userMods.toString() + " " + userMods.size)
                                         dropDownText.value = choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
                                         dropExpand.value = false
                                         position.value = choiceidx
@@ -292,7 +286,7 @@ fun ProductPage(
 
 fun resetWorkingItem(
     appViewModel: AppViewModel,
-    ) {
+) {
     appViewModel.currentProduct?.let { appViewModel.setProduct(it) }
 }
 
@@ -450,13 +444,13 @@ fun ColumnScope.DisplayName(
     navController: NavController,
     appViewModel: AppViewModel
 ) {
-        Text(
-            appViewModel.currentProduct!!.name,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier
-                .padding(0.dp, 0.dp, 0.dp, 20.dp)
-                .align(Alignment.CenterHorizontally),
-        )
+    Text(
+        appViewModel.currentProduct!!.name,
+        style = MaterialTheme.typography.headlineMedium,
+        modifier = Modifier
+            .padding(0.dp, 0.dp, 0.dp, 20.dp)
+            .align(Alignment.CenterHorizontally),
+    )
 }
 
 @Composable
@@ -464,48 +458,48 @@ fun ColumnScope.DisplayPrice(
     navController: NavController,
     appViewModel: AppViewModel,
 ): MutableState<Float?> {
-            val price =
-                remember { mutableStateOf(appViewModel.workingItem?.price?.high_with_modifiers) }
+    val price =
+        remember { mutableStateOf(appViewModel.workingItem?.price?.high_with_modifiers) }
 
 
-            val itemSubtotal = appViewModel.workingItem?.modifiers?.data?.size?.let { MutableList(it){ 0.0f } }
+    val itemSubtotal = appViewModel.workingItem?.modifiers?.data?.size?.let { MutableList(it){ 0.0f } }
 
-            appViewModel.workingItem?.modifiers?.data?.forEachIndexed { index, modifierData ->
-                modifierData.choices.forEach { choice ->
-                    if(modifierData.max_selected == 1){
-                        if (itemSubtotal != null) {
-                            itemSubtotal[index] = choice.price
-                        }
-                    } else {
-                        if (itemSubtotal != null) {
-                            itemSubtotal += choice.price
-                        }
-                    }
-
-                    if (itemSubtotal != null) {
-                        appViewModel.workingItem?.price?.high_with_modifiers = appViewModel.currentProduct?.price?.high_with_modifiers?.plus(
-                            itemSubtotal.sum()
-                        )!!
-                    }
-
-
-                    price.value = appViewModel.workingItem?.price?.high_with_modifiers
-
-                    println("DBG: " + itemSubtotal.toString())
-
-
+    appViewModel.workingItem?.modifiers?.data?.forEachIndexed { index, modifierData ->
+        modifierData.choices.forEach { choice ->
+            if(modifierData.max_selected == 1){
+                if (itemSubtotal != null) {
+                    itemSubtotal[index] = choice.price
                 }
-
+            } else {
+                if (itemSubtotal != null) {
+                    itemSubtotal += choice.price
+                }
             }
-            Text(
-                "$%.2f".format(price.value),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(0.dp, 0.dp, 0.dp, 20.dp)
-                    .align(Alignment.CenterHorizontally),
-                fontFamily = FontFamily.SansSerif
-            )
+
+            if (itemSubtotal != null) {
+                appViewModel.workingItem?.price?.high_with_modifiers = appViewModel.currentProduct?.price?.high_with_modifiers?.plus(
+                    itemSubtotal.sum()
+                )!!
+            }
+
+
+            price.value = appViewModel.workingItem?.price?.high_with_modifiers
+
+            println("DBG: " + itemSubtotal.toString())
+
+
+        }
+
+    }
+    Text(
+        "$%.2f".format(price.value),
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .padding(0.dp, 0.dp, 0.dp, 20.dp)
+            .align(Alignment.CenterHorizontally),
+        fontFamily = FontFamily.SansSerif
+    )
     return price
 }
 

@@ -151,4 +151,3 @@ class AppViewModel: ViewModel() {
         }
     }
 }
-

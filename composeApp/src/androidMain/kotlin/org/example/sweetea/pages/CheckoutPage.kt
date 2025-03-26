@@ -1,16 +1,18 @@
 package org.example.sweetea.pages
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import android.app.Activity
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,13 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import org.example.sweetea.CardEntryActivity
 import org.example.sweetea.Menu
-import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.MenuDisplayImage
 
@@ -34,8 +36,26 @@ fun CheckoutPage(
     navController: NavController,
     appViewModel: AppViewModel,
 ){
+    val intent = LocalContext.current
+
+    val paymentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        println("DBG: Started CheckoutPage() result(): ActivityResult")
+        println("DBG: Result Code " + result.resultCode)
+        println("DBG: Result Data " + result.data)
+        if(result.resultCode == Activity.RESULT_OK){
+            val data = result.data
+            println(data)
+        }
+        println("DBG: Finished CheckoutPage() result(): ActivityResult")
+    }
+
+    HorizontalDivider()
+
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,7 +64,8 @@ fun CheckoutPage(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
 
-            )
+        )
+
         val itemSubtotal = MutableList(appViewModel.shoppingCart.size){ 0.0f }
 
         val itemHeight = 120
@@ -62,7 +83,7 @@ fun CheckoutPage(
                 price = cartItem.price.high_with_modifiers,
                 index = idx,
                 appViewModel = appViewModel
-                )
+            )
         }
         Text(
             text = "Subtotal",
@@ -83,13 +104,19 @@ fun CheckoutPage(
         }
 
         Button(
-            onClick = { navController.navigate(Menu.route) },
+            onClick = {
+                val localIntent: Intent = Intent(intent, CardEntryActivity::class.java)
+                localIntent.putExtra("subTotal", itemSubtotal.sum())
+                paymentLauncher.launch(localIntent)
+            },
             modifier = Modifier
                 .size(height = 48.dp, width = 360.dp),
 
-        ) { Text(
-            text ="Checkout",
-            fontSize = 24.sp,)
+            ){
+            Text(
+                text ="Checkout",
+                fontSize = 24.sp
+            )
         }
     }
 }
@@ -122,7 +149,7 @@ fun CheckoutItem(
     ) {
         Row(
             modifier = Modifier.padding(10.dp),
-                //.height(imageHeight.dp),
+            //.height(imageHeight.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             MenuDisplayImage(

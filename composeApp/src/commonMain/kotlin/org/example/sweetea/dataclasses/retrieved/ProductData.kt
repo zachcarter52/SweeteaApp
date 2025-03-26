@@ -259,7 +259,7 @@ data class ModifierData(
 //"owner_id": "140236773",
 //"site_id": "568173742194551081",
     val site_product_id: Int,
-                        //val site_product_modifier_id: Int,               THIS ONE DOESNT WORK MAYBE WE DONT NEED ITTTTT
+    //val site_product_modifier_id: Int,               THIS ONE DOESNT WORK MAYBE WE DONT NEED ITTTTT
 //"site_modifier_set_id": 4244388283,
 //"modifier_set_id": "11ec613d01278714862f5226a7fc24fd",
 
@@ -272,15 +272,15 @@ data class ModifierData(
     var choices: MutableList<ChoiceData>
 ){
     constructor(modifierData: ModifierData) : this(
-            id = modifierData.id,
-            site_product_id = modifierData.site_product_id,
-            name = modifierData.name,
-            min_selected = modifierData.min_selected,
-            max_selected = modifierData.max_selected,
-            type = modifierData.type,
-            display_order = modifierData.display_order,
-            visible_on_invoice = modifierData.visible_on_invoice,
-            choices = modifierData.choices.map { ChoiceData(it.copy()) }.toMutableList()
+        id = modifierData.id,
+        site_product_id = modifierData.site_product_id,
+        name = modifierData.name,
+        min_selected = modifierData.min_selected,
+        max_selected = modifierData.max_selected,
+        type = modifierData.type,
+        display_order = modifierData.display_order,
+        visible_on_invoice = modifierData.visible_on_invoice,
+        choices = modifierData.choices.map { ChoiceData(it.copy()) }.toMutableList()
     )
 }
 
