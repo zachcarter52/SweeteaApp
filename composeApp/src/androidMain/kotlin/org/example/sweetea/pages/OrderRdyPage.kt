@@ -1,5 +1,5 @@
 package org.example.sweetea.pages
-
+/*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -80,7 +80,7 @@ fun ItemsCard(items: Items, modifier: Modifier) {
              )
          }
     }
-}
+}*/
 
 
 
