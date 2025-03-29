@@ -30,7 +30,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
@@ -59,8 +58,6 @@ import java.io.File
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import android.Manifest
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
@@ -69,13 +66,13 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
+import sqip.CardEntry
+import sqip.handleActivityResult
 
 
 class MainScreen : ComponentActivity(){
-
-
-
     private val appViewModel: AppViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private lateinit var orderViewModel: OrderViewModel
     private var userLocation: Location? = null
     private var nearestStore by mutableStateOf<StoreLocation?>(null)
@@ -90,7 +87,6 @@ class MainScreen : ComponentActivity(){
         StoreLocation("FootHills Blvd ", LatLng(38.753687,-121.311063)),
         StoreLocation("TEST ", LatLng(38.931576120528206, -121.08846144717354))
     )
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,8 +157,8 @@ class MainScreen : ComponentActivity(){
 
             SweeteaApp(
                 viewModel = appViewModel,
+                authViewModel = authViewModel,
                 cacheDir = cacheDir
-
             )
 
             // Button to manually request location permission, should be removed
@@ -277,13 +273,11 @@ class MainScreen : ComponentActivity(){
         }
     }
 
-
-
-
 @Composable
 fun SweeteaApp(
     modifier:Modifier = Modifier,
     viewModel: AppViewModel,
+    authViewModel: AuthViewModel,
     cacheDir: File
 ){
     LaunchedEffect(Unit){
@@ -398,6 +392,7 @@ fun SweeteaApp(
                         AppHeader(
                             modifier = modifier,
                             viewModel = viewModel,
+                            authViewModel = authViewModel,
                             headerText = currentRouteObject!!.topBarHeaderText,
                             hideLocation = currentRouteObject!!.hideLocation,
                             hideTopBarHeader = currentRouteObject!!.hideTopBarHeader,
@@ -408,6 +403,7 @@ fun SweeteaApp(
                         AppHeader(
                             modifier = modifier,
                             viewModel = viewModel,
+                            authViewModel = authViewModel,
                             enterTransition = enterTransition,
                             exitTransition = exitTransition
                         )
@@ -431,7 +427,6 @@ fun SweeteaApp(
         }
 
 }
-
 
 //    fun onPause() {
 //        // Remove the callback reference to prevent memory leaks

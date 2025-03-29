@@ -8,7 +8,8 @@ The class contains the a representation for the full response data,
 with some potential inaccuracy due to null values in the available
 responses; many values have also been commented out to to their lack of
 relevance to the product, and in favor of a decreased memory footprint
- */
+*/
+
 @Serializable
 data class ProductData (
     val id: String,
@@ -61,10 +62,29 @@ data class ProductData (
     //val placeholder_image: Data<PlaceholderImageData>,
     val images: Data<List<ImageData>>,
     //val media_files: Data<List<String>>,
-    val modifiers: Data<List<ModifierData>>,
+    val modifiers: Data<MutableList<ModifierData>>,
     val categories: Data<List<BasicCategoryData>>,
     //val discounts: Data<List<String>>,
-)
+){
+    constructor(productData: ProductData) : this(
+        id = productData.id,
+        site_product_id = productData.site_product_id,
+        visibility = productData.visibility,
+        name = productData.name,
+        short_description = productData.short_description,
+        product_type = productData.product_type,
+        taxable = productData.taxable,
+        site_link = productData.site_link,
+        inventory = InventoryData(productData.inventory),   // COPIER
+        price = PriceData(productData.price),               // COPIER
+        per_order_max = productData.per_order_max,
+        badges = BadgeData(productData.badges),             //COPIER
+        thumbnail = Data(ImageData(productData.thumbnail.data)), //COPIER
+        images = Data(productData.images.data.map { ImageData(it.copy()) }),                              //COPIER
+        modifiers = Data(productData.modifiers.data.map { ModifierData(it.copy()) }.toMutableList()),                  //COPIER
+        categories = Data(productData.categories.data.map { BasicCategoryData( it.copy()) }),                //COPIER
+    )
+}
 
 data class ProductTypeDetails(
     val calorie_count: String,
@@ -84,12 +104,21 @@ data class InventoryData(
     //val mark_sold_out_all_existing_locations: Boolean,
     //val mark_sold_out_skus_count: Int,
     val all_inventory_total: Int,
-)
+){
+    constructor(inventoryData: InventoryData) : this(
+        total = inventoryData.total,
+        lowest = inventoryData.lowest,
+        enabled = inventoryData.enabled,
+        all_variations_sold_out = inventoryData.all_variations_sold_out,
+        some_variations_sold_out = inventoryData.some_variations_sold_out,
+        all_inventory_total = inventoryData.all_inventory_total
+    )
+}
 
 @Serializable
 data class PriceData(
     val high: Float,
-    val high_with_modifiers: Float,
+    var high_with_modifiers: Float,
     //val high_with_subscriptions: Float,
     val high_formatted: String,
     //val high_formmated_with_modifiers: String,
@@ -120,14 +149,40 @@ data class PriceData(
     //val regular_low_formated_with_subscriptions: String,
     val regular_low_subunits: Int,
     //val regular_low_with_subscriptions_subunits: Int,
-)
+){
+    constructor(priceData: PriceData): this(
+        high = priceData.high,
+        high_with_modifiers = priceData.high_with_modifiers,
+        high_formatted = priceData.high_formatted,
+        high_subunits = priceData.high_subunits,
+        low = priceData.low,
+        low_with_modifiers = priceData.low_with_modifiers,
+        low_with_subscriptions = priceData.low_with_subscriptions,
+        low_formatted = priceData.low_formatted,
+        low_subunits = priceData.low_subunits,
+        regular_high = priceData.regular_high,
+        regular_high_with_modifiers = priceData.regular_high_with_modifiers,
+        regular_high_formatted = priceData.regular_high_formatted,
+        regular_high_subunits = priceData.regular_high_subunits,
+        regular_low = priceData.regular_low,
+        regular_low_with_modifiers = priceData.regular_low_with_modifiers,
+        regular_low_formatted = priceData.regular_low_formatted,
+        regular_low_subunits = priceData.regular_low_subunits
+    )
+}
 
 @Serializable
 data class BadgeData(
     val low_stock: Boolean,
     val out_of_stock: Boolean,
     val on_sale: Boolean,
-)
+){
+    constructor(badgeData: BadgeData) : this(
+        low_stock = badgeData.low_stock,
+        out_of_stock = badgeData.out_of_stock,
+        on_sale = badgeData.on_sale
+    )
+}
 
 data class PreorderingData(
     val pickup: Boolean,
@@ -161,7 +216,23 @@ data class ImageData(
     val created_at: String,
     val updated_at: String,
     val absolute_urls: Map<String, String>,
-)
+){
+    constructor(imageData: ImageData) : this(
+        id = imageData.id,
+        owner_id = imageData.owner_id,
+        site_id = imageData.site_id,
+        site_product_image_id = imageData.site_product_image_id,
+        url = imageData.url,
+        absolute_url = imageData.absolute_url,
+        urls = imageData.urls.toMap(),
+        width = imageData.width,
+        height = imageData.height,
+        format = imageData.format,
+        created_at = imageData.created_at,
+        updated_at = imageData.updated_at,
+        absolute_urls = imageData.absolute_urls.toMap()
+    )
+}
 
 data class PlaceholderImageData(
     val placeholder: Boolean,
@@ -174,7 +245,12 @@ data class BasicCategoryData(
     val site_category_id: String,
     val name: String,
     //val ancestor_site_category_ids: List<String>
-)
+){
+    constructor(basicCategoryData: BasicCategoryData) : this(
+        site_category_id = basicCategoryData.site_category_id,
+        name = basicCategoryData.name
+    )
+}
 
 @Serializable
 data class ModifierData(
@@ -183,7 +259,7 @@ data class ModifierData(
 //"owner_id": "140236773",
 //"site_id": "568173742194551081",
     val site_product_id: Int,
-                        //val site_product_modifier_id: Int,               THIS ONE DOESNT WORK MAYBE WE DONT NEED ITTTTT
+    //val site_product_modifier_id: Int,               THIS ONE DOESNT WORK MAYBE WE DONT NEED ITTTTT
 //"site_modifier_set_id": 4244388283,
 //"modifier_set_id": "11ec613d01278714862f5226a7fc24fd",
 
@@ -193,9 +269,20 @@ data class ModifierData(
     val type: String,
     val display_order: Int,
     val visible_on_invoice: Int,
-    val choices: List<ChoiceData>,
-
-)
+    var choices: MutableList<ChoiceData>
+){
+    constructor(modifierData: ModifierData) : this(
+        id = modifierData.id,
+        site_product_id = modifierData.site_product_id,
+        name = modifierData.name,
+        min_selected = modifierData.min_selected,
+        max_selected = modifierData.max_selected,
+        type = modifierData.type,
+        display_order = modifierData.display_order,
+        visible_on_invoice = modifierData.visible_on_invoice,
+        choices = modifierData.choices.map { ChoiceData(it.copy()) }.toMutableList()
+    )
+}
 
 @Serializable
 data class ChoiceData(
@@ -204,4 +291,12 @@ data class ChoiceData(
     val price: Float,
     val display_order: Int,
     val sold_out: Boolean,
-)
+){
+    constructor(choiceData: ChoiceData) : this(
+        id = choiceData.id,
+        name = choiceData.name,
+        price = choiceData.price,
+        display_order = choiceData.display_order,
+        sold_out = choiceData.sold_out
+    )
+}
