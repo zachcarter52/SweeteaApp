@@ -19,18 +19,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import androidx.navigation.NavController
 import android.util.Log
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
+import com.amplifyframework.auth.result.AuthResetPasswordResult
 import com.amplifyframework.core.Amplify
 
 import org.example.sweetea.*
 
 @Composable
-fun LoginPage(modifier: Modifier, navController: NavController) {
+fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit,authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    //var username by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
+    val username by authViewModel.username.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
@@ -50,8 +65,28 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Button(onClick = { /* Handle login */ }) {
+        Button(onClick = {
+            // Handle login logic here
+            authViewModel.loginUser(email,password) { success, error ->
+                if(success){
+                    authViewModel.fetchUsername()
+                    onLoginComplete()
+                }else {
+                    errorMessage = error
+                }
+
+            }
+        }) {
             Text("Sign In")
+        }
+
+        errorMessage?.let {
+            Text(text = it, color = Color.Red)
+            Text(text = "Welcome, $username!")
+        }
+
+        if (isLoggedIn && username.isNotBlank()) {
+            Text(text = "Welcome, $username!")
         }
 
         TextButton(onClick = {
@@ -60,19 +95,22 @@ fun LoginPage(modifier: Modifier, navController: NavController) {
             Text("Don't have an account? Sign Up")
         }
 
-        /*  LOG OUT BUTTON
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Log Out")
-        }*/
+        TextButton(onClick = {
+            navController.navigate("forgotpassword/$email")
+        }) {
+            Text("Forgot Your Password?")
+        }
 
     }
 }
 
 @Composable
-fun SignupPage(modifier: Modifier, navController: NavController) {
+fun SignupPage(modifier: Modifier, navController: NavController, onSignUpComplete: () -> Unit = {},viewModel: AuthViewModel) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var shouldNavigate by remember { mutableStateOf(false) }
 
     Column (verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,8 +134,30 @@ fun SignupPage(modifier: Modifier, navController: NavController) {
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Button(onClick = { /* Handle login */ }) {
+        Button(onClick = {
+            viewModel.signUpUser(email, password, username)
+            { success, error ->
+                if (success) {
+                    onSignUpComplete()
+                    shouldNavigate = true
+                } else {
+                    errorMessage = error
+                }
+            }
+        }) {
             Text("Sign Up")
+        }
+
+        if(shouldNavigate){
+            navController.navigate("verification/$email")
+        }
+
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
 
         TextButton(onClick = { navController.navigate(Login.route) }) {
@@ -107,61 +167,170 @@ fun SignupPage(modifier: Modifier, navController: NavController) {
 }
 
 @Composable
-fun VerificationPage() {
+fun VerificationPage(modifier: Modifier, navController: NavController, email: String) {
+    var code by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+    var shouldNavigate by remember { mutableStateOf(false) }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     )
     {
+        Text(text = "Enter the verification code sent to: \n$email",
+            textAlign = TextAlign.Center, // Centers the text itself
+            modifier = Modifier.fillMaxWidth())
         TextField(
-            value = "",
-            onValueChange = { },
+            value = code,
+            onValueChange = { code = it },
             label = { Text("Verification Code") },
-            visualTransformation = PasswordVisualTransformation()
         )
 
-        Button(onClick = { /* Handle verification */ }) {
+        errorMessage?.let {
+            Text(text = it, color = Color.Red)
+        }
+
+        Button(onClick = {
+            Amplify.Auth.confirmSignUp(email, code,
+                { result ->
+                    if (result.isSignUpComplete) {
+                        shouldNavigate = true
+                    } else {
+                        errorMessage = "Verification failed"
+                    }
+                },{ error ->
+                    Log.e("Amplify", "Confirm sign up failed", error)
+                    errorMessage = "Verification failed: ${error.message}"
+                }
+            )
+        }) {
             Text("Verify")
         }
 
-
+        if (shouldNavigate) {
+            navController.navigate(Login.route)
+        }
     }
 
+}
 
-    fun signup(username: String, password: String, email: String) {
-        val options = AuthSignUpOptions.builder()
-            .userAttribute(AuthUserAttributeKey.email(), email)
-            .build()
+@Composable
+fun LogOutPage (modifier: Modifier, navController: NavController){
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize()
+    ) {
 
-        Amplify.Auth.signUp(
-            username,
-            password,
-            options,
-            { Log.i("AuthQuickstart", "Sign up succeeded: ${it.userId}") },
-            { Log.e("AuthQuickstart", "Sign up failed  ${it.message}") }
+        Button(onClick = {
+            Amplify.Auth.signOut() {
+            }
+            navController.navigate("account")
+        }) {
+            Text("Log Out")
+        }
+    }
+}
 
+@Composable
+fun ForgotPasswordPage(modifier: Modifier, navController: NavController, onPasswordResetSuccess: () -> Unit = {}) {
+    var email by remember { mutableStateOf("") }
+    var code by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    var step by remember { mutableIntStateOf(1) } // Step 1: Request reset, Step 2: Confirm new password, Step 3: Success
+    val context = LocalContext.current
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize()
+    ) {
+        Text(
+            text = when (step) {
+                1 -> "Enter the email address associated \nwith your account."
+                2 -> "Enter the verification code sent to \n$email"
+                3 -> "Password reset successful!"
+                else -> ""
+            },
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
+        errorMessage?.let {
+            Text(text = it, color = Color.Red)
+        }
 
-        fun signin(username: String, password: String) {
-            Amplify.Auth.signIn(
-                username,
-                password,
-                { Log.i("AuthQuickstart", "Sign in succeeded:") },
-                { Log.e("AuthQuickstart", "Sign in failed") }
+        if (step == 1) {
+            //Enter your email to reset your password
+            TextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") }
             )
 
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        fun signout() {
-            Amplify.Auth.signOut() {
-                Log.i("AuthQuickstart", "Sign out succeeded: ")
-                Log.e("AuthQuickstart", "Sign out failed ")
-
+            Button(onClick = {
+                // Handle email reset logic here
+                Amplify.Auth.resetPassword(email,
+                    { result: AuthResetPasswordResult ->
+                        if (result.isPasswordReset) {
+                            step = 2
+                            Log.e("Amplify", "Password reset already initiated")
+                        } else
+                            step = 2
+                    },
+                    { error: AuthException ->
+                        Log.e("Amplify", "Verification failed", error)
+                        errorMessage = "Verification failed: ${error.message}"
+                    })
+            }) {
+                Text("Send Reset Code")
             }
 
-        }
+        } else if (step == 2) {
+            //enter verification code and new Password
+            TextField(
+                value = code,
+                onValueChange = { code = it },
+                label = { Text("Verification Code") },
+            )
+            TextField(
+                value = newPassword,
+                onValueChange = { newPassword = it },
+                label = { Text("New Password") },
+                visualTransformation = PasswordVisualTransformation(),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
+            //Reset password button
+            Button(onClick = {
+                // Handle password reset logic here
+                Amplify.Auth.confirmResetPassword(email, newPassword, code,
+                    {
+                        onPasswordResetSuccess()
+                        step = 3
+                    },
+                    { error: AuthException ->
+                        Log.e("Amplify", "Password reset failed", error)
+                        errorMessage = "Password reset failed: ${error.message}"
+                    })
+            }) {
+                Text("Reset Password")
+            }
+
+        } else if (step == 3) {
+            //Text("Password reset successful!")
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                navController.navigate("login")
+            }) {
+                Text("Log In")
+            }
+        }
     }
 }
 
