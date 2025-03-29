@@ -2,12 +2,12 @@ package org.example.sweetea.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-//import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestore
 import org.example.sweetea.notifications.Notifications
 
 class OrderViewModel(application: Application): AndroidViewModel(application) {
     //firestore database for example
-    /*private val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     fun listenForNewOrders() {
         db.collection("orders")
@@ -22,5 +22,5 @@ class OrderViewModel(application: Application): AndroidViewModel(application) {
                 }
             }
     }
-    */
+
 }

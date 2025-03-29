@@ -139,6 +139,8 @@ dependencies {
 
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.ui.test.junit4.android)
 
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
