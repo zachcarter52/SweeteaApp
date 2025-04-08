@@ -1,0 +1,1 @@
+{"version":3,"file":"createVendorRequest.js","sourceRoot":"","sources":["../../../src/models/createVendorRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAmE;AACnE,mCAAgD;AAenC,QAAA,yBAAyB,GAAgC,IAAA,eAAM,EAAC;IAC3E,cAAc,EAAE,CAAC,iBAAiB,EAAE,IAAA,eAAM,GAAE,CAAC;IAC7C,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,iBAAQ,EAAC,IAAA,aAAI,EAAC,cAAM,OAAA,qBAAY,EAAZ,CAAY,CAAC,CAAC,CAAC;CACvD,CAAC,CAAC"}

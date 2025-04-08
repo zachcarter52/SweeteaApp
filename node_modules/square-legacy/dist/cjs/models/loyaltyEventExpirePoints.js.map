@@ -1,0 +1,1 @@
+{"version":3,"file":"loyaltyEventExpirePoints.js","sourceRoot":"","sources":["../../../src/models/loyaltyEventExpirePoints.ts"],"names":[],"mappings":";;;AAAA,oCAA2D;AAU9C,QAAA,8BAA8B,GAAqC,IAAA,eAAM,EACpF;IACE,gBAAgB,EAAE,CAAC,oBAAoB,EAAE,IAAA,eAAM,GAAE,CAAC;IAClD,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,eAAM,GAAE,CAAC;CAC7B,CACF,CAAC"}

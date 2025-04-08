@@ -1,0 +1,1 @@
+{"version":3,"file":"loyaltyEventOther.js","sourceRoot":"","sources":["../../../src/models/loyaltyEventOther.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,EAAU,MAAM,EAAE,MAAM,WAAW,CAAC;AAU3D,MAAM,CAAC,MAAM,uBAAuB,GAA8B,MAAM,CAAC;IACvE,gBAAgB,EAAE,CAAC,oBAAoB,EAAE,MAAM,EAAE,CAAC;IAClD,MAAM,EAAE,CAAC,QAAQ,EAAE,MAAM,EAAE,CAAC;CAC7B,CAAC,CAAC"}

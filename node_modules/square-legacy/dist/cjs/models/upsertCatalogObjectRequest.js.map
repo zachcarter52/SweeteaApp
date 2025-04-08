@@ -1,0 +1,1 @@
+{"version":3,"file":"upsertCatalogObjectRequest.js","sourceRoot":"","sources":["../../../src/models/upsertCatalogObjectRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAyD;AACzD,iDAAqE;AAyBxD,QAAA,gCAAgC,GAAuC,IAAA,eAAM,EACxF;IACE,cAAc,EAAE,CAAC,iBAAiB,EAAE,IAAA,eAAM,GAAE,CAAC;IAC7C,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,aAAI,EAAC,cAAM,OAAA,mCAAmB,EAAnB,CAAmB,CAAC,CAAC;CACpD,CACF,CAAC"}

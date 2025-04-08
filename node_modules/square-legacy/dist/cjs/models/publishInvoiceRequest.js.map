@@ -1,0 +1,1 @@
+{"version":3,"file":"publishInvoiceRequest.js","sourceRoot":"","sources":["../../../src/models/publishInvoiceRequest.ts"],"names":[],"mappings":";;;AAAA,oCAA+E;AAkBlE,QAAA,2BAA2B,GAAkC,IAAA,eAAM,EAC9E;IACE,OAAO,EAAE,CAAC,SAAS,EAAE,IAAA,eAAM,GAAE,CAAC;IAC9B,cAAc,EAAE,CAAC,iBAAiB,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;CAClE,CACF,CAAC"}

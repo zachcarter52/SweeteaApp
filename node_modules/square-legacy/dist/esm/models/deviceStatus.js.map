@@ -1,0 +1,1 @@
+{"version":3,"file":"deviceStatus.js","sourceRoot":"","sources":["../../../src/models/deviceStatus.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,QAAQ,EAAU,MAAM,EAAE,MAAM,WAAW,CAAC;AAM7D,MAAM,CAAC,MAAM,kBAAkB,GAAyB,MAAM,CAAC;IAC7D,QAAQ,EAAE,CAAC,UAAU,EAAE,QAAQ,CAAC,MAAM,EAAE,CAAC,CAAC;CAC3C,CAAC,CAAC"}

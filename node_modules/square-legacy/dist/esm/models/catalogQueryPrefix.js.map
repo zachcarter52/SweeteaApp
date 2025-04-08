@@ -1,0 +1,1 @@
+{"version":3,"file":"catalogQueryPrefix.js","sourceRoot":"","sources":["../../../src/models/catalogQueryPrefix.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAU,MAAM,EAAE,MAAM,WAAW,CAAC;AAUnD,MAAM,CAAC,MAAM,wBAAwB,GAA+B,MAAM,CAAC;IACzE,aAAa,EAAE,CAAC,gBAAgB,EAAE,MAAM,EAAE,CAAC;IAC3C,eAAe,EAAE,CAAC,kBAAkB,EAAE,MAAM,EAAE,CAAC;CAChD,CAAC,CAAC"}

@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CancelBookingRequest = exports.UpdateBookingRequest = exports.BulkRetrieveTeamMemberBookingProfilesRequest = exports.BulkRetrieveBookingsRequest = exports.SearchAvailabilityRequest = exports.CreateBookingRequest = void 0;
+var CreateBookingRequest_1 = require("./CreateBookingRequest");
+Object.defineProperty(exports, "CreateBookingRequest", { enumerable: true, get: function () { return CreateBookingRequest_1.CreateBookingRequest; } });
+var SearchAvailabilityRequest_1 = require("./SearchAvailabilityRequest");
+Object.defineProperty(exports, "SearchAvailabilityRequest", { enumerable: true, get: function () { return SearchAvailabilityRequest_1.SearchAvailabilityRequest; } });
+var BulkRetrieveBookingsRequest_1 = require("./BulkRetrieveBookingsRequest");
+Object.defineProperty(exports, "BulkRetrieveBookingsRequest", { enumerable: true, get: function () { return BulkRetrieveBookingsRequest_1.BulkRetrieveBookingsRequest; } });
+var BulkRetrieveTeamMemberBookingProfilesRequest_1 = require("./BulkRetrieveTeamMemberBookingProfilesRequest");
+Object.defineProperty(exports, "BulkRetrieveTeamMemberBookingProfilesRequest", { enumerable: true, get: function () { return BulkRetrieveTeamMemberBookingProfilesRequest_1.BulkRetrieveTeamMemberBookingProfilesRequest; } });
+var UpdateBookingRequest_1 = require("./UpdateBookingRequest");
+Object.defineProperty(exports, "UpdateBookingRequest", { enumerable: true, get: function () { return UpdateBookingRequest_1.UpdateBookingRequest; } });
+var CancelBookingRequest_1 = require("./CancelBookingRequest");
+Object.defineProperty(exports, "CancelBookingRequest", { enumerable: true, get: function () { return CancelBookingRequest_1.CancelBookingRequest; } });

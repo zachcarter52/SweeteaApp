@@ -1,0 +1,1 @@
+{"version":3,"file":"createInvoiceAttachmentRequest.js","sourceRoot":"","sources":["../../../src/models/createInvoiceAttachmentRequest.ts"],"names":[],"mappings":";;;AAAA,oCAA6D;AAahD,QAAA,oCAAoC,GAA2C,IAAA,eAAM,EAChG;IACE,cAAc,EAAE,CAAC,iBAAiB,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;IACvD,WAAW,EAAE,CAAC,aAAa,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;CACjD,CACF,CAAC"}

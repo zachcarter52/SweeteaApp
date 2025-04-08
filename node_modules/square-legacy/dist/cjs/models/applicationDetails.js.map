@@ -1,0 +1,1 @@
+{"version":3,"file":"applicationDetails.js","sourceRoot":"","sources":["../../../src/models/applicationDetails.ts"],"names":[],"mappings":";;;AAAA,oCAAuE;AAkB1D,QAAA,wBAAwB,GAA+B,IAAA,eAAM,EAAC;IACzE,aAAa,EAAE,CAAC,gBAAgB,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;IACrD,aAAa,EAAE,CAAC,gBAAgB,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;CAChE,CAAC,CAAC"}

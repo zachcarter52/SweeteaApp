@@ -1,0 +1,1 @@
+{"version":3,"file":"dateRange.js","sourceRoot":"","sources":["../../../src/models/dateRange.ts"],"names":[],"mappings":";;;AAAA,oCAAuE;AAqB1D,QAAA,eAAe,GAAsB,IAAA,eAAM,EAAC;IACvD,SAAS,EAAE,CAAC,YAAY,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;IACvD,OAAO,EAAE,CAAC,UAAU,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;CACpD,CAAC,CAAC"}

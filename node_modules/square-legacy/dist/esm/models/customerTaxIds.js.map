@@ -1,0 +1,1 @@
+{"version":3,"file":"customerTaxIds.js","sourceRoot":"","sources":["../../../src/models/customerTaxIds.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,EAAE,QAAQ,EAAU,MAAM,EAAE,MAAM,WAAW,CAAC;AAWvE,MAAM,CAAC,MAAM,oBAAoB,GAA2B,MAAM,CAAC;IACjE,KAAK,EAAE,CAAC,QAAQ,EAAE,QAAQ,CAAC,QAAQ,CAAC,MAAM,EAAE,CAAC,CAAC,CAAC;CAChD,CAAC,CAAC"}

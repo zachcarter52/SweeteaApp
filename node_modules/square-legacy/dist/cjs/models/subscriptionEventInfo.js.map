@@ -1,0 +1,1 @@
+{"version":3,"file":"subscriptionEventInfo.js","sourceRoot":"","sources":["../../../src/models/subscriptionEventInfo.ts"],"names":[],"mappings":";;;AAAA,oCAAuE;AAU1D,QAAA,2BAA2B,GAAkC,IAAA,eAAM,EAC9E;IACE,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;IAChD,IAAI,EAAE,CAAC,MAAM,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;CACnC,CACF,CAAC"}

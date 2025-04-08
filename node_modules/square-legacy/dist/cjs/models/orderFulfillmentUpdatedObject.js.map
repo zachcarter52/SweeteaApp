@@ -1,0 +1,1 @@
+{"version":3,"file":"orderFulfillmentUpdatedObject.js","sourceRoot":"","sources":["../../../src/models/orderFulfillmentUpdatedObject.ts"],"names":[],"mappings":";;;AAAA,oCAA2D;AAC3D,qEAGmC;AAMtB,QAAA,mCAAmC,GAA0C,IAAA,eAAM,EAC9F;IACE,uBAAuB,EAAE;QACvB,2BAA2B;QAC3B,IAAA,iBAAQ,EAAC,IAAA,aAAI,EAAC,cAAM,OAAA,uDAA6B,EAA7B,CAA6B,CAAC,CAAC;KACpD;CACF,CACF,CAAC"}

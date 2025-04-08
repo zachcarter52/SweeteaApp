@@ -1,0 +1,1 @@
+{"version":3,"file":"tenderBuyNowPayLaterDetails.js","sourceRoot":"","sources":["../../../src/models/tenderBuyNowPayLaterDetails.ts"],"names":[],"mappings":";;;AAAA,oCAA6D;AAQhD,QAAA,iCAAiC,GAAwC,IAAA,eAAM,EAC1F;IACE,mBAAmB,EAAE,CAAC,yBAAyB,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;IACpE,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;CACvC,CACF,CAAC"}

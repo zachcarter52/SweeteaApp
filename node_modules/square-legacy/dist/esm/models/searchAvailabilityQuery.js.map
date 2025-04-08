@@ -1,0 +1,1 @@
+{"version":3,"file":"searchAvailabilityQuery.js","sourceRoot":"","sources":["../../../src/models/searchAvailabilityQuery.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,IAAI,EAAE,MAAM,EAAU,MAAM,WAAW,CAAC;AACjD,OAAO,EAEL,8BAA8B,GAC/B,MAAM,4BAA4B,CAAC;AAQpC,MAAM,CAAC,MAAM,6BAA6B,GAAoC,MAAM,CAClF,EAAE,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAI,CAAC,GAAG,EAAE,CAAC,8BAA8B,CAAC,CAAC,EAAE,CACnE,CAAC"}

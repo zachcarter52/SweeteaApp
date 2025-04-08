@@ -1,0 +1,1 @@
+{"version":3,"file":"businessHours.js","sourceRoot":"","sources":["../../../src/models/businessHours.ts"],"names":[],"mappings":";;;AAAA,oCAA4E;AAC5E,6DAG+B;AAQlB,QAAA,mBAAmB,GAA0B,IAAA,eAAM,EAAC;IAC/D,OAAO,EAAE;QACP,SAAS;QACT,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,cAAK,EAAC,IAAA,aAAI,EAAC,cAAM,OAAA,+CAAyB,EAAzB,CAAyB,CAAC,CAAC,CAAC,CAAC;KACjE;CACF,CAAC,CAAC"}

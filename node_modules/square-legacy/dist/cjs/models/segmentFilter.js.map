@@ -1,0 +1,1 @@
+{"version":3,"file":"segmentFilter.js","sourceRoot":"","sources":["../../../src/models/segmentFilter.ts"],"names":[],"mappings":";;;AAAA,oCAAmE;AACnE,6CAA+D;AAelD,QAAA,mBAAmB,GAA0B,IAAA,eAAM,EAAC;IAC/D,kBAAkB,EAAE,CAAC,sBAAsB,EAAE,IAAA,eAAM,GAAE,CAAC;IACtD,kBAAkB,EAAE;QAClB,uBAAuB;QACvB,IAAA,iBAAQ,EAAC,IAAA,aAAI,EAAC,cAAM,OAAA,+BAAiB,EAAjB,CAAiB,CAAC,CAAC;KACxC;CACF,CAAC,CAAC"}

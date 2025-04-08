@@ -1,0 +1,7 @@
+import { Schema } from '../schema';
+/** Lists all webhook event types that can be subscribed to. */
+export interface ListWebhookEventTypesRequest {
+    /** The API version for which to list event types. Setting this field overrides the default version used by the application. */
+    apiVersion?: string | null;
+}
+export declare const listWebhookEventTypesRequestSchema: Schema<ListWebhookEventTypesRequest>;

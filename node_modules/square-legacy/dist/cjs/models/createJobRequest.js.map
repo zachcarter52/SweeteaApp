@@ -1,0 +1,1 @@
+{"version":3,"file":"createJobRequest.js","sourceRoot":"","sources":["../../../src/models/createJobRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAyD;AACzD,6BAAuC;AAkB1B,QAAA,sBAAsB,GAA6B,IAAA,eAAM,EAAC;IACrE,GAAG,EAAE,CAAC,KAAK,EAAE,IAAA,aAAI,EAAC,cAAM,OAAA,eAAS,EAAT,CAAS,CAAC,CAAC;IACnC,cAAc,EAAE,CAAC,iBAAiB,EAAE,IAAA,eAAM,GAAE,CAAC;CAC9C,CAAC,CAAC"}

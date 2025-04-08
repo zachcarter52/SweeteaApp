@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdateCustomerRequest = exports.SearchCustomersRequest = exports.BulkUpdateCustomersRequest = exports.BulkRetrieveCustomersRequest = exports.BulkDeleteCustomersRequest = exports.BulkCreateCustomersRequest = exports.CreateCustomerRequest = void 0;
+var CreateCustomerRequest_1 = require("./CreateCustomerRequest");
+Object.defineProperty(exports, "CreateCustomerRequest", { enumerable: true, get: function () { return CreateCustomerRequest_1.CreateCustomerRequest; } });
+var BulkCreateCustomersRequest_1 = require("./BulkCreateCustomersRequest");
+Object.defineProperty(exports, "BulkCreateCustomersRequest", { enumerable: true, get: function () { return BulkCreateCustomersRequest_1.BulkCreateCustomersRequest; } });
+var BulkDeleteCustomersRequest_1 = require("./BulkDeleteCustomersRequest");
+Object.defineProperty(exports, "BulkDeleteCustomersRequest", { enumerable: true, get: function () { return BulkDeleteCustomersRequest_1.BulkDeleteCustomersRequest; } });
+var BulkRetrieveCustomersRequest_1 = require("./BulkRetrieveCustomersRequest");
+Object.defineProperty(exports, "BulkRetrieveCustomersRequest", { enumerable: true, get: function () { return BulkRetrieveCustomersRequest_1.BulkRetrieveCustomersRequest; } });
+var BulkUpdateCustomersRequest_1 = require("./BulkUpdateCustomersRequest");
+Object.defineProperty(exports, "BulkUpdateCustomersRequest", { enumerable: true, get: function () { return BulkUpdateCustomersRequest_1.BulkUpdateCustomersRequest; } });
+var SearchCustomersRequest_1 = require("./SearchCustomersRequest");
+Object.defineProperty(exports, "SearchCustomersRequest", { enumerable: true, get: function () { return SearchCustomersRequest_1.SearchCustomersRequest; } });
+var UpdateCustomerRequest_1 = require("./UpdateCustomerRequest");
+Object.defineProperty(exports, "UpdateCustomerRequest", { enumerable: true, get: function () { return UpdateCustomerRequest_1.UpdateCustomerRequest; } });

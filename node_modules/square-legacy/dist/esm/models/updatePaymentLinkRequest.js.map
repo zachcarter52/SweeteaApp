@@ -1,0 +1,1 @@
+{"version":3,"file":"updatePaymentLinkRequest.js","sourceRoot":"","sources":["../../../src/models/updatePaymentLinkRequest.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,IAAI,EAAE,MAAM,EAAU,MAAM,WAAW,CAAC;AACjD,OAAO,EAAe,iBAAiB,EAAE,MAAM,eAAe,CAAC;AAM/D,MAAM,CAAC,MAAM,8BAA8B,GAAqC,MAAM,CACpF,EAAE,WAAW,EAAE,CAAC,cAAc,EAAE,IAAI,CAAC,GAAG,EAAE,CAAC,iBAAiB,CAAC,CAAC,EAAE,CACjE,CAAC"}

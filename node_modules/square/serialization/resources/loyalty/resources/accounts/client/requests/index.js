@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AdjustLoyaltyPointsRequest = exports.AccumulateLoyaltyPointsRequest = exports.SearchLoyaltyAccountsRequest = exports.CreateLoyaltyAccountRequest = void 0;
+var CreateLoyaltyAccountRequest_1 = require("./CreateLoyaltyAccountRequest");
+Object.defineProperty(exports, "CreateLoyaltyAccountRequest", { enumerable: true, get: function () { return CreateLoyaltyAccountRequest_1.CreateLoyaltyAccountRequest; } });
+var SearchLoyaltyAccountsRequest_1 = require("./SearchLoyaltyAccountsRequest");
+Object.defineProperty(exports, "SearchLoyaltyAccountsRequest", { enumerable: true, get: function () { return SearchLoyaltyAccountsRequest_1.SearchLoyaltyAccountsRequest; } });
+var AccumulateLoyaltyPointsRequest_1 = require("./AccumulateLoyaltyPointsRequest");
+Object.defineProperty(exports, "AccumulateLoyaltyPointsRequest", { enumerable: true, get: function () { return AccumulateLoyaltyPointsRequest_1.AccumulateLoyaltyPointsRequest; } });
+var AdjustLoyaltyPointsRequest_1 = require("./AdjustLoyaltyPointsRequest");
+Object.defineProperty(exports, "AdjustLoyaltyPointsRequest", { enumerable: true, get: function () { return AdjustLoyaltyPointsRequest_1.AdjustLoyaltyPointsRequest; } });

@@ -1,0 +1,1 @@
+{"version":3,"file":"catalogObjectCategory.js","sourceRoot":"","sources":["../../../src/models/catalogObjectCategory.ts"],"names":[],"mappings":";;;AAAA,oCAA+E;AAclE,QAAA,2BAA2B,GAAkC,IAAA,eAAM,EAC9E;IACE,EAAE,EAAE,CAAC,IAAI,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;IAC9B,OAAO,EAAE,CAAC,SAAS,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;CACnD,CACF,CAAC"}

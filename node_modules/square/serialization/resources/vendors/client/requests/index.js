@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SearchVendorsRequest = exports.CreateVendorRequest = exports.BatchUpdateVendorsRequest = exports.BatchGetVendorsRequest = exports.BatchCreateVendorsRequest = void 0;
+var BatchCreateVendorsRequest_1 = require("./BatchCreateVendorsRequest");
+Object.defineProperty(exports, "BatchCreateVendorsRequest", { enumerable: true, get: function () { return BatchCreateVendorsRequest_1.BatchCreateVendorsRequest; } });
+var BatchGetVendorsRequest_1 = require("./BatchGetVendorsRequest");
+Object.defineProperty(exports, "BatchGetVendorsRequest", { enumerable: true, get: function () { return BatchGetVendorsRequest_1.BatchGetVendorsRequest; } });
+var BatchUpdateVendorsRequest_1 = require("./BatchUpdateVendorsRequest");
+Object.defineProperty(exports, "BatchUpdateVendorsRequest", { enumerable: true, get: function () { return BatchUpdateVendorsRequest_1.BatchUpdateVendorsRequest; } });
+var CreateVendorRequest_1 = require("./CreateVendorRequest");
+Object.defineProperty(exports, "CreateVendorRequest", { enumerable: true, get: function () { return CreateVendorRequest_1.CreateVendorRequest; } });
+var SearchVendorsRequest_1 = require("./SearchVendorsRequest");
+Object.defineProperty(exports, "SearchVendorsRequest", { enumerable: true, get: function () { return SearchVendorsRequest_1.SearchVendorsRequest; } });

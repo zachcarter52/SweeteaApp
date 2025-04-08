@@ -1,0 +1,1 @@
+{"version":3,"file":"updateWebhookSubscriptionRequest.js","sourceRoot":"","sources":["../../../src/models/updateWebhookSubscriptionRequest.ts"],"names":[],"mappings":";;;AAAA,oCAA2D;AAC3D,6DAG+B;AAWlB,QAAA,sCAAsC,GAA6C,IAAA,eAAM,EACpG;IACE,YAAY,EAAE;QACZ,cAAc;QACd,IAAA,iBAAQ,EAAC,IAAA,aAAI,EAAC,cAAM,OAAA,+CAAyB,EAAzB,CAAyB,CAAC,CAAC;KAChD;CACF,CACF,CAAC"}

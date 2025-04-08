@@ -1,0 +1,1 @@
+{"version":3,"file":"v1Money.js","sourceRoot":"","sources":["../../../src/models/v1Money.ts"],"names":[],"mappings":";;;AAAA,oCAA+E;AAelE,QAAA,aAAa,GAAoB,IAAA,eAAM,EAAC;IACnD,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;IAChD,YAAY,EAAE,CAAC,eAAe,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;CACpD,CAAC,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"bulkDeleteOrderCustomAttributesRequest.js","sourceRoot":"","sources":["../../../src/models/bulkDeleteOrderCustomAttributesRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAuD;AACvD,6IAGuE;AAW1D,QAAA,4CAA4C,GAAmD,IAAA,eAAM,EAChH;IACE,MAAM,EAAE;QACN,QAAQ;QACR,IAAA,aAAI,EACF,IAAA,aAAI,EACF;YACE,OAAA,+HAAiE;QAAjE,CAAiE,CACpE,CACF;KACF;CACF,CACF,CAAC"}

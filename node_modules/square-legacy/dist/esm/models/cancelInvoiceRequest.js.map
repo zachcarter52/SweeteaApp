@@ -1,0 +1,1 @@
+{"version":3,"file":"cancelInvoiceRequest.js","sourceRoot":"","sources":["../../../src/models/cancelInvoiceRequest.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,EAAU,MAAM,WAAW,CAAC;AAYnD,MAAM,CAAC,MAAM,0BAA0B,GAAiC,MAAM,CAAC;IAC7E,OAAO,EAAE,CAAC,SAAS,EAAE,MAAM,EAAE,CAAC;CAC/B,CAAC,CAAC"}

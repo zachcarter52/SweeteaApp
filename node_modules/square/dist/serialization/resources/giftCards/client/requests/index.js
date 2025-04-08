@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UnlinkCustomerFromGiftCardRequest = exports.LinkCustomerToGiftCardRequest = exports.GetGiftCardFromNonceRequest = exports.GetGiftCardFromGanRequest = exports.CreateGiftCardRequest = void 0;
+var CreateGiftCardRequest_1 = require("./CreateGiftCardRequest");
+Object.defineProperty(exports, "CreateGiftCardRequest", { enumerable: true, get: function () { return CreateGiftCardRequest_1.CreateGiftCardRequest; } });
+var GetGiftCardFromGanRequest_1 = require("./GetGiftCardFromGanRequest");
+Object.defineProperty(exports, "GetGiftCardFromGanRequest", { enumerable: true, get: function () { return GetGiftCardFromGanRequest_1.GetGiftCardFromGanRequest; } });
+var GetGiftCardFromNonceRequest_1 = require("./GetGiftCardFromNonceRequest");
+Object.defineProperty(exports, "GetGiftCardFromNonceRequest", { enumerable: true, get: function () { return GetGiftCardFromNonceRequest_1.GetGiftCardFromNonceRequest; } });
+var LinkCustomerToGiftCardRequest_1 = require("./LinkCustomerToGiftCardRequest");
+Object.defineProperty(exports, "LinkCustomerToGiftCardRequest", { enumerable: true, get: function () { return LinkCustomerToGiftCardRequest_1.LinkCustomerToGiftCardRequest; } });
+var UnlinkCustomerFromGiftCardRequest_1 = require("./UnlinkCustomerFromGiftCardRequest");
+Object.defineProperty(exports, "UnlinkCustomerFromGiftCardRequest", { enumerable: true, get: function () { return UnlinkCustomerFromGiftCardRequest_1.UnlinkCustomerFromGiftCardRequest; } });

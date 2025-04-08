@@ -1,0 +1,1 @@
+{"version":3,"file":"bulkCreateTeamMembersRequest.js","sourceRoot":"","sources":["../../../src/models/bulkCreateTeamMembersRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAuD;AACvD,qEAGmC;AAatB,QAAA,kCAAkC,GAAyC,IAAA,eAAM,EAC5F;IACE,WAAW,EAAE;QACX,cAAc;QACd,IAAA,aAAI,EAAC,IAAA,aAAI,EAAC,cAAM,OAAA,uDAA6B,EAA7B,CAA6B,CAAC,CAAC;KAChD;CACF,CACF,CAAC"}

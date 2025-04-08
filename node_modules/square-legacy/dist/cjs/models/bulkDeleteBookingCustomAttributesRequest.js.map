@@ -1,0 +1,1 @@
+{"version":3,"file":"bulkDeleteBookingCustomAttributesRequest.js","sourceRoot":"","sources":["../../../src/models/bulkDeleteBookingCustomAttributesRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAuD;AACvD,6FAG+C;AAYlC,QAAA,8CAA8C,GAAqD,IAAA,eAAM,EACpH;IACE,MAAM,EAAE;QACN,QAAQ;QACR,IAAA,aAAI,EAAC,IAAA,aAAI,EAAC,cAAM,OAAA,+EAAyC,EAAzC,CAAyC,CAAC,CAAC;KAC5D;CACF,CACF,CAAC"}

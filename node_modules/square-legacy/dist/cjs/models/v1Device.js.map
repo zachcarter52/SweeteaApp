@@ -1,0 +1,1 @@
+{"version":3,"file":"v1Device.js","sourceRoot":"","sources":["../../../src/models/v1Device.ts"],"names":[],"mappings":";;;AAAA,oCAAuE;AAS1D,QAAA,cAAc,GAAqB,IAAA,eAAM,EAAC;IACrD,EAAE,EAAE,CAAC,IAAI,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;IAC9B,IAAI,EAAE,CAAC,MAAM,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;CAC7C,CAAC,CAAC"}

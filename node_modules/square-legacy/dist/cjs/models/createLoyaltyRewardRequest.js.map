@@ -1,0 +1,1 @@
+{"version":3,"file":"createLoyaltyRewardRequest.js","sourceRoot":"","sources":["../../../src/models/createLoyaltyRewardRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAyD;AACzD,iDAAqE;AAgBxD,QAAA,gCAAgC,GAAuC,IAAA,eAAM,EACxF;IACE,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,aAAI,EAAC,cAAM,OAAA,mCAAmB,EAAnB,CAAmB,CAAC,CAAC;IACnD,cAAc,EAAE,CAAC,iBAAiB,EAAE,IAAA,eAAM,GAAE,CAAC;CAC9C,CACF,CAAC"}

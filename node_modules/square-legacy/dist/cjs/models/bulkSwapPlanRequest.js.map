@@ -1,0 +1,1 @@
+{"version":3,"file":"bulkSwapPlanRequest.js","sourceRoot":"","sources":["../../../src/models/bulkSwapPlanRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAmD;AAsBtC,QAAA,yBAAyB,GAAgC,IAAA,eAAM,EAAC;IAC3E,kBAAkB,EAAE,CAAC,uBAAuB,EAAE,IAAA,eAAM,GAAE,CAAC;IACvD,kBAAkB,EAAE,CAAC,uBAAuB,EAAE,IAAA,eAAM,GAAE,CAAC;IACvD,UAAU,EAAE,CAAC,aAAa,EAAE,IAAA,eAAM,GAAE,CAAC;CACtC,CAAC,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"createDeviceCodeRequest.js","sourceRoot":"","sources":["../../../src/models/createDeviceCodeRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAyD;AACzD,2CAA4D;AAY/C,QAAA,6BAA6B,GAAoC,IAAA,eAAM,EAClF;IACE,cAAc,EAAE,CAAC,iBAAiB,EAAE,IAAA,eAAM,GAAE,CAAC;IAC7C,UAAU,EAAE,CAAC,aAAa,EAAE,IAAA,aAAI,EAAC,cAAM,OAAA,6BAAgB,EAAhB,CAAgB,CAAC,CAAC;CAC1D,CACF,CAAC"}

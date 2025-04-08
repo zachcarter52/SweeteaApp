@@ -1,0 +1,1 @@
+{"version":3,"file":"orderReward.js","sourceRoot":"","sources":["../../../src/models/orderReward.ts"],"names":[],"mappings":";;;AAAA,oCAAmD;AAatC,QAAA,iBAAiB,GAAwB,IAAA,eAAM,EAAC;IAC3D,EAAE,EAAE,CAAC,IAAI,EAAE,IAAA,eAAM,GAAE,CAAC;IACpB,YAAY,EAAE,CAAC,gBAAgB,EAAE,IAAA,eAAM,GAAE,CAAC;CAC3C,CAAC,CAAC"}

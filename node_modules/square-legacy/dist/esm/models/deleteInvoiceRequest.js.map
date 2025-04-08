@@ -1,0 +1,1 @@
+{"version":3,"file":"deleteInvoiceRequest.js","sourceRoot":"","sources":["../../../src/models/deleteInvoiceRequest.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,EAAE,QAAQ,EAAU,MAAM,WAAW,CAAC;AAY7D,MAAM,CAAC,MAAM,0BAA0B,GAAiC,MAAM,CAAC;IAC7E,OAAO,EAAE,CAAC,SAAS,EAAE,QAAQ,CAAC,MAAM,EAAE,CAAC,CAAC;CACzC,CAAC,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"timeRange.js","sourceRoot":"","sources":["../../../src/models/timeRange.ts"],"names":[],"mappings":";;;AAAA,oCAAuE;AAsB1D,QAAA,eAAe,GAAsB,IAAA,eAAM,EAAC;IACvD,OAAO,EAAE,CAAC,UAAU,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;IACnD,KAAK,EAAE,CAAC,QAAQ,EAAE,IAAA,iBAAQ,EAAC,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC,CAAC;CAChD,CAAC,CAAC"}

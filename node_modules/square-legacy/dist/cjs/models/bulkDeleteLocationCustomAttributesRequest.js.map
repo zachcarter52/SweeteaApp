@@ -1,0 +1,1 @@
+{"version":3,"file":"bulkDeleteLocationCustomAttributesRequest.js","sourceRoot":"","sources":["../../../src/models/bulkDeleteLocationCustomAttributesRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAuD;AACvD,iLAGyF;AAc5E,QAAA,+CAA+C,GAAsD,IAAA,eAAM,EACtH;IACE,MAAM,EAAE;QACN,QAAQ;QACR,IAAA,aAAI,EACF,IAAA,aAAI,EACF;YACE,OAAA,mKAAmF;QAAnF,CAAmF,CACtF,CACF;KACF;CACF,CACF,CAAC"}

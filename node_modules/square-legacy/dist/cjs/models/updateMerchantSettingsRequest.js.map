@@ -1,0 +1,1 @@
+{"version":3,"file":"updateMerchantSettingsRequest.js","sourceRoot":"","sources":["../../../src/models/updateMerchantSettingsRequest.ts"],"names":[],"mappings":";;;AAAA,oCAAiD;AACjD,uEAGoC;AAMvB,QAAA,mCAAmC,GAA0C,IAAA,eAAM,EAC9F;IACE,gBAAgB,EAAE;QAChB,mBAAmB;QACnB,IAAA,aAAI,EAAC,cAAM,OAAA,yDAA8B,EAA9B,CAA8B,CAAC;KAC3C;CACF,CACF,CAAC"}

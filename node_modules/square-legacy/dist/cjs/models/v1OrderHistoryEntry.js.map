@@ -1,0 +1,1 @@
+{"version":3,"file":"v1OrderHistoryEntry.js","sourceRoot":"","sources":["../../../src/models/v1OrderHistoryEntry.ts"],"names":[],"mappings":";;;AAAA,oCAA6D;AAShD,QAAA,yBAAyB,GAAgC,IAAA,eAAM,EAAC;IAC3E,MAAM,EAAE,CAAC,QAAQ,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;IACtC,SAAS,EAAE,CAAC,YAAY,EAAE,IAAA,iBAAQ,EAAC,IAAA,eAAM,GAAE,CAAC,CAAC;CAC9C,CAAC,CAAC"}

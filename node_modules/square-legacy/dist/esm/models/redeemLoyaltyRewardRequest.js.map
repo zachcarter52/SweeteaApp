@@ -1,0 +1,1 @@
+{"version":3,"file":"redeemLoyaltyRewardRequest.js","sourceRoot":"","sources":["../../../src/models/redeemLoyaltyRewardRequest.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAU,MAAM,EAAE,MAAM,WAAW,CAAC;AAanD,MAAM,CAAC,MAAM,gCAAgC,GAAuC,MAAM,CACxF;IACE,cAAc,EAAE,CAAC,iBAAiB,EAAE,MAAM,EAAE,CAAC;IAC7C,UAAU,EAAE,CAAC,aAAa,EAAE,MAAM,EAAE,CAAC;CACtC,CACF,CAAC"}

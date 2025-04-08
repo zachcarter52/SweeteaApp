@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdateItemTaxesRequest = exports.UpdateItemModifierListsRequest = exports.SearchCatalogItemsRequest = exports.SearchCatalogObjectsRequest = exports.BatchUpsertCatalogObjectsRequest = exports.BatchGetCatalogObjectsRequest = exports.BatchDeleteCatalogObjectsRequest = void 0;
+var BatchDeleteCatalogObjectsRequest_1 = require("./BatchDeleteCatalogObjectsRequest");
+Object.defineProperty(exports, "BatchDeleteCatalogObjectsRequest", { enumerable: true, get: function () { return BatchDeleteCatalogObjectsRequest_1.BatchDeleteCatalogObjectsRequest; } });
+var BatchGetCatalogObjectsRequest_1 = require("./BatchGetCatalogObjectsRequest");
+Object.defineProperty(exports, "BatchGetCatalogObjectsRequest", { enumerable: true, get: function () { return BatchGetCatalogObjectsRequest_1.BatchGetCatalogObjectsRequest; } });
+var BatchUpsertCatalogObjectsRequest_1 = require("./BatchUpsertCatalogObjectsRequest");
+Object.defineProperty(exports, "BatchUpsertCatalogObjectsRequest", { enumerable: true, get: function () { return BatchUpsertCatalogObjectsRequest_1.BatchUpsertCatalogObjectsRequest; } });
+var SearchCatalogObjectsRequest_1 = require("./SearchCatalogObjectsRequest");
+Object.defineProperty(exports, "SearchCatalogObjectsRequest", { enumerable: true, get: function () { return SearchCatalogObjectsRequest_1.SearchCatalogObjectsRequest; } });
+var SearchCatalogItemsRequest_1 = require("./SearchCatalogItemsRequest");
+Object.defineProperty(exports, "SearchCatalogItemsRequest", { enumerable: true, get: function () { return SearchCatalogItemsRequest_1.SearchCatalogItemsRequest; } });
+var UpdateItemModifierListsRequest_1 = require("./UpdateItemModifierListsRequest");
+Object.defineProperty(exports, "UpdateItemModifierListsRequest", { enumerable: true, get: function () { return UpdateItemModifierListsRequest_1.UpdateItemModifierListsRequest; } });
+var UpdateItemTaxesRequest_1 = require("./UpdateItemTaxesRequest");
+Object.defineProperty(exports, "UpdateItemTaxesRequest", { enumerable: true, get: function () { return UpdateItemTaxesRequest_1.UpdateItemTaxesRequest; } });

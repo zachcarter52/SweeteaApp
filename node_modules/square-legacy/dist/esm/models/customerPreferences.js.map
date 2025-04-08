@@ -1,0 +1,1 @@
+{"version":3,"file":"customerPreferences.js","sourceRoot":"","sources":["../../../src/models/customerPreferences.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,EAAE,QAAQ,EAAU,MAAM,WAAW,CAAC;AAQxE,MAAM,CAAC,MAAM,yBAAyB,GAAgC,MAAM,CAAC;IAC3E,iBAAiB,EAAE,CAAC,oBAAoB,EAAE,QAAQ,CAAC,QAAQ,CAAC,OAAO,EAAE,CAAC,CAAC,CAAC;CACzE,CAAC,CAAC"}
