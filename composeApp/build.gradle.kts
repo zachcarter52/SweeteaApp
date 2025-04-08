@@ -1,8 +1,5 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.utils.IMPLEMENTATION
 
 plugins {
     alias(libs.plugins.kotlinSerialization)
@@ -176,6 +173,7 @@ dependencies {
     implementation("com.google.maps.android:places-ktx:3.3.1")
 
     implementation(libs.androidx.ui.test.junit4.android)
+    implementation(libs.androidx.lifecycle.viewmodel.android)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.ui.test.junit4)

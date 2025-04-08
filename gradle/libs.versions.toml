@@ -67,6 +67,7 @@ uiToolingPreview = "1.4.3"
 core = "1.13.0"
 uiTestJunit4Android = "1.7.8"
 composeBom = "2024.09.00"
+lifecycleViewmodelAndroid = "2.8.7"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -178,6 +179,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi" }
 squareup-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 squareup-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen" }
+androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

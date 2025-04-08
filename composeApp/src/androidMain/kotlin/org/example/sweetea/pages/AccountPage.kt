@@ -27,7 +27,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import org.example.sweetea.*
+import org.example.sweetea.LogOut
+import org.example.sweetea.Login
+import org.example.sweetea.R
+import org.example.sweetea.SignUp
 import org.example.sweetea.ui.components.BearPageTemplate
 import kotlin.math.ceil
 

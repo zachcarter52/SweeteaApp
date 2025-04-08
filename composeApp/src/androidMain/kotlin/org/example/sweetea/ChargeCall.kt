@@ -2,21 +2,22 @@ package org.example.sweetea
 
 import kotlinx.io.IOException
 import okhttp3.ResponseBody
+import org.example.sweetea.pages.LineItem
+import retrofit2.Converter
+import retrofit2.Response
+import retrofit2.Retrofit
 import sqip.Call
 import java.lang.reflect.Type
-import retrofit2.Response
-import retrofit2.Converter
-import retrofit2.Retrofit
 
-class ChargeCall(private val factory: Factory, private val nonce: String) : Call<ChargeResult> {
-    private val call: retrofit2.Call<Void> = factory.service.charge(ChargeService.ChargeRequest(nonce))
+class ChargeCall(private val factory: Factory, private val nonce: String, private val lineItems: List<LineItem>) : Call<ChargeResult> {
+    private val call: retrofit2.Call<Void> = factory.service.charge(ChargeService.ChargeRequest(nonce, lineItems))
 
     override fun cancel() {
         call.cancel()
     }
 
     override fun clone(): Call<ChargeResult> {
-        return factory.create(nonce)
+        return factory.create(nonce, lineItems)
     }
 
     override fun enqueue(callback: sqip.Callback<ChargeResult>) {
@@ -28,6 +29,7 @@ class ChargeCall(private val factory: Factory, private val nonce: String) : Call
         try{
             response = call.execute()
         }catch (e: IOException){
+            println("DBG: " + e)
             return ChargeResult.networkError()
         }
         return responseToResult(response)
@@ -52,6 +54,7 @@ class ChargeCall(private val factory: Factory, private val nonce: String) : Call
             if(errorResponse?.errorMessage != null){
                 return ChargeResult.error(errorResponse.errorMessage)
             } else {
+                println("DBG: " + errorBody)
                 return ChargeResult.networkError()
             }
         }catch (e: IOException){
@@ -66,8 +69,8 @@ class ChargeCall(private val factory: Factory, private val nonce: String) : Call
         val errorResponseType: Type = ChargeService.ChargeErrorResponse::class.java
         internal val errorConverter: Converter<ResponseBody, ChargeService.ChargeErrorResponse> = retroFit.responseBodyConverter(errorResponseType, noAnnotations)
 
-        fun create(nonce: String): Call<ChargeResult> {
-            return ChargeCall(this, nonce)
+        fun create(nonce: String, lineItems: List<LineItem>): Call<ChargeResult> {
+            return ChargeCall(this, nonce, lineItems)
         }
     }
 }

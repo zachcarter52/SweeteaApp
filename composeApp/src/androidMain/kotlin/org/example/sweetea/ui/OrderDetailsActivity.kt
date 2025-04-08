@@ -1,10 +1,6 @@
 package org.example.sweetea.ui
 
-import android.os.Bundle
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 //import com.google.firebase.firestore.FirebaseFirestore
-import org.example.sweetea.R
 
 //firestore database for example
 class OrderDetailsActivity {

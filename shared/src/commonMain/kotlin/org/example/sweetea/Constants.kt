@@ -21,6 +21,10 @@ object Constants {
     const val LOCATIONS_ENDPOINT = "store-locations/"
     const val CATEGORY_ENDPOINT = "categories?per_page=50&include=images"
     const val PRODUCTS_ENDPOINT = "products?page=1&per_page=200&include=images,options,modifiers,categories,discounts,media_files"
-    const val CHARGE_SERVER_HOST = "sweeta-app-e0bba8d1a50d.herokuapp.com"
-    const val CHARGE_SERVER_URL = "https://sweeta-app-e0bba8d1a50d.herokuapp.com/"
+
+    //const val CHARGE_SERVER_HOST = "sweeta-app-e0bba8d1a50d.herokuapp.com"
+    //const val CHARGE_SERVER_URL = "https://sweeta-app-e0bba8d1a50d.herokuapp.com/"
+
+    const val CHARGE_SERVER_HOST = "192.168.254.200"
+    const val CHARGE_SERVER_URL = "http://192.168.254.200:8080"
 }
