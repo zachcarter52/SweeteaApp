@@ -53,56 +53,61 @@ fun HomePage(
     BearPageTemplate(
         modifier = modifier,
     ) {
-        HomeCard(
-            image = {
-                Image(
-                    painter = featuredItemsImage,
-                    contentDescription = "Featured Items",
-                    contentScale = ContentScale.FillHeight,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentSize(Alignment.Center)
-                    //.padding(top = calculatedPadding)
-                )
-            },
-            imageHeader = "Featured Menu Items",
-            buttonText = "Order Now",
-            onClick = {
-                navController.navigateSingleTopTo(
-                    Menu.route
-                )
-            }
-        )
-        val url = appStatus.currentEvent.eventImageURL
-        val uriHandler = LocalUriHandler.current
-        println("eventUrl: $url")
-        HomeCard(
-            image = {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(url)
-                        .memoryCacheKey(url)
-                        .diskCacheKey(url)
-                        .build(),
-                    contentScale = ContentScale.FillHeight,
-                    contentDescription = appStatus.currentEvent.eventName,
-                    placeholder = featuredItemsImage,
-                    fallback = featuredItemsImage,
-                    error = featuredItemsImage,
-                )
-            },
-            imageHeader = appStatus.currentEvent.eventName,
-            buttonText = appStatus.currentEvent.buttonText,
-            onClick = {
-                if(appStatus.currentEvent.linkIsRoute) {
-                    navController.navigateSingleTopTo(
-                        appStatus.currentEvent.link
+        if(appStatus.currentEvents.size < 1) {
+            HomeCard(
+                image = {
+                    Image(
+                        painter = featuredItemsImage,
+                        contentDescription = "Featured Items",
+                        contentScale = ContentScale.FillHeight,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(Alignment.Center)
+                        //.padding(top = calculatedPadding)
                     )
-                } else {
-                    uriHandler.openUri(appStatus.currentEvent.link)
+                },
+                imageHeader = "Featured Menu Items",
+                buttonText = "Order Now",
+                onClick = {
+                    navController.navigateSingleTopTo(
+                        Menu.route
+                    )
                 }
+            )
+        } else {
+            for (event in appStatus.currentEvents) {
+                val url = event.eventImageURL
+                val uriHandler = LocalUriHandler.current
+                println("eventUrl: $url")
+                HomeCard(
+                    image = {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(url)
+                                .memoryCacheKey(url)
+                                .diskCacheKey(url)
+                                .build(),
+                            contentScale = ContentScale.FillHeight,
+                            contentDescription = event.eventName,
+                            placeholder = featuredItemsImage,
+                            fallback = featuredItemsImage,
+                            error = featuredItemsImage,
+                        )
+                    },
+                    imageHeader = event.eventName,
+                    buttonText = event.buttonText,
+                    onClick = {
+                        if (event.linkIsRoute) {
+                            navController.navigateSingleTopTo(
+                                event.link
+                            )
+                        } else {
+                            uriHandler.openUri(event.link)
+                        }
+                    }
+                )
             }
-        )
+        }
     }
 
 }

@@ -1,25 +1,20 @@
 package org.example.sweetea.database
 
+import kotlinx.coroutines.Dispatchers
+import org.example.sweetea.database.model.Account
+import org.example.sweetea.database.model.AccountRepository
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.example.sweetea.Constants
-import org.example.sweetea.database.model.Account
-import org.example.sweetea.database.model.AccountRepository
 import org.example.sweetea.database.model.DatabaseSchema
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.kotlin.datetime.date
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 class AccountSchema(val database: Database) : AccountRepository, DatabaseSchema() {
     object Accounts : Table(){
@@ -36,7 +31,7 @@ class AccountSchema(val database: Database) : AccountRepository, DatabaseSchema(
         }
     }
 
-    suspend fun createAccount( account: Account): ULong? {
+    override suspend fun createAccount( account: Account): ULong? {
         return dbQuery {
             if(Accounts.selectAll().where{ Accounts.emailAddress eq account.emailAddress}.singleOrNull() != null){
                 return@dbQuery null;

@@ -4,30 +4,23 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
-import io.ktor.server.application.Application
+import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
-import io.ktor.server.request.contentType
-import io.ktor.server.request.header
-import io.ktor.server.request.receiveChannel
-import io.ktor.server.request.receiveMultipart
-import io.ktor.server.response.respond
-import io.ktor.server.response.respondBytes
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.RoutingCall
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.put
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
 import org.example.sweetea.ResponseClasses.AppStatus
-import org.example.sweetea.database.getSelectedEvent
-import org.example.sweetea.database.rewardSchema
+import org.example.sweetea.database.model.EventRepository
+import org.example.sweetea.database.model.RewardRepository
 import java.io.File
 import java.util.Date
 
-fun Application.configureRouting() {
+fun Application.configureRouting(
+    eventSchema: EventRepository,
+    rewardSchema: RewardRepository
+) {
     val l: String = File.separator
     suspend fun RoutingCall.respondFile(filepath: String){
         //${l} is equivalent to "/" on linux and "\" on windows
@@ -43,23 +36,35 @@ fun Application.configureRouting() {
         get("/status") {
             call.respond(
                 AppStatus(
-                    getSelectedEvent().toEventResponse(),
+                    eventSchema.getSelectedEvents().map{it.toEventResponse()},
                     rewardSchema.getBearValue()
                 )
             )
         }
         route("/bear-value") {
             get("") {
-                call.respond(rewardSchema.getBearValue())
+                call.respond(rewardSchema.getBearValue().toString())
             }
-            put("/{value}") {
-                val newBearValue = call.parameters["value"]!!.toInt()
-                rewardSchema.setBearValue(newBearValue)
-                call.respond(HttpStatusCode.OK)
+            authenticate("admin-auth-session"){
+                put("/{value}") {
+                    val newBearValue = call.parameters["value"]!!.toInt()
+                    rewardSchema.setBearValue(newBearValue)
+                    call.respond(HttpStatusCode.OK)
+                }
             }
         }
-        get("/events/selected") {
-            call.respond(getSelectedEvent().toEventResponse())
+        route("/events"){
+            get("/selected") {
+                call.respond(eventSchema.getSelectedEvents().map{it.toEventResponse()})
+            }
+            put("/decrement/{selectionIndex}"){
+                val selectionIndex = call.parameters["selectionIndex"]!!.toInt()
+                call.respond(eventSchema.swapSelections(selectionIndex, selectionIndex-1))
+            }
+            put("/increment/{selectionIndex}"){
+                val selectionIndex = call.parameters["selectionIndex"]!!.toInt()
+                call.respond(eventSchema.swapSelections(selectionIndex, selectionIndex+1))
+            }
         }
         get("/{filename}") {
             val filename = call.parameters["filename"]!!

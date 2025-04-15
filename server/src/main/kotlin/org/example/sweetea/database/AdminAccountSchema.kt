@@ -1,16 +1,12 @@
 package org.example.sweetea.database
 
 import org.example.sweetea.Constants
+import org.example.sweetea.PrivateConstants
 import org.example.sweetea.database.model.AdminAccount
 import org.example.sweetea.database.model.AdminAccountRepository
 import org.example.sweetea.database.model.DatabaseSchema
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import org.mindrot.jbcrypt.BCrypt
 
 class AdminAccountSchema(database: Database) : AdminAccountRepository, DatabaseSchema() {

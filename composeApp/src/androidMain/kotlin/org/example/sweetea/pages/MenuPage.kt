@@ -5,30 +5,47 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMapNotNull
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
+import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.R
 import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.MenuDisplayImage
 import org.example.sweetea.ui.components.MenuItem
@@ -109,9 +126,24 @@ fun MenuPage(
     val itemHeight = 120
 
     val imageCache = remember { mutableStateMapOf<Int, Painter>() }
+    var searchTerms by remember { mutableStateOf("") }
 
     val menuCategoryState by appViewModel.categoryList.collectAsState()
+    val menuProductState by appViewModel.productList.collectAsStateWithLifecycle()
     println("Menu Categories $menuCategoryState")
+
+    fun getSearchProducts(): List<ProductData> = menuProductState.fastMapNotNull{ product: ProductData ->
+        val matchResult = Fuzzy.fuzzyMatch(searchTerms, product.name)
+        return@fastMapNotNull if(matchResult.first) {
+            Pair(product, matchResult.second)
+        } else {
+            null
+        }
+    }.sortedByDescending { searchResult: Pair<ProductData, Int> ->
+        searchResult.second
+    }.map{ searchResult: Pair<ProductData, Int> ->
+        searchResult.first
+    }
 
     @Composable
     fun cachedImage(id: Int): Painter{
@@ -127,7 +159,30 @@ fun MenuPage(
         modifier = modifier,
         showBear = false,
     ){
-        HorizontalDivider()
+        Column(Modifier.fillMaxWidth()) {
+            TextField(
+                value = searchTerms,
+                onValueChange = { searchTerms = it },
+                label = { Text("Search") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                ),
+                trailingIcon = {
+                    if(searchTerms.isNotEmpty()){
+                        IconButton(onClick = {searchTerms = ""}){
+                            Icon(
+                                imageVector = Icons.Outlined.Close,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                },
+                shape = RectangleShape
+            )
+        }
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
         ){
@@ -145,22 +200,43 @@ fun MenuPage(
             }
         }
         HorizontalDivider()
-        menuCategoryState.forEachIndexed{
-                                        index, menuCategory ->
-            val url = "${menuCategory.images.data[0].url}?height=${3*itemHeight}"
-            MenuItem(
-                url = url,
-                contentDescription = menuCategory.name,
-                contentScale = ContentScale.FillHeight,
-                itemName = menuCategory.name,
-                imageHeight = itemHeight,
-                onClick = {
-                    //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
-                    appViewModel.setCategory(menuCategory)
-                    navController.navigate(SubMenu.route)
+        Column(Modifier.fillMaxWidth()) {
+            if(searchTerms.isEmpty()) {
+                menuCategoryState.forEachIndexed { index, menuCategory ->
+                    val url = "${menuCategory.images.data[0].url}?height=${3 * itemHeight}"
+                    MenuItem(
+                        url = url,
+                        contentDescription = menuCategory.name,
+                        contentScale = ContentScale.FillHeight,
+                        itemName = menuCategory.name,
+                        imageHeight = itemHeight,
+                        onClick = {
+                            //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
+                            appViewModel.setCategory(menuCategory)
+                            navController.navigate(SubMenu.route)
+                        }
+                    )
+                    if (index != menuCategoryState.size - 1) HorizontalDivider()
                 }
-            )
-            if(index != menuCategoryState.size - 1) HorizontalDivider()
+            } else {
+                val searchedProducts = getSearchProducts()
+                searchedProducts.fastForEachIndexed{ index, product ->
+                    val url = "${product.images.data[0].url}?height=${3*itemHeight}"
+                    MenuItem(
+                        url = url,
+                        contentDescription = product.name,
+                        contentScale = ContentScale.FillHeight,
+                        itemName = product.name,
+                        imageHeight = itemHeight,
+                        price = product.price.regular_high_with_modifiers,
+                        onClick = {
+                            appViewModel.setProduct(product)
+                            navController.navigate(ProductCustomPage.route)
+                        }
+                    )
+                    if (index != searchedProducts.size - 1) HorizontalDivider()
+                }
+            }
         }
     }
 }

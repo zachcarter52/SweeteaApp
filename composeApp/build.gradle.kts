@@ -114,6 +114,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.multiplatform.paths)
+            implementation(libs.sublime.fuzzy.search)
         }
     }
 }

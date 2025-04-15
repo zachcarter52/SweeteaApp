@@ -1,6 +1,6 @@
 [versions]
 accompanistPermissions = "0.31.2-alpha"
-agp = "8.9.0"
+agp = "8.7.3"
 amplifyframeworkAwsAuthCognito = "2.16.0"
 android-compileSdk = "35"
 android-minSdk = "25"
@@ -24,6 +24,7 @@ converterMoshi = "2.11.0"
 desugar_jdk_libs = "2.1.2"
 junit = "4.13.2"
 kotlin = "2.0.21"
+sublime-fuzzy-search = "2.3.4"
 
 kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
@@ -68,6 +69,7 @@ core = "1.13.0"
 uiTestJunit4Android = "1.7.8"
 composeBom = "2024.09.00"
 lifecycleViewmodelAndroid = "2.8.7"
+junit-jupiter = "5.8.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -85,6 +87,7 @@ converter-moshi = { module = "com.squareup.retrofit2:converter-moshi" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
+sublime-fuzzy-search = { module = "com.github.android-password-store:sublime-fuzzy", version.ref = "sublime-fuzzy-search"}
 
 #cognito
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
@@ -180,6 +183,7 @@ retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi" 
 squareup-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 squareup-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen" }
 androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

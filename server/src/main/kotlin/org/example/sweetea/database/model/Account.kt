@@ -1,7 +1,7 @@
 package org.example.sweetea.database.model;
 
-import kotlinx.datetime.LocalDate
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializable;
+import kotlinx.datetime.LocalDate;
 
 @Serializable
 data class Account(
