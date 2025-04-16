@@ -1,8 +1,6 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.utils.IMPLEMENTATION
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     alias(libs.plugins.kotlinSerialization)
@@ -16,6 +14,7 @@ plugins {
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -33,6 +32,14 @@ kotlin {
     }
     
     sourceSets {
+
+        // Adds common test dependencies
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+        }
         
         androidMain.dependencies {
 
@@ -135,6 +142,7 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         applicationId = "org.example.sweetea"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
@@ -178,6 +186,7 @@ dependencies {
     implementation("com.google.maps.android:places-ktx:3.3.1")
 
     implementation(libs.androidx.ui.test.junit4.android)
+    implementation(libs.androidx.lifecycle.viewmodel.android)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.ui.test.junit4)

@@ -1,4 +1,45 @@
-package org.example.sweetea
+package org.example.sweetea.pages
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import org.example.sweetea.dataclasses.local.AppViewModel
+
+@Composable
+fun OrderPrepPage(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    appViewModel: AppViewModel){
+    Column(
+        verticalArrangement =  Arrangement.Center,
+        modifier = modifier.padding(8.dp)
+    ){
+        appViewModel.currentLocation?.let {
+            Text(
+                modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start),
+                text = it.nickname,
+                fontSize = 24.sp,
+                lineHeight = 28.sp
+            )
+        }
+
+        Text(
+            text = "Your Order is Being Processed!",
+            fontSize = 32.sp,
+            lineHeight = 36.sp
+        )
+    }
+
+}
+
+/*package org.example.sweetea
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -68,3 +109,4 @@ fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String 
 fun getCurrentDateTime(): Date {
     return Calendar.getInstance().time
 }
+*/

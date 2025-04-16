@@ -1,6 +1,7 @@
 package org.example.sweetea.plugins
 
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.form
@@ -10,13 +11,17 @@ import io.ktor.server.response.respondRedirect
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
-import io.ktor.server.sessions.*
+import io.ktor.server.sessions.Sessions
+import io.ktor.server.sessions.clear
 import io.ktor.server.sessions.cookie
 import io.ktor.server.sessions.maxAge
+import io.ktor.server.sessions.sessions
+import io.ktor.server.sessions.set
 import kotlinx.serialization.Serializable
 import org.example.sweetea.database.adminAccountSchema
 import org.mindrot.jbcrypt.BCrypt
 import java.util.TreeMap
+import kotlin.collections.set
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 

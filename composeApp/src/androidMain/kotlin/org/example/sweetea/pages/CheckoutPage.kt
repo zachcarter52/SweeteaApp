@@ -5,8 +5,8 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,10 +25,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.gson.Gson
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.example.sweetea.CardEntryActivity
 import org.example.sweetea.Menu
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.MenuDisplayImage
+import org.example.sweetea.PrepPage
+
+@JsonClass(generateAdapter = true)
+data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
+    val price: Float,
+    val quantity: String = 1.toString(),
+    @Json(name = "name")
+    val productName: String,
+    val productId: String,
+    val siteProductId: String,
+    val productModifiers: MutableList<CartItemChoiceDetails>,
+    val basePriceMoney: CartItemPriceDetails
+)
+
+@JsonClass(generateAdapter = true)
+data class CartItemChoiceDetails(
+    val choiceName: String,
+    val choiceId: String,
+    val price: Float
+)
+
+@JsonClass(generateAdapter = true)
+data class CartItemPriceDetails(
+    val amount: Float,
+    val currency: String = "USD"
+)
 
 @Composable
 fun CheckoutPage(
@@ -37,6 +67,7 @@ fun CheckoutPage(
     appViewModel: AppViewModel,
 ){
     val intent = LocalContext.current
+    val lineItems = mutableListOf<LineItem>()
 
     val paymentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -45,8 +76,9 @@ fun CheckoutPage(
         println("DBG: Result Code " + result.resultCode)
         println("DBG: Result Data " + result.data)
         if(result.resultCode == Activity.RESULT_OK){
+            navController.navigate(PrepPage.route)
             val data = result.data
-            println(data)
+            println("Data" + data)
         }
         println("DBG: Finished CheckoutPage() result(): ActivityResult")
     }
@@ -72,7 +104,32 @@ fun CheckoutPage(
 
         println("DBG: Cart item count = " + appViewModel.shoppingCart.size)
         appViewModel.shoppingCart.forEachIndexed { idx, cartItem ->
+            lineItems.add(
+                LineItem(
+                    price = cartItem.price.regular_high,
+                    productName = cartItem.name,
+                    productId = cartItem.id,
+                    siteProductId = cartItem.site_product_id,
+                    productModifiers = mutableListOf<CartItemChoiceDetails>().apply {
+                        cartItem.modifiers.data.forEach { modifierData ->
+                            modifierData.choices.forEach { choiceData ->
+                                add(CartItemChoiceDetails(
+                                    choiceName = choiceData.name,
+                                    choiceId = choiceData.id,
+                                    price = choiceData.price
+                                ))
+                            }
+                        }
+                    },
+                    basePriceMoney = CartItemPriceDetails(
+                        amount = cartItem.price.high_with_modifiers,
+                        currency = "USD"
+                    )
+                )
+            )
+
             itemSubtotal[idx] += cartItem.price.high_with_modifiers
+
             val url = "${cartItem.images.data[0].url}?height=${3*itemHeight}"
             CheckoutItem(
                 imageHeight = itemHeight,
@@ -106,7 +163,8 @@ fun CheckoutPage(
         Button(
             onClick = {
                 val localIntent: Intent = Intent(intent, CardEntryActivity::class.java)
-                localIntent.putExtra("subTotal", itemSubtotal.sum())
+                localIntent.putExtra("jsonLineItems", Gson().toJson(lineItems))
+                println("INTENT DATA: " + localIntent)
                 paymentLauncher.launch(localIntent)
             },
             modifier = Modifier

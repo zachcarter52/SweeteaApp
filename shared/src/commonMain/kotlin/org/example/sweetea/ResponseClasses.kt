@@ -1,7 +1,6 @@
 package org.example.sweetea
 
 import kotlinx.serialization.Serializable
-import kotlin.random.Random
 
 object ResponseClasses {
     @Serializable

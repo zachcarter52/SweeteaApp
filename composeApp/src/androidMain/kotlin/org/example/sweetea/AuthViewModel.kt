@@ -1,8 +1,6 @@
 package org.example.sweetea
 
 import android.util.Log
-import androidx.compose.material.Text
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amplifyframework.auth.AuthUserAttributeKey
@@ -13,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.lang.reflect.Modifier
 
 class AuthViewModel : ViewModel() {
     private val authRepository: AuthRepository = CognitoAuthRepository()

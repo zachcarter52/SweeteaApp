@@ -1,19 +1,23 @@
 package org.example.sweetea.ui.theme
 
-import org.example.sweetea.R
-
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-
-import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.GoogleFont
+import org.example.sweetea.R
 import org.jetbrains.compose.resources.Font
+import sweetea.composeapp.generated.resources.CherryBombOne_Regular
 import sweetea.composeapp.generated.resources.Res
-import sweetea.composeapp.generated.resources.*
+import sweetea.composeapp.generated.resources.Zain_Black
+import sweetea.composeapp.generated.resources.Zain_Bold
+import sweetea.composeapp.generated.resources.Zain_ExtraBold
+import sweetea.composeapp.generated.resources.Zain_ExtraLight
+import sweetea.composeapp.generated.resources.Zain_Italic
+import sweetea.composeapp.generated.resources.Zain_Light
+import sweetea.composeapp.generated.resources.Zain_LightItalic
+import sweetea.composeapp.generated.resources.Zain_Regular
 
 @Composable
 fun SweeteaTypography(): Typography {
