@@ -89,7 +89,7 @@ class MainScreen : ComponentActivity(){
         //create notification channel
         Notifications.createNotificationChannel(this)
         orderViewModel = ViewModelProvider(this)[OrderViewModel::class.java]
-        //orderViewModel.listenForNewOrders() //start listening for orders
+        orderViewModel.listenForNewOrders() //start listening for orders
 
         installSplashScreen()
 
@@ -491,4 +491,6 @@ fun SweeteaApp(
 //
 //    }
 }
+
+
 
