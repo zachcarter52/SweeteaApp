@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,8 @@
 		48A5440A2D79601E0039C95B /* NearbyPlacesFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A544092D7960150039C95B /* NearbyPlacesFinder.swift */; };
 		48A6D8E52D7918D200B0BCAE /* DeviceLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A6D8E42D7918C000B0BCAE /* DeviceLocation.swift */; };
 		48D41D852D9374B800B78F98 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D41D842D9374B800B78F98 /* LoginView.swift */; };
+		48DC1A252DADC80600016C3F /* SquareRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DC1A242DADC7FF00016C3F /* SquareRequest.swift */; };
+		48DC1A272DADC91400016C3F /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DC1A262DADC90A00016C3F /* ProductViewModel.swift */; };
 		48DC6E062D7C1F400008014B /* StoreInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DC6E052D7C1F380008014B /* StoreInfo.swift */; };
 		48E03DFA2D7B99850082D745 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E03DF92D7B99810082D745 /* HomeView.swift */; };
 		48E03DFC2D7BAAC40082D745 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48E03DFB2D7BAAC40082D745 /* Assets.xcassets */; };
@@ -25,6 +27,12 @@
 		48E03E022D7BC4E90082D745 /* Rewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E03E012D7BC4E90082D745 /* Rewards.swift */; };
 		48E03E042D7BC5030082D745 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E03E032D7BC5030082D745 /* Account.swift */; };
 		48E03E062D7BD66B0082D745 /* StoreSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E03E052D7BD66B0082D745 /* StoreSelection.swift */; };
+		48E3E2AA2DADE95F0061DB6D /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E3E2A92DADE9530061DB6D /* ProductView.swift */; };
+		48E3E2AC2DADEC850061DB6D /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E3E2AB2DADEC7F0061DB6D /* CategoryViewModel.swift */; };
+		48E3E2AE2DADEFE10061DB6D /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E3E2AD2DADEFDC0061DB6D /* CategoryView.swift */; };
+		48E3E2B02DAED65D0061DB6D /* CategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E3E2AF2DAED6560061DB6D /* CategoryDetailView.swift */; };
+		48E3E2B22DAF07320061DB6D /* ProductDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E3E2B12DAF072A0061DB6D /* ProductDetailView.swift */; };
+		48F1FC112D972FC500933271 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F1FC102D972FC500933271 /* SessionManager.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		841E1DCC9159A3522D8466A6 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2635B0DB5B2C634715871F /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
@@ -40,6 +48,8 @@
 		48A544092D7960150039C95B /* NearbyPlacesFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPlacesFinder.swift; sourceTree = "<group>"; };
 		48A6D8E42D7918C000B0BCAE /* DeviceLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocation.swift; sourceTree = "<group>"; };
 		48D41D842D9374B800B78F98 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		48DC1A242DADC7FF00016C3F /* SquareRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareRequest.swift; sourceTree = "<group>"; };
+		48DC1A262DADC90A00016C3F /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
 		48DC6E052D7C1F380008014B /* StoreInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreInfo.swift; sourceTree = "<group>"; };
 		48E03DF92D7B99810082D745 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		48E03DFB2D7BAAC40082D745 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -48,6 +58,12 @@
 		48E03E012D7BC4E90082D745 /* Rewards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rewards.swift; sourceTree = "<group>"; };
 		48E03E032D7BC5030082D745 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		48E03E052D7BD66B0082D745 /* StoreSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSelection.swift; sourceTree = "<group>"; };
+		48E3E2A92DADE9530061DB6D /* ProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductView.swift; sourceTree = "<group>"; };
+		48E3E2AB2DADEC7F0061DB6D /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		48E3E2AD2DADEFDC0061DB6D /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		48E3E2AF2DAED6560061DB6D /* CategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailView.swift; sourceTree = "<group>"; };
+		48E3E2B12DAF072A0061DB6D /* ProductDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailView.swift; sourceTree = "<group>"; };
+		48F1FC102D972FC500933271 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		56692064EB662E50B2553170 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* Sweetea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sweetea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -56,6 +72,10 @@
 		BB2635B0DB5B2C634715871F /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D63399DF5CD6E768388FFCAA /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		48DC1A172DADC67100016C3F /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B92378962B6B1156000C7307 /* Frameworks */ = {
@@ -110,6 +130,13 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				48E3E2B12DAF072A0061DB6D /* ProductDetailView.swift */,
+				48E3E2AF2DAED6560061DB6D /* CategoryDetailView.swift */,
+				48E3E2AD2DADEFDC0061DB6D /* CategoryView.swift */,
+				48E3E2AB2DADEC7F0061DB6D /* CategoryViewModel.swift */,
+				48E3E2A92DADE9530061DB6D /* ProductView.swift */,
+				48DC1A262DADC90A00016C3F /* ProductViewModel.swift */,
+				48DC1A242DADC7FF00016C3F /* SquareRequest.swift */,
 				48DC6E052D7C1F380008014B /* StoreInfo.swift */,
 				48E03DF92D7B99810082D745 /* HomeView.swift */,
 				48A544092D7960150039C95B /* NearbyPlacesFinder.swift */,
@@ -118,6 +145,7 @@
 				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
+				48DC1A172DADC67100016C3F /* Models */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
 				48E03DFD2D7BC4A90082D745 /* Home.swift */,
 				48E03DFF2D7BC4C00082D745 /* Menu.swift */,
@@ -127,6 +155,7 @@
 				48D41D842D9374B800B78F98 /* LoginView.swift */,
 				481EF5352D937F4D00A69309 /* SignUp.swift */,
 				481EF5372D938CB000A69309 /* VerificationPage.swift */,
+				48F1FC102D972FC500933271 /* SessionManager.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -165,6 +194,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				48DC1A172DADC67100016C3F /* Models */,
 			);
 			name = iosApp;
 			productName = iosApp;
@@ -289,14 +321,22 @@
 				48E03E022D7BC4E90082D745 /* Rewards.swift in Sources */,
 				48A5440A2D79601E0039C95B /* NearbyPlacesFinder.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				48E3E2AC2DADEC850061DB6D /* CategoryViewModel.swift in Sources */,
 				48DC6E062D7C1F400008014B /* StoreInfo.swift in Sources */,
 				48E03E002D7BC4C00082D745 /* Menu.swift in Sources */,
 				48D41D852D9374B800B78F98 /* LoginView.swift in Sources */,
+				48DC1A252DADC80600016C3F /* SquareRequest.swift in Sources */,
 				48A6D8E52D7918D200B0BCAE /* DeviceLocation.swift in Sources */,
+				48E3E2AE2DADEFE10061DB6D /* CategoryView.swift in Sources */,
+				48E3E2B02DAED65D0061DB6D /* CategoryDetailView.swift in Sources */,
+				48F1FC112D972FC500933271 /* SessionManager.swift in Sources */,
 				48E03E042D7BC5030082D745 /* Account.swift in Sources */,
+				48DC1A272DADC91400016C3F /* ProductViewModel.swift in Sources */,
 				48E03DFA2D7B99850082D745 /* HomeView.swift in Sources */,
 				48E03DFE2D7BC4A90082D745 /* Home.swift in Sources */,
+				48E3E2AA2DADE95F0061DB6D /* ProductView.swift in Sources */,
 				481EF5382D938CB000A69309 /* VerificationPage.swift in Sources */,
+				48E3E2B22DAF07320061DB6D /* ProductDetailView.swift in Sources */,
 				481EF5362D937F4D00A69309 /* SignUp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 			);
