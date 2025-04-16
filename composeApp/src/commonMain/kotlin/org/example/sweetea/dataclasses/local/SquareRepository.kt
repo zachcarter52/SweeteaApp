@@ -3,7 +3,6 @@ package org.example.sweetea.dataclasses.local
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
-import org.example.sweetea.dataclasses.retrieved.SquareApiRequest
 
 
 class SquareRepository {

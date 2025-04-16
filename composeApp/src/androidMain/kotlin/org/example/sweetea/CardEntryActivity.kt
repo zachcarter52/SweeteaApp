@@ -4,36 +4,35 @@ import android.app.Activity
 import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.LaunchedEffect
-import androidx.core.content.res.ConfigurationHelper
-import kotlinx.io.IOException
+import com.google.gson.Gson
+import org.example.sweetea.pages.LineItem
 import retrofit2.Retrofit
 import sqip.Callback
 import sqip.CardDetails
 import sqip.CardEntry
 import sqip.CardEntry.DEFAULT_CARD_ENTRY_REQUEST_CODE
-import sqip.CardEntryActivityCommand
 import sqip.CardEntryActivityResult
-import sqip.CardNonceBackgroundHandler
 
 class CardEntryActivity : AppCompatActivity() {
     private lateinit var chargeCallFactory: ChargeCall.Factory
-    private var intent: Intent = Intent()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        println("DBG: Started CardEntryActivity")
         super.onCreate(savedInstanceState)
+
+        val intentData = intent.getStringExtra("jsonLineItems")
+        val lineItems = Gson().fromJson(intentData, Array<LineItem>::class.java).toList()
+        println("INTENT DATA: " + lineItems.toString())
 
         val retrofit: Retrofit = ConfigHelper.createRetroFitInstance()
         chargeCallFactory = ChargeCall.Factory(retrofit)
 
-        val cardHandler = CardEntryBackgroundHandler(chargeCallFactory, resources)
+        val cardHandler = CardEntryBackgroundHandler(chargeCallFactory, resources, lineItems)
         CardEntry.setCardNonceBackgroundHandler(cardHandler)
         CardEntry.startCardEntryActivity(this, true, DEFAULT_CARD_ENTRY_REQUEST_CODE)
     }
 
+    @Override
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -63,18 +62,17 @@ class CardEntryActivity : AppCompatActivity() {
                 }
             }
         )
+        println("DBG: CardEntryActivity onResult() Finished")
         finish()
     }
 
     override fun onStop(){
         super.onStop()
         println("DBG: CardEntryActivity onStop()")
-        finish()
     }
 
     override fun onDestroy(){
         super.onDestroy()
         println("DBG: CardEntryActivity onDestroy()")
-        finish()
     }
 }

@@ -4,13 +4,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import org.example.sweetea.Menu
 import org.example.sweetea.ProductCustomPage
-import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
-import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.MenuItem
 
