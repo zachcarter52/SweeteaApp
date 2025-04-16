@@ -197,6 +197,11 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
 
+    testImplementation("junit:junit:4.13.2")
+    configurations.all {
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
+
     // Test rules and transitive dependencies:
 
     debugImplementation(libs.androidx.ui.tooling)
