@@ -42,4 +42,9 @@ data class PaginationData (
 @Serializable
 data class Data<DataType>(
     val data: DataType
-)
+){
+    constructor(data: Data<DataType>) : this(
+        data = data.data
+    )
+}
+

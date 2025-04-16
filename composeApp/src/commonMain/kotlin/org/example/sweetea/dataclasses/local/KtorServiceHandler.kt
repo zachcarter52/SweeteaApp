@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 
 
 class KtorServiceHandler {
-    val ktor by lazy{
+    private val ktor by lazy{
         HttpClient(){
             expectSuccess = true
 
@@ -29,8 +29,8 @@ class KtorServiceHandler {
             }
         }
     }
-    val eventService: EventsApiService by lazy {
-        EventService(ktor)
+    val serverService: ServerApiService by lazy {
+        ServerService(ktor)
     }
     val squareService: SquareApiService by lazy {
         SquareService(ktor)
