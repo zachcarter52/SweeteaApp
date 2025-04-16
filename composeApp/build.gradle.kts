@@ -1,3 +1,4 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
@@ -41,7 +42,7 @@ kotlin {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
         }
-        
+
         androidMain.dependencies {
 
             implementation(compose.preview)
@@ -172,8 +173,8 @@ android {
 dependencies {
 
     implementation(libs.androidx.core)
-    implementation(libs.play.services.location)
-    implementation(libs.play.services.maps)
+//    implementation(libs.play.services.location)
+    //implementation(libs.play.services.maps)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.ui.test.junit4.android)
 
@@ -205,9 +206,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.accompanist.permissions)
 
-    implementation(libs.maps.compose)
-    implementation(libs.play.services.maps)
-    implementation(libs.play.services.location)
+  //  implementation(libs.maps.compose)
+   // implementation(libs.play.services.maps)
+//    implementation(libs.play.services.location)
 
     testImplementation("junit:junit:4.13.2")
     configurations.all {

@@ -2,6 +2,7 @@
 accompanistPermissions = "0.31.2-alpha"
 agp = "8.7.3"
 amplifyframeworkAwsAuthCognito = "2.16.0"
+amplifyIos = "1.0.0"
 android-compileSdk = "35"
 android-minSdk = "25"
 android-targetSdk = "35"
@@ -92,6 +93,7 @@ card-entry = { module = "com.squareup.sdk.in-app-payments:card-entry", version.r
 com-squareup-moshi-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
+amplify-ios = { module = "com.amplifyframework:amplify-ios", version.ref = "amplifyIos" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -139,8 +141,6 @@ moshi-adapters = { module = "com.squareup.moshi:moshi-adapters" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
 moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen" }
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
-play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
-play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 play-services-maps-v1800 = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMapsVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}

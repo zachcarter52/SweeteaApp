@@ -1,19 +1,19 @@
+////
+////  Home.swift
+////  iosApp
+////
+////  Created by Zach Carter on 3/7/25.
+////  Copyright © 2025 orgName. All rights reserved.
+////
 //
-//  Home.swift
-//  iosApp
+//import SwiftUI
 //
-//  Created by Zach Carter on 3/7/25.
-//  Copyright © 2025 orgName. All rights reserved.
+//struct Home: View {
+//    var body: some View {
+//       HomeView()
+//    }
+//}
 //
-
-import SwiftUI
-
-struct Home: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-#Preview {
-    Home()
-}
+//#Preview {
+//    Home()
+//}
