@@ -171,6 +171,8 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.ui.test.junit4.android)
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -203,6 +205,11 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+
+    testImplementation("junit:junit:4.13.2")
+    configurations.all {
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
 
     // Test rules and transitive dependencies:
 
