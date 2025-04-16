@@ -137,11 +137,13 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     implementation(libs.volley)
     implementation(libs.places)
+    androidTestImplementation(libs.testng)
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
@@ -154,5 +156,10 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+
+    testImplementation("junit:junit:4.13.2")
+    configurations.all {
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
 }
 

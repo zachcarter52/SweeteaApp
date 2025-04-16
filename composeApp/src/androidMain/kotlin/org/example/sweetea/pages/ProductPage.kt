@@ -65,13 +65,13 @@ fun ProductPage(
     modifier: Modifier = Modifier,
     navController: NavController,
     appViewModel: AppViewModel
-){
+) {
 
     // workingItem : ProductData - a copy of what we clicked on
     // when a custom choice is selected, change the workingItem choice to match
     val workingItem: ProductData? = appViewModel.currentProduct?.clone()
     workingItem?.modifiers?.data?.forEach { modifierData ->
-        if(modifierData.max_selected == 1){
+        if (modifierData.max_selected == 1) {
             // Drink will have the default "[0]" option saved for single modifier choices
 
             // WORKING ITEM NEEDS TO BE CLONED, IT STILL REFERNCES THE CURRENT PRODUCT
@@ -100,49 +100,49 @@ fun ProductPage(
                     .align(Alignment.CenterHorizontally),
             )
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(16.dp, 0.dp, 16.dp, 0.dp),
-        ){
-            Column{
-                Button(
-                    onClick = {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth().padding(16.dp, 0.dp, 16.dp, 0.dp),
+            ) {
+                Column {
+                    Button(
+                        onClick = {
 
-                    },
+                        },
 
+                        ) {
+                        Image(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add to Shopping Cart"
+                        )
+                    }
+                }
+                Column {
+                    Button(
+                        onClick =
+                        {
+                            navController.navigate(CheckPage.route)
+                        },
                     ) {
-                    Image(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add to Shopping Cart"
-                    )
+                        Image(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = "Checkout Bag"
+                        )
+                    }
                 }
             }
-            Column{
-                Button(
-                    onClick =
-                    {
-                        navController.navigate(CheckPage.route)
-                    },
-                ) {
-                    Image(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = "Checkout Bag"
-                    )
-                }
-            }
-        }
 
-        //Display price
-        val price = appViewModel.currentProduct!!.price.regular_high_with_modifiers
-        Text(
-            "$%.2f".format(price),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(0.dp, 0.dp, 0.dp, 20.dp)
-                .align(Alignment.CenterHorizontally),
-            fontFamily = FontFamily.SansSerif
-        )
+            //Display price
+            val price = appViewModel.currentProduct!!.price.regular_high_with_modifiers
+            Text(
+                "$%.2f".format(price),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 0.dp, 20.dp)
+                    .align(Alignment.CenterHorizontally),
+                fontFamily = FontFamily.SansSerif
+            )
 
             //Display product image
             val itemHeight = 350
@@ -170,83 +170,89 @@ fun ProductPage(
                     .padding(0.dp, 20.dp, 0.dp, 20.dp)
             )
 
-        //Display options
-        appViewModel.currentProduct?.modifiers?.data?.forEachIndexed { modidx, modifierData ->
-            if(modifierData.max_selected == 1){ //if only one choice allowed use a dropdown
-                val dropExpand = remember {
-                    mutableStateOf(false)
-                }
-                val dropDownText = remember {
-                    mutableStateOf(modifierData.choices[0].name)
-                }
+            //Display options
+            appViewModel.currentProduct?.modifiers?.data?.forEachIndexed { modidx, modifierData ->
+                if (modifierData.max_selected == 1) { //if only one choice allowed use a dropdown
+                    val dropExpand = remember {
+                        mutableStateOf(false)
+                    }
+                    val dropDownText = remember {
+                        mutableStateOf(modifierData.choices[0].name)
+                    }
 
-                val position = remember {
-                    mutableStateOf(0)
-                }
-                Column (
-                    horizontalAlignment = AbsoluteAlignment.Left,
-                ){
-                    Text(
-                        modifierData.name, //Display Modification name (Ice Level, Sugar Level, Milk, etc.)
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                }
-
-                Box (
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                ){
-                    Row(
-                        modifier = Modifier.clickable {
-                            dropExpand.value = true
-                        }
-                            .padding(0.dp, 20.dp, 0.dp, 20.dp),
+                    val position = remember {
+                        mutableStateOf(0)
+                    }
+                    Column(
+                        horizontalAlignment = AbsoluteAlignment.Left,
                     ) {
                         Text(
-                            modifierData.name, //Display Modification name (Size, Milk, etc.)
+                            modifierData.name, //Display Modification name (Ice Level, Sugar Level, Milk, etc.)
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily.SansSerif
                         )
                     }
-                    DropdownMenu(
-                        expanded = dropExpand.value,
-                        onDismissRequest = {
-                            dropExpand.value = false
-                        }
-                    ) {
-                        modifierData.choices.forEachIndexed { choiceidx, choiceData ->
-                            DropdownMenuItem(text = {
-                                if (choiceData.price != 0.0f) { //if the mod is an extra cost, display that cost
-                                    Text(
-                                        choiceData.name + " - " + "$%.2f".format(choiceData.price),
-                                        fontFamily = FontFamily.SansSerif
-                                        )
-                                } else { //else just show the name
-                                    Text(
-                                        choiceData.name,
-                                        fontFamily = FontFamily.SansSerif
-                                        )
-                                }
-                            },
-                                onClick = {
-                                    dropDownText.value = choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
-                                    dropExpand.value = false
-                                    position.value = choiceidx
 
-                                    // wokingItem updated
-                                    workingItem?.modifiers?.data?.forEachIndexed { wiModIdx, wiMod ->
-                                        if(wiModIdx == modidx){
-                                            wiMod.choices = mutableListOf(choiceData)
-                                        }
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Row(
+                            modifier = Modifier.clickable {
+                                dropExpand.value = true
+                            }
+                                .padding(0.dp, 20.dp, 0.dp, 20.dp),
+                        ) {
+                            Text(
+                                modifierData.name, //Display Modification name (Size, Milk, etc.)
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = dropExpand.value,
+                            onDismissRequest = {
+                                dropExpand.value = false
+                            }
+                        ) {
+                            modifierData.choices.forEachIndexed { choiceidx, choiceData ->
+                                DropdownMenuItem(text = {
+                                    if (choiceData.price != 0.0f) { //if the mod is an extra cost, display that cost
+                                        Text(
+                                            choiceData.name + " - " + "$%.2f".format(choiceData.price),
+                                            fontFamily = FontFamily.SansSerif
+                                        )
+                                    } else { //else just show the name
+                                        Text(
+                                            choiceData.name,
+                                            fontFamily = FontFamily.SansSerif
+                                        )
                                     }
-                                })
+                                },
+                                    onClick = {
+                                        dropDownText.value =
+                                            choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
+                                        dropExpand.value = false
+                                        position.value = choiceidx
+
+                                        // wokingItem updated
+                                        workingItem?.modifiers?.data?.forEachIndexed { wiModIdx, wiMod ->
+                                            if (wiModIdx == modidx) {
+                                                wiMod.choices = mutableListOf(choiceData)
+                                            }
+                                        }
+                                    })
+                            }
                         }
                     }
                 }
-            } else{ //if multiple options are allowed, show checkboxes
+            }
+        }
+    }
+}
+/*else{} /*if multiple options are allowed, show checkboxes
                 Column{
                     Text(
                         modifierData.name, //Display name of modification type (Ex.: "Toppings", "Sugar Level", "Ice Level", "Milk")
@@ -356,3 +362,4 @@ fun ProductPage(
         }
     }
 }
+    */

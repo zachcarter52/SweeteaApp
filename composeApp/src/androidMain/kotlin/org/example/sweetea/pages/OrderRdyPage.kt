@@ -31,15 +31,15 @@ fun OrderRdyPage(number:String, modifier: Modifier, navController: NavController
     ){
         Text(
             text = number,
-            fontsize = 24.sp,
-            lineheight = 28.sp,
+            fontSize = 24.sp,
+            lineHeight = 28.sp,
             modifier = Modifier.padding(bottom = 8.dp)
                 .align(alignment = Alignment.Start)
         )
         Text(
             text = "Your Order is Now Ready For Pick-Up!",
-            fontsize = 32.sp,
-            lineheight = 36.sp,
+            fontSize = 32.sp,
+            lineHeight = 36.sp,
         )
 
 
