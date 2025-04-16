@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 object ResponseClasses {
     @Serializable
     data class Event (
-        val id: Long,
-        val name: String,
-        val buttonText: String,
-        val filename: String,
-        val isSelected: Boolean,
-        val link: String,
-        val linkIsRoute: Boolean,
+        val id: Long = 0L,
+        val name: String = "",
+        val buttonText: String = "",
+        val filename: String = "car.JPG",
+        val selectionIndex: Int = -1,
+        val link: String = "",
+        val linkIsRoute: Boolean = false,
     ): Comparable<Event>{
         override fun compareTo(other: Event): Int {
             return id.compareTo(other.id)
@@ -20,34 +20,30 @@ object ResponseClasses {
             name,
             buttonText,
             "${Constants.TEST_URL}:${Constants.SERVER_PORT}${Constants.IMAGES_ENDPOINT}$filename",
+            selectionIndex,
             link,
             linkIsRoute
         )
-        companion object {
-            val DefaultEvent = Event(0L, "", "", "car.JPG", false, "", false)
-        }
+
     }
 
     @Serializable
     data class EventResponse(
-        val eventName: String,
-        val buttonText: String,
-        val eventImageURL: String,
-        val link: String,
-        val linkIsRoute: Boolean,
-    ){
-        companion object{
-            val DefaultEvent = Event.DefaultEvent.toEventResponse()
-        }
-    }
+        val eventName: String = "",
+        val buttonText: String = "",
+        val eventImageURL: String = "${Constants.SERVER_URL}:${Constants.SERVER_PORT}/uploads/car.JPG",
+        val selectionIndex: Int = -1,
+        val link: String = "",
+        val linkIsRoute: Boolean = false,
+    )
 
     @Serializable
     data class AppStatus(
-        val currentEvent: EventResponse,
+        val currentEvents: List<EventResponse>,
         val bearValue: Int,
     ){
         companion object{
-            val DefaultStatus = AppStatus(EventResponse.DefaultEvent, Constants.DEFAULT_BEAR_VALUE)
+            val DefaultStatus = AppStatus(listOf(EventResponse()), Constants.DEFAULT_BEAR_VALUE)
         }
     }
 }

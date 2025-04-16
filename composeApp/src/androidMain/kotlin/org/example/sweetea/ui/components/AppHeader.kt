@@ -1,5 +1,6 @@
 package org.example.sweetea.ui.components
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -17,18 +18,29 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.toRoute
 import org.example.sweetea.AuthViewModel
+import org.example.sweetea.BaseDestinations
+import org.example.sweetea.Menu
+import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.navigateSingleTopTo
 
 @Composable
 fun AppHeader(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     viewModel: AppViewModel,
     authViewModel: AuthViewModel,
     headerText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
@@ -101,8 +113,92 @@ fun AppHeader(
                 }
             }
         }
-        Row(){
-            if(content != null) content()
+        if(navController.currentDestination?.parent?.startDestinationRoute != BaseDestinations[0].route) {
+            Row() {
+                navController.currentBackStackEntry?.destination?.route?.let {
+                    if(BaseDestinations.map { dest -> dest.route }.indexOf(it) == -1){
+                        when(it){
+                            "subMenu" -> {
+                                Text(
+                                    modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
+                                    text = buildAnnotatedString {
+                                        withLink(
+                                            LinkAnnotation.Url(
+                                                url=Menu.route,
+                                                styles = TextLinkStyles(
+                                                    style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                                    hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
+                                                ),
+                                                linkInteractionListener = {
+                                                    navController.navigate(Menu.route)
+                                                }
+                                            )
+                                        ) {
+                                            append("Menu")
+                                        }
+                                        append(" > ")
+                                        append(viewModel.currentCategory?.name)
+                                    }
+                                )
+                            }
+                            "productPage" -> {
+                                Text(
+                                    modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
+                                    text = buildAnnotatedString {
+                                        withLink(
+                                            LinkAnnotation.Url(
+                                                url=Menu.route,
+                                                styles = TextLinkStyles(
+                                                    style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                                    hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
+                                                ),
+                                                linkInteractionListener = {
+                                                    navController.navigateSingleTopTo(Menu.route)
+                                                }
+                                            )
+                                        ) {
+                                            append("Menu")
+                                        }
+                                        append(" > ")
+                                        withLink(
+                                            LinkAnnotation.Url(
+                                                url = SubMenu.route,
+                                                styles = TextLinkStyles(
+                                                    style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                                    hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
+                                                ),
+                                                linkInteractionListener = {
+                                                    navController.navigate(SubMenu.route)
+                                                }
+                                            )
+                                        ) {
+                                            append(viewModel.currentCategory?.name)
+                                        }
+                                        append(" > ")
+                                        append(viewModel.currentProduct?.name)
+                                    }
+                                )
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+            }
+            Row() {
+                if (content != null) content()
+            }
         }
+    }
+}
+
+private fun String.toTilecase(delimiter: String = " "): String {
+
+    return split(delimiter).joinToString(delimiter) { word ->
+
+        //convert each word to small case inside the lambda
+        val smallCaseWord = word.lowercase()
+
+        //finish off by capitalizing to title case
+        smallCaseWord.replaceFirstChar(Char::titlecaseChar)
     }
 }

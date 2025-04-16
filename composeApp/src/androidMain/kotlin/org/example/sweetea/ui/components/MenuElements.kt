@@ -83,9 +83,9 @@ fun MenuItem(
         24.dp
     }
     val itemTextSize = if(isHeader){
-        24.sp
+        30.sp
     } else {
-        20.sp
+        24.sp
     }
 
     Row(

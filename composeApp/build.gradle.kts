@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
+
 plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.kotlinMultiplatform)
@@ -82,6 +83,7 @@ kotlin {
             implementation(libs.com.squareup.moshi.moshi.kotlin.codegen)
             implementation(libs.okhttp3.logging.interceptor)
             implementation(libs.squareup.converter.moshi)
+            implementation(libs.firebase.firestore.ktx)
             //implementation(libs.moshi.adapters)
             //implementation(libs.converter.moshi)
             //implementation("com.squareup.retrofit2:converter-moshi")
@@ -125,6 +127,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.multiplatform.paths)
+            implementation(libs.sublime.fuzzy.search)
         }
     }
 }

@@ -36,7 +36,7 @@ class AccountSchema(val database: Database) : AccountRepository, DatabaseSchema(
         }
     }
 
-    suspend fun createAccount( account: Account): ULong? {
+    override suspend fun createAccount( account: Account): ULong? {
         return dbQuery {
             if(Accounts.selectAll().where{ Accounts.emailAddress eq account.emailAddress}.singleOrNull() != null){
                 return@dbQuery null;

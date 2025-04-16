@@ -22,12 +22,15 @@ import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
 import org.example.sweetea.ResponseClasses.AppStatus
-import org.example.sweetea.database.getSelectedEvent
-import org.example.sweetea.database.rewardSchema
+import org.example.sweetea.database.model.EventRepository
+import org.example.sweetea.database.model.RewardRepository
 import java.io.File
 import java.util.Date
 
-fun Application.configureRouting() {
+fun Application.configureRouting(
+    eventSchema: EventRepository,
+    rewardSchema: RewardRepository
+) {
     val l: String = File.separator
     suspend fun RoutingCall.respondFile(filepath: String){
         //${l} is equivalent to "/" on linux and "\" on windows
@@ -43,23 +46,35 @@ fun Application.configureRouting() {
         get("/status") {
             call.respond(
                 AppStatus(
-                    getSelectedEvent().toEventResponse(),
+                    eventSchema.getSelectedEvents().map{it.toEventResponse()},
                     rewardSchema.getBearValue()
                 )
             )
         }
         route("/bear-value") {
             get("") {
-                call.respond(rewardSchema.getBearValue())
+                call.respond(rewardSchema.getBearValue().toString())
             }
-            put("/{value}") {
-                val newBearValue = call.parameters["value"]!!.toInt()
-                rewardSchema.setBearValue(newBearValue)
-                call.respond(HttpStatusCode.OK)
+            authenticate("admin-auth-session"){
+                put("/{value}") {
+                    val newBearValue = call.parameters["value"]!!.toInt()
+                    rewardSchema.setBearValue(newBearValue)
+                    call.respond(HttpStatusCode.OK)
+                }
             }
         }
-        get("/events/selected") {
-            call.respond(getSelectedEvent().toEventResponse())
+        route("/events"){
+            get("/selected") {
+                call.respond(eventSchema.getSelectedEvents().map{it.toEventResponse()})
+            }
+            put("/decrement/{selectionIndex}"){
+                val selectionIndex = call.parameters["selectionIndex"]!!.toInt()
+                call.respond(eventSchema.swapSelections(selectionIndex, selectionIndex-1))
+            }
+            put("/increment/{selectionIndex}"){
+                val selectionIndex = call.parameters["selectionIndex"]!!.toInt()
+                call.respond(eventSchema.swapSelections(selectionIndex, selectionIndex+1))
+            }
         }
         get("/{filename}") {
             val filename = call.parameters["filename"]!!

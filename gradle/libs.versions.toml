@@ -1,6 +1,6 @@
 [versions]
 accompanistPermissions = "0.31.2-alpha"
-agp = "8.7.2"
+agp = "8.7.3"
 amplifyframeworkAwsAuthCognito = "2.16.0"
 amplifyIos = "1.0.0"
 android-compileSdk = "35"
@@ -25,6 +25,7 @@ converterMoshi = "2.11.0"
 desugar_jdk_libs = "2.1.2"
 junit = "4.13.2"
 kotlin = "2.0.21"
+sublime-fuzzy-search = "2.3.4"
 
 kotlinBom = "provider"
 kotlinx-coroutines = "1.9.0"
@@ -71,6 +72,7 @@ firebaseFirestoreKtx = "25.1.3"
 uiTestJunit4Android = "1.7.8"
 composeBom = "2025.03.01"
 lifecycleViewmodelAndroid = "2.8.7"
+junit-jupiter = "5.8.1"
 
 
 volley = "1.2.1"
@@ -95,6 +97,7 @@ amplify-ios = { module = "com.amplifyframework:amplify-ios", version.ref = "ampl
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
+sublime-fuzzy-search = { module = "com.github.android-password-store:sublime-fuzzy", version.ref = "sublime-fuzzy-search"}
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places"}
 
@@ -193,6 +196,7 @@ retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi" 
 squareup-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 squareup-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen" }
 androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
 
 
 [plugins]
