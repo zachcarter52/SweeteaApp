@@ -47,6 +47,32 @@ import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.MenuDisplayImage
+import org.example.sweetea.PrepPage
+
+@JsonClass(generateAdapter = true)
+data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
+    val price: Float,
+    val quantity: String = 1.toString(),
+    @Json(name = "name")
+    val productName: String,
+    val productId: String,
+    val siteProductId: String,
+    val productModifiers: MutableList<CartItemChoiceDetails>,
+    val basePriceMoney: CartItemPriceDetails
+)
+
+@JsonClass(generateAdapter = true)
+data class CartItemChoiceDetails(
+    val choiceName: String,
+    val choiceId: String,
+    val price: Float
+)
+
+@JsonClass(generateAdapter = true)
+data class CartItemPriceDetails(
+    val amount: Float,
+    val currency: String = "USD"
+)
 
 @JsonClass(generateAdapter = true)
 data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
@@ -89,8 +115,9 @@ fun CheckoutPage(
         println("DBG: Result Code " + result.resultCode)
         println("DBG: Result Data " + result.data)
         if(result.resultCode == Activity.RESULT_OK){
+            navController.navigate(PrepPage.route)
             val data = result.data
-            println(data)
+            println("Data" + data)
         }
         println("DBG: Finished CheckoutPage() result(): ActivityResult")
     }
@@ -176,7 +203,6 @@ fun CheckoutPage(
                     }
                     append(" first.")
                 }
-
             )
         }
         Text(

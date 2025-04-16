@@ -1,13 +1,20 @@
 package org.example.sweetea.plugins
 
-import io.ktor.server.routing.*
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
 import io.ktor.server.auth.authenticate
 import io.ktor.server.response.*
 import io.ktor.server.thymeleaf.*
 import org.example.sweetea.database.model.EventRepository
 import org.example.sweetea.database.model.RewardRepository
 import org.thymeleaf.templateresolver.*
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
+import org.example.sweetea.database.eventSchema
+import org.example.sweetea.database.getSelectedEvent
+import org.example.sweetea.database.rewardSchema
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
+import org.thymeleaf.templateresolver.FileTemplateResolver
 
 fun Application.configureWebPanel(
     eventSchema: EventRepository,

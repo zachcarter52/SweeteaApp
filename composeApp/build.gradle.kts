@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+
 
 plugins {
     alias(libs.plugins.kotlinSerialization)
@@ -13,6 +15,7 @@ plugins {
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -30,6 +33,14 @@ kotlin {
     }
     
     sourceSets {
+
+        // Adds common test dependencies
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+        }
         
         androidMain.dependencies {
 
@@ -134,6 +145,7 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         applicationId = "org.example.sweetea"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
@@ -196,6 +208,11 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+
+    testImplementation("junit:junit:4.13.2")
+    configurations.all {
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
 
     // Test rules and transitive dependencies:
 

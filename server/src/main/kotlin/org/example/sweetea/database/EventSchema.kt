@@ -6,10 +6,17 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.ResponseClasses.Event
+import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.database.model.EventRepository
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class EventSchema(database: Database): EventRepository, DatabaseSchema() {
     object Events: Table(){

@@ -32,6 +32,7 @@ class CardEntryActivity : AppCompatActivity() {
         CardEntry.startCardEntryActivity(this, true, DEFAULT_CARD_ENTRY_REQUEST_CODE)
     }
 
+    @Override
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -61,18 +62,17 @@ class CardEntryActivity : AppCompatActivity() {
                 }
             }
         )
+        println("DBG: CardEntryActivity onResult() Finished")
         finish()
     }
 
     override fun onStop(){
         super.onStop()
         println("DBG: CardEntryActivity onStop()")
-        finish()
     }
 
     override fun onDestroy(){
         super.onDestroy()
         println("DBG: CardEntryActivity onDestroy()")
-        finish()
     }
 }

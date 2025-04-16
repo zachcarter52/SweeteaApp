@@ -1,23 +1,31 @@
 package org.example.sweetea.database
 
-import io.ktor.http.*
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.request.contentType
+import io.ktor.server.request.receive
+import io.ktor.server.request.receiveMultipart
+import io.ktor.server.response.respond
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
 import org.jetbrains.exposed.sql.*
 import org.example.sweetea.Constants
-import org.example.sweetea.database.model.Account
 import org.example.sweetea.ResponseClasses.Event
 import org.example.sweetea.database.model.AccountRepository
 import org.example.sweetea.database.model.AdminAccountRepository
 import org.example.sweetea.database.model.EventRepository
 import org.example.sweetea.database.model.RewardRepository
+import org.example.sweetea.database.model.Account
 import java.io.File
 
 fun Application.configureDatabases(
