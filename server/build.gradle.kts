@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.mariadb.jdbc)
     implementation(libs.jbcrypt)
@@ -34,4 +35,5 @@ dependencies {
     implementation(libs.ktor.network.tls)
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.junit.jupiter)
 }

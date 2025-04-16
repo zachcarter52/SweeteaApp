@@ -1,13 +1,14 @@
 package org.example.sweetea.plugins
 
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.*
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.form
 import io.ktor.server.auth.principal
 import io.ktor.server.auth.session
 import io.ktor.server.response.respondRedirect
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
@@ -18,7 +19,8 @@ import io.ktor.server.sessions.maxAge
 import io.ktor.server.sessions.sessions
 import io.ktor.server.sessions.set
 import kotlinx.serialization.Serializable
-import org.example.sweetea.database.adminAccountSchema
+import org.example.sweetea.database.AdminAccountSchema
+import org.example.sweetea.database.model.AdminAccountRepository
 import org.mindrot.jbcrypt.BCrypt
 import java.util.TreeMap
 import kotlin.collections.set
@@ -29,7 +31,9 @@ import kotlin.time.toDuration
 data class AdminSession(val name: String, val salt: String){
     public fun getHashedValue() = BCrypt.hashpw(name, salt)
 }
-fun Application.configureSecurity() {
+fun Application.configureSecurity(
+    adminAccountSchema: AdminAccountRepository
+) {
     val hashes = TreeMap<String, String>()
     install(Sessions){
         cookie<AdminSession>("admin_session"){
@@ -79,7 +83,7 @@ fun Application.configureSecurity() {
                 val session = call.principal<AdminSession>()
                 if(session != null){
                     call.sessions.set(session)
-                    call.respondRedirect("/index")
+                    call.respondText("/index")
                 }
             }
         }

@@ -26,7 +26,7 @@ class AppViewModel: ViewModel() {
     private val _categoryList = MutableStateFlow<List<CategoryData>>(listOf())
     val categoryList: StateFlow<List<CategoryData>> = _categoryList
     private val _productList = MutableStateFlow<List<ProductData>>(listOf())
-    private val productList: StateFlow<List<ProductData>> = _productList
+    val productList: StateFlow<List<ProductData>> = _productList
     private val _appStatus = MutableStateFlow(AppStatus.DefaultStatus)
     val appStatus: StateFlow<AppStatus> = _appStatus
     var currentLocation: LocationData? by mutableStateOf(null)

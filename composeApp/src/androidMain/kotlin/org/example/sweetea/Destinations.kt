@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,9 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-
 //import com.google.android.libraries.places.api.model.SubDestination
-
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.CheckoutPage
@@ -94,7 +93,6 @@ object Menu : Destination(
     subPages = listOf(
         SubMenu,
         ProductCustomPage,
-        CheckPage,
         PrepPage
     ),
     topBarHeaderText = {
@@ -106,8 +104,11 @@ object Menu : Destination(
     }
 )
 
-object CheckPage : BasicDestination(
-    route = "checkoutPage",
+object Checkout : Destination(
+    icon = Icons.Default.ShoppingCart,
+    label="Cart",
+    route = "checkout",
+    pageRoute = "checkoutPage",
     page = { modifier, navController, appViewModel -> CheckoutPage(modifier, navController, appViewModel )},
     topBarHeaderText = {Text("Checkout Page", fontSize = 28.sp, fontWeight = FontWeight.Bold)}
 )
@@ -207,6 +208,7 @@ val BaseDestinations = listOf(
     Home,
     Menu,
     Rewards,
+    Checkout,
     Account
 )
 

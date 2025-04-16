@@ -1,5 +1,10 @@
 package org.example.sweetea.database
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.ResponseClasses.Event
 import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.database.model.EventRepository
@@ -19,7 +24,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         val name = varchar("name", length = 255)
         val filename = varchar("filename", length = 255)
         val buttonText = varchar("buttonText", length = 255)
-        val isSelected = bool("isSelected").default(false)
+        val selectionIndex = integer("selectionIndex").default(-1)
         val link = varchar("link", length = 2083)
         val linkIsRoute = bool("linkIsRoute").default(false)
 
@@ -31,6 +36,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
             SchemaUtils.create(Events)
         }
     }
+    
 
     override suspend fun createEvent(event: Event): Long? {
        return dbQuery {
@@ -47,7 +53,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                }[Events.id]
                if(newEventID == 1L){
                   Events.update({ Events.id eq newEventID }){
-                      it[isSelected] = true
+                      it[selectionIndex] = 1
                   }
                }
                return@dbQuery newEventID
@@ -63,7 +69,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                     it[Events.name],
                     it[Events.buttonText],
                     it[Events.filename],
-                    it[Events.isSelected],
+                    it[Events.selectionIndex],
                     it[Events.link],
                     it[Events.linkIsRoute],
                 )
@@ -80,7 +86,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                         it[Events.name],
                         it[Events.buttonText],
                         it[Events.filename],
-                        it[Events.isSelected],
+                        it[Events.selectionIndex],
                         it[Events.link],
                         it[Events.linkIsRoute],
                     )
@@ -88,20 +94,79 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         }
     }
 
-    override suspend fun getSelectedEvent(): Event? {
+    override suspend fun getSelectedEventCount(): Int {
         return dbQuery {
-            Events.selectAll().where{Events.isSelected eq true}
+            Events.selectAll().where{Events.selectionIndex greater -1}.count().toInt()
+        }
+    }
+
+    private var selectedEvents = listOf<Event>()
+    private var mustUpdateSelectedEvents = true
+
+    override suspend fun getEventsBySelected(): List<Event> {
+        return allEvents().sortedBy {
+            if(it.selectionIndex == -1){
+                Int.MAX_VALUE
+            } else {
+                it.selectionIndex
+            }
+        }
+    }
+    override suspend fun getSelectedEvents(): List<Event> {
+        if(mustUpdateSelectedEvents) {
+            return dbQuery {
+                selectedEvents = Events.selectAll().where { Events.selectionIndex greater -1 }
+                    .map {
+                        Event(
+                            it[Events.id],
+                            it[Events.name],
+                            it[Events.buttonText],
+                            it[Events.filename],
+                            it[Events.selectionIndex],
+                            it[Events.link],
+                            it[Events.linkIsRoute],
+                        )
+                    }.sorted()
+                return@dbQuery selectedEvents
+            }
+        } else {
+            return selectedEvents
+        }
+    }
+
+    override suspend fun getEventBySelection(selectionIndex: Int): Event? {
+        return dbQuery {
+            Events.selectAll().where{Events.selectionIndex eq selectionIndex}
                 .map{
                     Event(
                         it[Events.id],
                         it[Events.name],
                         it[Events.buttonText],
                         it[Events.filename],
-                        it[Events.isSelected],
+                        it[Events.selectionIndex],
                         it[Events.link],
                         it[Events.linkIsRoute],
                     )
                 }.singleOrNull()
+        }
+    }
+
+    override suspend fun swapSelections(selectionIndexA: Int, selectionIndexB: Int): Boolean {
+        return dbQuery {
+            val eventA = getEventBySelection(selectionIndexA)
+            val eventB = getEventBySelection(selectionIndexB)
+            if(eventA != null && eventB != null && eventA != eventB){
+                val updatedA = Events.update({ Events.id eq eventA.id}){
+                    it[selectionIndex] = selectionIndexB
+                }
+                val updatedB = Events.update({ Events.id eq eventB.id}){
+                    it[selectionIndex] = selectionIndexA
+                }
+                val completedSuccessfully = updatedB > 0 && updatedA > 0
+                if(completedSuccessfully) mustUpdateSelectedEvents = true
+                return@dbQuery completedSuccessfully
+            }
+            return@dbQuery false
         }
     }
 
@@ -118,7 +183,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                             it[Events.name],
                             it[Events.buttonText],
                             it[Events.filename],
-                            it[Events.isSelected],
+                            it[Events.selectionIndex],
                             it[Events.link],
                             it[Events.linkIsRoute],
                         )
@@ -129,25 +194,27 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         }
     }
 
-    override suspend fun selectEvent(id: Long): Event?{
+    override suspend fun selectEvent(eventID: Long): Event?{
         return dbQuery {
-            val previouslySelectedEvent = getSelectedEvent()
-            val selectedNewEvent = Events.update({ Events.id eq id }){
-                it[isSelected] = true
-            } > 0
-            if(selectedNewEvent){
-                if(previouslySelectedEvent != null) Events.update({ Events.id eq previouslySelectedEvent.id  }){
-                    it[isSelected] = false
+            val event = getEvent(eventID)
+            if(event != null) {
+                val currentSelectedEventCount = getSelectedEventCount()
+                Events.update({ Events.id eq eventID }) {
+                    it[selectionIndex] = if(event.selectionIndex == -1) currentSelectedEventCount+1 else -1
+                } > 0
+                if(event.selectionIndex != -1){
+                    for(i in event.selectionIndex + 1..currentSelectedEventCount+1){
+                        val eventToUpdate = getEventBySelection(i)
+                        if(eventToUpdate != null){
+                            Events.update({Events.id eq eventToUpdate.id}){
+                               it[selectionIndex] = eventToUpdate.selectionIndex - 1
+                            }
+                        }
+                    }
                 }
-                val curEvent = getEvent(id)
-                if(curEvent != null) {
-                    selectedEvent = curEvent
-                    return@dbQuery selectedEvent
-                }
-                return@dbQuery null
-            } else {
-                return@dbQuery null
+                return@dbQuery getEvent(eventID)
             }
+            return@dbQuery null
         }
     }
 
@@ -155,9 +222,6 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         return dbQuery {
             val eventToDelete = getEvent(id)
             if (eventToDelete != null) {
-                if(eventToDelete.isSelected){
-                   selectEvent(allEvents().first().id)
-                }
                 val rowsChanged = Events.deleteWhere{
                     Events.id eq id
                 }

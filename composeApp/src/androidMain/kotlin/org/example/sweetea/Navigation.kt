@@ -11,11 +11,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.NavigationViewModel
 
 //navhost function of Navigation
 @Composable
 fun SweetTeaNavHost(
     viewModel: AppViewModel,
+    navViewModel: NavigationViewModel? = null,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     enterTransition: () -> EnterTransition,
@@ -27,10 +29,10 @@ fun SweetTeaNavHost(
         enterTransition = {enterTransition()},
         exitTransition = {exitTransition()},
     ) {
-        BaseDestinations.forEach {
-                destination ->
+        BaseDestinations.forEach { destination ->
             if(destination.subPages == null) {
                 composable(route = destination.route ) {
+                    navViewModel?.navigateToHead(destination.route)
                     destination.page(modifier, navController, viewModel)
                 }
             } else {
@@ -39,11 +41,13 @@ fun SweetTeaNavHost(
                     route = destination.pageRoute,
                 ){
                     composable(destination.route){
+                        navViewModel?.navigateToHead(destination.route)
                         destination.page(modifier, navController, viewModel)
                     }
                     destination.subPages.forEach{
                             subpage ->
                         composable(subpage.route){
+                            navViewModel?.navigateSubPage(destination.route)
                             subpage.page(modifier, navController, viewModel)
                         }
                     }

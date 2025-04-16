@@ -71,15 +71,13 @@
         </div>
     </div>
     <div id="eventContainer" class="container container-border row">
-        <table id="eventTable" class="table table-striped-columns bd-example">
+        <table id="eventTable" class="table table-striped-columns">
             <tbody>
             <tr id="header-row">
                 <th>Name</th>
-                <th th:each="event, iter: ${events}"
-                    th:id="${event.isSelected} ? 'selected' : ''"
-                    th:text="${event.name}"
-                    th:attr="event-id=${event.id}"
-                ></th>
+                <td th:each="event, iter: ${events}"
+                    th:attr="event-id=${event.id}, selection-index=${event.selectionIndex}"
+                ><b th:text="${event.name}"></b></td>
             </tr>
             <tr>
                 <th>Button Text</th>
@@ -95,14 +93,28 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td th:each="event, iter: ${events}" th:id="eventImage + ${event.id}" >
+                <td class="text-center" th:each="event, iter: ${events}" th:id="eventImage + ${event.id}" >
                     <img src="uploads/car.JPG" alt="car" th:attr="src=@{uploads/__${event.filename}__}, alt=${event.name}"/>
+                </td>
+            </tr>
+            <tr id="select-row">
+                <th>Selected Order</th>
+                <td class="" th:each="event, iter: ${events}" th:id="eventSelection + ${event.id}">
+                    <div class="text-center float-start" style="width:33%">
+                        <button class="btn btn-secondary decrement-button" th:if="${event.selectionIndex > -1}" th:disabled="${iter.index == 0}">←</button>
+                    </div>
+                    <div class="text-center float-start" th:attr="style=${event.selectionIndex > -1 ? 'width:33%' : 'width:100%'}">
+                        <button class="btn btn-primary select-button" th:text="${event.selectionIndex > -1} ? Deselect : Select">Deselect</button>
+                    </div>
+                    <div class="text-center float-start" style="width:33%">
+                        <button class="btn btn-secondary increment-button" th:if="${event.selectionIndex > -1}" th:disabled="${iter.count == selectedEventCount}">→</button>
+                    </div>
                 </td>
             </tr>
             <tr id="delete-row">
                 <td></td>
                 <td th:each="event, iter: ${events}">
-                    <button type="button" class="btn btn-danger d-block mx-auto" th:attr="event-id=${event.id}">Delete</button>
+                    <button type="button" class="delete-button btn btn-danger d-block mx-auto" th:attr="event-id=${event.id}">Delete</button>
                 </td>
             </tr>
             </tbody>
