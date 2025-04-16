@@ -71,6 +71,7 @@ kotlin {
             implementation(libs.com.squareup.moshi.moshi.kotlin.codegen)
             implementation(libs.okhttp3.logging.interceptor)
             implementation(libs.squareup.converter.moshi)
+            implementation(libs.firebase.firestore.ktx)
             //implementation(libs.moshi.adapters)
             //implementation(libs.converter.moshi)
             //implementation("com.squareup.retrofit2:converter-moshi")

@@ -55,6 +55,7 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.launch
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.notifications.Notifications
