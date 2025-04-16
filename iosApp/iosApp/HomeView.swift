@@ -8,13 +8,18 @@
 //
 
 import SwiftUI
+import Amplify
 
 struct HomeView: View {
+    @EnvironmentObject var sessionManager: SessionManager
+    let user: AuthUser
+    let defaultGreet = ""
+
     var body: some View {
         NavigationView {
             VStack {
                 HStack {
-                    Text("Hi, <user_name>")
+                    Text("Hi, \(sessionManager.displayName ?? defaultGreet)")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(Color.black)
@@ -22,37 +27,33 @@ struct HomeView: View {
                         .padding()
                     Spacer()
                 }
-                
+
                 Image("sweetealogo_homepage")
                     .resizable()
                     .scaledToFit()
-        
-                
+
                 Text("Featured Menu Items")
                     .foregroundColor(Color.black)
                     .padding(.top, 5)
                     .padding(.bottom, 2)
-                
+
                 Image("featured_items")
                     .resizable()
                     .scaledToFit()
                     .padding(.horizontal)
-                
+
                 Spacer()
-                
+
                 NavigationLink(destination: StoreSelection()) {
                     Text("Order Now")
                         .font(.headline)
-                                .padding()
-                                .frame(maxWidth: 130)
-                                .background(Color.customBlue)
-                                .foregroundColor(.white)
-                                .cornerRadius(100)
-                        
+                        .padding()
+                        .frame(maxWidth: 130)
+                        .background(Color.customBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(100)
                 }
                 .padding()
-                   
-                
             }
             .background(Color.white)
             .navigationTitle("Home")
@@ -60,11 +61,3 @@ struct HomeView: View {
         }
     }
 }
-
-
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
-

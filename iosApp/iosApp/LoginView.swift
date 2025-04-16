@@ -2,6 +2,7 @@ import SwiftUI
 import Amplify
 
 struct LoginView: View {
+    @EnvironmentObject var sessionManager: SessionManager
     
     @State var email: String = ""
     @State var password: String = ""
@@ -68,7 +69,7 @@ struct LoginView: View {
             
             // Sign In Button
             Button {
-                signIn(email: email, password: password)
+                sessionManager.login(username: email, password: password)
             } label: {
                 Text("Sign In")
                     .font(.headline)
@@ -87,10 +88,12 @@ struct LoginView: View {
                 Text(errorMessage)
                     .foregroundColor(.red)
             }
+            
+//            Button("LOGOUT", action: sessionManager.signOut)
 
             // Don't have an account text (Centered)
             HStack {
-                NavigationLink(destination: SignUpView()) {
+                Button(action: sessionManager.showSignUp) {
                     Text("Don't have an account? Sign up")
                         .foregroundColor(Color.customBlue)
                         .padding(.top, 10)
@@ -100,30 +103,10 @@ struct LoginView: View {
             
             Spacer()
         }
-        .frame(maxHeight: .infinity) // Ensures the VStack fills the screen height
+        .frame(maxHeight: .infinity) 
         .background(Color.white)
     }
 
-    private func signIn(email: String, password: String) {
-        // Call Amplify Auth sign-in
-        Amplify.Auth.signIn(username: email, password: password) { result in
-            switch result {
-            case .success(let signInResult):
-                print("Sign-in success: \(signInResult)")
-                DispatchQueue.main.async {
-                    isSignInSuccess = true
-                    signInError = nil
-                    
-                }
-            case .failure(let error):
-                print("Error during sign-in: \(error)")
-                DispatchQueue.main.async {
-                    signInError = error.localizedDescription
-                    isSignInSuccess = false
-                }
-            }
-        }
-    }
 }
 
 

@@ -1,20 +1,16 @@
-//
-//  Account.swift
-//  iosApp
-//
-//  Created by Zach Carter on 3/7/25.
-//  Copyright © 2025 orgName. All rights reserved.
-//
-
 import SwiftUI
+import Amplify
 
 struct Account: View {
+    @EnvironmentObject var sessionManager: SessionManager
+    
+    let user: AuthUser
     
     var body: some View {
         NavigationView {
             VStack {
                 HStack {
-                    Text("Hi, <user_name>")
+                    Text("Hi, \(sessionManager.displayName ?? user.username)")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.black)
@@ -49,25 +45,29 @@ struct Account: View {
                 }
                 .padding()
                 Spacer()
-                NavigationLink(destination: LoginView()) {
+                Button(action: {
+                    sessionManager.signOut()
+                }) {
                     Text("Logout")
                         .font(.headline)
                         .padding()
-                                .frame(maxWidth: 130)
-                                .background(Color.customBlue)
-                                .foregroundColor(.white)
-                                .cornerRadius(100)
-                        
+                        .frame(maxWidth: 130)
+                        .background(Color.customBlue)
+                        .foregroundColor(.white)
+                        .cornerRadius(100)
                 }
                 .padding(.top, -125)
                 
             }
             .background(Color.white)
             .navigationBarTitleDisplayMode(.inline)
+            
         }
     }
-    
-    // Move this function inside the `Account` view
+
+
+
+
     private func openInstagram() {
         let instagramUsername = "sweeteaus"
         if let url = URL(string: "instagram://user?username=\(instagramUsername)") {
@@ -103,10 +103,3 @@ struct AccountGridItem: View {
         .cornerRadius(10)
     }
 }
-
-#Preview {
-    Account()
-}
-
-
-

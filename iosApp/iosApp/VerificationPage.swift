@@ -2,6 +2,7 @@ import SwiftUI
 import Amplify
 
 struct VerificationPage: View {
+    @EnvironmentObject var sessionManager: SessionManager
     
     var email: String
     @State private var code: String = ""
@@ -25,12 +26,12 @@ struct VerificationPage: View {
             }
             
             Button(action: {
-                verifyCode()
+                sessionManager.confirmSignUp(username: email, code: code)
             }) {
                 Text("Verify")
                     .bold()
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.customBlue)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
@@ -45,27 +46,10 @@ struct VerificationPage: View {
             }
         })
     }
-    
-    private func verifyCode() {
-        Amplify.Auth.confirmSignUp(for: email, confirmationCode: code) { result in
-            switch result {
-            case .success(let signUpResult):
-                if signUpResult.isSignupComplete {
-                    print("Verification successful, user confirmed.")
-                    shouldNavigate = true
-                } else {
-                    errorMessage = "Verification failed. Please try again."
-                }
-            case .failure(let error):
-                print("Error during sign-up verification: \(error.localizedDescription)")
-                errorMessage = "Verification failed: \(error.localizedDescription)"
-            }
-        }
-    }
 }
 
-struct VerificationPage_Previews: PreviewProvider {
-    static var previews: some View {
-        VerificationPage(email: "test@example.com")
-    }
-}
+//struct VerificationPage_Previews: PreviewProvider {
+//    static var previews: some View {
+//        VerificationPage(email: "test@example.com")
+//    }
+//}
