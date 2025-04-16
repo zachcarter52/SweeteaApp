@@ -16,13 +16,12 @@ import kotlinx.coroutines.launch
 import java.lang.reflect.Modifier
 
 class AuthViewModel : ViewModel() {
+    private val authRepository: AuthRepository = CognitoAuthRepository()
     var isUserLoggedIn = MutableStateFlow(false)
         private set
     val isUserLoggedInState: StateFlow<Boolean> = isUserLoggedIn.asStateFlow()
-
     val username = MutableStateFlow("")
     val usernameState: StateFlow<String> = username.asStateFlow()
-
     //var username = mutableStateOf("") // Stores username across UI screens
 
     init {

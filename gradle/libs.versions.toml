@@ -71,6 +71,10 @@ uiTestJunit4Android = "1.7.8"
 composeBom = "2024.09.00"
 
 
+volley = "1.2.1"
+places = "3.3.0"
+testng = "6.9.6"
+
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -88,6 +92,8 @@ amplify-ios = { module = "com.amplifyframework:amplify-ios", version.ref = "ampl
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places"}
 
 #cognito
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
@@ -171,6 +177,7 @@ mockreader-ui = { module = "com.squareup.sdk:mockreader-ui", version.ref = "squa
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
 
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
