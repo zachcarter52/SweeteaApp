@@ -33,6 +33,7 @@ import org.example.sweetea.CardEntryActivity
 import org.example.sweetea.Menu
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.MenuDisplayImage
+import org.example.sweetea.PrepPage
 
 @JsonClass(generateAdapter = true)
 data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
@@ -75,8 +76,9 @@ fun CheckoutPage(
         println("DBG: Result Code " + result.resultCode)
         println("DBG: Result Data " + result.data)
         if(result.resultCode == Activity.RESULT_OK){
+            navController.navigate(PrepPage.route)
             val data = result.data
-            println(data)
+            println("Data" + data)
         }
         println("DBG: Finished CheckoutPage() result(): ActivityResult")
     }

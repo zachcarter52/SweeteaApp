@@ -25,6 +25,6 @@ object Constants {
     //const val CHARGE_SERVER_HOST = "sweeta-app-e0bba8d1a50d.herokuapp.com"
     //const val CHARGE_SERVER_URL = "https://sweeta-app-e0bba8d1a50d.herokuapp.com/"
 
-    const val CHARGE_SERVER_HOST = "192.168.254.200"
-    const val CHARGE_SERVER_URL = "http://192.168.254.200:8080"
+    const val CHARGE_SERVER_HOST = "18.144.165.135"
+    const val CHARGE_SERVER_URL = "http://18.144.165.135:8080"
 }

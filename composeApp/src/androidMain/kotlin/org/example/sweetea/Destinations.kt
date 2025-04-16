@@ -29,6 +29,7 @@ import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
 import org.example.sweetea.pages.SubMenuPage
 import org.example.sweetea.pages.VerificationPage
+import org.example.sweetea.pages.OrderPrepPage
 
 /*
 Describes a basic destination within the NavController,
@@ -90,7 +91,8 @@ object Menu : Destination(
     subPages = listOf(
         SubMenu,
         ProductCustomPage,
-        CheckPage
+        CheckPage,
+        PrepPage
     ),
     topBarHeaderText = {
         Text(
@@ -106,6 +108,13 @@ object CheckPage : BasicDestination(
     page = { modifier, navController, appViewModel -> CheckoutPage(modifier, navController, appViewModel )},
     topBarHeaderText = {Text("Checkout Page", fontSize = 28.sp, fontWeight = FontWeight.Bold)}
 )
+
+object PrepPage : BasicDestination(
+    route = "prepPage",
+    page = { modifier, navController, appViewModel -> OrderPrepPage(modifier, navController, appViewModel )},
+    topBarHeaderText = {Text("")}
+)
+
 object ProductCustomPage : BasicDestination(
     route = "productPage",
     page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },
