@@ -40,6 +40,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
@@ -302,7 +303,14 @@ fun SweeteaApp(
         dynamicColor = false
     ){
 
+        val NavHost = @Composable {
+
+        }
         val navController = rememberNavController()
+        val navEntries = navController.visibleEntries.collectAsState()
+        print("[DEBUGLOG] navEntries [${navEntries.value.size}]:")
+        println(navEntries.value)
+
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         var currentRoute by remember{mutableStateOf("")}
 
@@ -310,8 +318,11 @@ fun SweeteaApp(
         var oldSelectedItem by remember { mutableIntStateOf(0) }
 
         val navPageRoute = navBackStackEntry?.id
+        print("[DEBUGLOG] currentDistination.parent:")
+        println(navController.currentDestination?.parent)
         val navRoute = navBackStackEntry?.destination?.route
         var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
+        println(currentRouteObject)
         if(navRoute != null && navRoute != currentRoute){
             currentRoute = navRoute
             val curRouteObj = destMap( navRoute )
@@ -385,21 +396,23 @@ fun SweeteaApp(
                     if (currentRouteObject != null) {
                         AppHeader(
                             modifier = modifier,
+                            navController = navController,
                             viewModel = viewModel,
                             authViewModel = authViewModel,
                             headerText = currentRouteObject!!.topBarHeaderText,
                             hideLocation = currentRouteObject!!.hideLocation,
                             hideTopBarHeader = currentRouteObject!!.hideTopBarHeader,
                             enterTransition = enterTransition,
-                            exitTransition = exitTransition
+                            exitTransition = exitTransition,
                         )
                     } else {
                         AppHeader(
                             modifier = modifier,
+                            navController = navController,
                             viewModel = viewModel,
                             authViewModel = authViewModel,
                             enterTransition = enterTransition,
-                            exitTransition = exitTransition
+                            exitTransition = exitTransition,
                         )
                     }
                 },

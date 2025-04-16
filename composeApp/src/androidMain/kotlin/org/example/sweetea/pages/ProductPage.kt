@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import org.example.sweetea.CheckPage
+import org.example.sweetea.Checkout
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
@@ -100,9 +100,7 @@ fun ProductPage(
                             appViewModel.shoppingCart.add(appViewModel.workingItem!!)
                             println("DBG: Shopping Cart" + appViewModel.shoppingCart)
                             resetWorkingItem(appViewModel)
-                            navController.navigate(
-                                ProductCustomPage.route
-                            )
+                            navController.popBackStack()
                         },
 
                         ) {
@@ -118,7 +116,7 @@ fun ProductPage(
                             {
                                 //appViewModel.shoppingCart.add(appViewModel.workingItem!!)
                                 println("DBG: Shopping Cart" + appViewModel.shoppingCart)
-                                navController.navigate(CheckPage.route)
+                                navController.navigate(Checkout.route)
                             },
                     ) {
                         Image(

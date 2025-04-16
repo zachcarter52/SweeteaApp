@@ -35,17 +35,17 @@ import com.amplifyframework.core.Amplify
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.Login
 import org.example.sweetea.SignUp
+import org.example.sweetea.ui.components.BearPageTemplate
 
 @Composable
 fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit,authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    //var username by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val username by authViewModel.username.collectAsState()
 
-    Column(
+    BearPageTemplate(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxSize()

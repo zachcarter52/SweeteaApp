@@ -53,7 +53,7 @@ fun HomePage(
     BearPageTemplate(
         modifier = modifier,
     ) {
-        if(appStatus.currentEvents.size < 1) {
+        if(appStatus.currentEvents.isEmpty()) {
             HomeCard(
                 image = {
                     Image(
@@ -75,7 +75,7 @@ fun HomePage(
                 }
             )
         } else {
-            for (event in appStatus.currentEvents) {
+            for (event in appStatus.currentEvents.sortedBy{ it.selectionIndex }) {
                 val url = event.eventImageURL
                 val uriHandler = LocalUriHandler.current
                 println("eventUrl: $url")

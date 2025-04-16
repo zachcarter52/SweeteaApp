@@ -5,15 +5,22 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +28,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -32,6 +44,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import org.example.sweetea.CardEntryActivity
 import org.example.sweetea.Menu
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.dataclasses.retrieved.ProductData
+import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.MenuDisplayImage
 
 @JsonClass(generateAdapter = true)
@@ -101,43 +115,68 @@ fun CheckoutPage(
         val itemHeight = 120
 
         println("DBG: Cart item count = " + appViewModel.shoppingCart.size)
-        appViewModel.shoppingCart.forEachIndexed { idx, cartItem ->
-            lineItems.add(
-                LineItem(
-                    price = cartItem.price.regular_high,
-                    productName = cartItem.name,
-                    productId = cartItem.id,
-                    siteProductId = cartItem.site_product_id,
-                    productModifiers = mutableListOf<CartItemChoiceDetails>().apply {
-                        cartItem.modifiers.data.forEach { modifierData ->
-                            modifierData.choices.forEach { choiceData ->
-                                add(CartItemChoiceDetails(
-                                    choiceName = choiceData.name,
-                                    choiceId = choiceData.id,
-                                    price = choiceData.price
-                                ))
+        if(appViewModel.shoppingCart.size > 0) {
+            appViewModel.shoppingCart.forEachIndexed { idx, cartItem ->
+                lineItems.add(
+                    LineItem(
+                        price = cartItem.price.regular_high,
+                        productName = cartItem.name,
+                        productId = cartItem.id,
+                        siteProductId = cartItem.site_product_id,
+                        productModifiers = mutableListOf<CartItemChoiceDetails>().apply {
+                            cartItem.modifiers.data.forEach { modifierData ->
+                                modifierData.choices.forEach { choiceData ->
+                                    add(
+                                        CartItemChoiceDetails(
+                                            choiceName = choiceData.name,
+                                            choiceId = choiceData.id,
+                                            price = choiceData.price
+                                        )
+                                    )
+                                }
                             }
-                        }
-                    },
-                    basePriceMoney = CartItemPriceDetails(
-                        amount = cartItem.price.high_with_modifiers,
-                        currency = "USD"
+                        },
+                        basePriceMoney = CartItemPriceDetails(
+                            amount = cartItem.price.high_with_modifiers,
+                            currency = "USD"
+                        )
                     )
                 )
-            )
 
-            itemSubtotal[idx] += cartItem.price.high_with_modifiers
+                itemSubtotal[idx] += cartItem.price.high_with_modifiers
 
-            val url = "${cartItem.images.data[0].url}?height=${3*itemHeight}"
-            CheckoutItem(
-                imageHeight = itemHeight,
-                url = url,
-                contentDescription = cartItem.name,
-                contentScale = ContentScale.FillHeight,
-                itemName = cartItem.name,
-                price = cartItem.price.high_with_modifiers,
-                index = idx,
-                appViewModel = appViewModel
+                val url = "${cartItem.images.data[0].url}?height=${3 * itemHeight}"
+                CheckoutItem(
+                    imageHeight = itemHeight,
+                    url = url,
+                    cartItem = cartItem,
+                    contentScale = ContentScale.FillHeight,
+                    index = idx,
+                    appViewModel = appViewModel
+                )
+            }
+        } else {
+            Text(
+                modifier = Modifier.padding(0.dp, 80.dp),
+                text = buildAnnotatedString {
+                    append("You don't have anything in your cart,\n add something from the ")
+                    withLink(
+                        LinkAnnotation.Url(
+                            url=Menu.route,
+                            styles = TextLinkStyles(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
+                            ),
+                            linkInteractionListener = {
+                                navController.navigateSingleTopTo(Menu.route)
+                            }
+                        )
+                    ) {
+                        append("menu")
+                    }
+                    append(" first.")
+                }
+
             )
         }
         Text(
@@ -181,27 +220,17 @@ fun CheckoutPage(
 fun CheckoutItem(
     imageHeight: Int,
     url: String,
-    contentDescription: String,
+    cartItem: ProductData,
     contentScale: ContentScale,
-    itemName: String,
-    price: Float? = null,
     index : Int,
     appViewModel: AppViewModel
 ){
-    val isHeader = price == null
-    val textPadding = if(isHeader) {
-        48.dp
-    } else {
-        24.dp
-    }
-    val itemTextSize = if(isHeader){
-        24.sp
-    } else {
-        20.sp
-    }
+    val textPadding = 24.dp
+    val itemTextSize = 24.sp
+
     HorizontalDivider()
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Row(
             modifier = Modifier.padding(10.dp),
@@ -211,36 +240,61 @@ fun CheckoutItem(
             MenuDisplayImage(
                 imageHeight = imageHeight,
                 url = url,
-                contentDescription = contentDescription,
+                contentDescription = cartItem.name,
                 contentScale = contentScale,
             )
             Column(
                 modifier = Modifier.padding(textPadding, 0.dp)
             ) {
                 Text(
-                    text = itemName,
+                    text = cartItem.name,
                     fontSize = itemTextSize,
                 )
-                if(!isHeader){
-                    appViewModel.shoppingCart.get(index).modifiers.data.forEach { modifier ->
-                        modifier.choices.forEach { choice ->
-                            if(choice.price > 0) {
-                                Text(
-                                    text = choice.name + " + " + "$%.2f".format(choice.price),
-                                    fontSize = 16.sp
-                                )
-                            } else {
-                                Text(
-                                    text = choice.name,
-                                    fontSize = 16.sp
-                                )
-                            }
+                appViewModel.shoppingCart[index].modifiers.data.forEach { modifier ->
+                    modifier.choices.forEach { choice ->
+                        if(choice.price > 0) {
+                            Text(
+                                text = choice.name + " + " + "$%.2f".format(choice.price),
+                                fontSize = 16.sp
+                            )
+                        } else {
+                            Text(
+                                text = choice.name,
+                                fontSize = 16.sp
+                            )
                         }
                     }
-                    Text(
-                        text = "$%.2f".format(price),
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(0.5f),
+                    ) {
+                        Text(
+                            text = "$%.2f".format(cartItem.price.high_with_modifiers),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Button(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
+                                appViewModel.shoppingCart.remove(cartItem)
+                            },
+                            contentPadding = PaddingValues(2.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Remove from Cart",
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+
                 }
             }
         }

@@ -12,7 +12,6 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class EventSchema(database: Database): EventRepository, DatabaseSchema() {
-    private var maxSelectionIndex: Int = -1
     object Events: Table(){
         val id = long("eventID").autoIncrement()
         val name = varchar("name", length = 255)
@@ -28,9 +27,6 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
     init{
         transaction(database) {
             SchemaUtils.create(Events)
-        }
-        CoroutineScope(Job()).launch{
-            maxSelectionIndex = getSelectedEventCount()?: -1
         }
     }
     
@@ -50,7 +46,7 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
                }[Events.id]
                if(newEventID == 1L){
                   Events.update({ Events.id eq newEventID }){
-                      it[selectionIndex] = ++maxSelectionIndex
+                      it[selectionIndex] = 1
                   }
                }
                return@dbQuery newEventID
@@ -195,11 +191,12 @@ class EventSchema(database: Database): EventRepository, DatabaseSchema() {
         return dbQuery {
             val event = getEvent(eventID)
             if(event != null) {
+                val currentSelectedEventCount = getSelectedEventCount()
                 Events.update({ Events.id eq eventID }) {
-                    it[selectionIndex] = if(event.selectionIndex == -1) maxSelectionIndex++ else -1
+                    it[selectionIndex] = if(event.selectionIndex == -1) currentSelectedEventCount+1 else -1
                 } > 0
                 if(event.selectionIndex != -1){
-                    for(i in event.selectionIndex + 1..maxSelectionIndex){
+                    for(i in event.selectionIndex + 1..currentSelectedEventCount+1){
                         val eventToUpdate = getEventBySelection(i)
                         if(eventToUpdate != null){
                             Events.update({Events.id eq eventToUpdate.id}){

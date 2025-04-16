@@ -21,8 +21,11 @@ import org.example.sweetea.R
 @Composable
 fun BearPageTemplate(
     modifier: Modifier = Modifier,
+    verticalArrangement: Arrangement.Vertical? = null,
+    horizontalAlignment: Alignment.Horizontal? = null,
     showBear: Boolean = true,
-    content: @Composable () -> Unit = {}){
+    content: @Composable () -> Unit = {}
+){
     val logo = if (!isSystemInDarkTheme()){
         painterResource(id = R.drawable.sweetealogo_homepage_light)
     } else {
@@ -33,8 +36,8 @@ fun BearPageTemplate(
         modifier = modifier.fillMaxSize()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = if(showBear) Arrangement.spacedBy(20.dp)
-            else Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
+            else verticalArrangement?: Arrangement.Top,
+        horizontalAlignment = horizontalAlignment ?: Alignment.CenterHorizontally,
     ){
         if(showBear) {
             Box {
