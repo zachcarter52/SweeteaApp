@@ -26,6 +26,7 @@ junit = "4.13.2"
 kotlin = "2.0.21"
 sublime-fuzzy-search = "2.3.4"
 
+kotlinBom = "provider"
 kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
 kotlinx-datetime = "0.6.1"
@@ -68,10 +69,14 @@ uiToolingPreview = "1.4.3"
 core = "1.13.0"
 firebaseFirestoreKtx = "25.1.3"
 uiTestJunit4Android = "1.7.8"
-composeBom = "2024.09.00"
+composeBom = "2025.03.01"
 lifecycleViewmodelAndroid = "2.8.7"
 junit-jupiter = "5.8.1"
 
+
+volley = "1.2.1"
+places = "3.3.0"
+testng = "6.9.6"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -86,10 +91,13 @@ androidx-ui-v143 = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 card-entry = { module = "com.squareup.sdk.in-app-payments:card-entry", version.ref = "cardEntry" }
 com-squareup-moshi-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
 sublime-fuzzy-search = { module = "com.github.android-password-store:sublime-fuzzy", version.ref = "sublime-fuzzy-search"}
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places"}
 
 #cognito
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
@@ -175,6 +183,7 @@ mockreader-ui = { module = "com.squareup.sdk:mockreader-ui", version.ref = "squa
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
 
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }

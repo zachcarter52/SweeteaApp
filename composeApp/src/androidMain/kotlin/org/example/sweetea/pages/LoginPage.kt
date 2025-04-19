@@ -35,7 +35,6 @@ import com.amplifyframework.core.Amplify
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.Login
 import org.example.sweetea.SignUp
-import org.example.sweetea.ui.components.BearPageTemplate
 
 @Composable
 fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete: () -> Unit,authViewModel: AuthViewModel) {

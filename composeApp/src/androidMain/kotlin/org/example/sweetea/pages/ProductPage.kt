@@ -48,32 +48,12 @@ import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
 
-data class K (val data: String) : Cloneable {
-
-}
-
 @Composable
 fun ProductPage(
     modifier: Modifier = Modifier,
     navController: NavController,
     appViewModel: AppViewModel
 ) {
-    // workingItem : ProductData - a copy of what we clicked on
-    // when a custom choice is selected, change the workingItem choice to match
-    /*
-    val workingItem = ProductData(productData);// appViewModel.currentProduct?.clone()
-    workingItem?.modifiers?.data?.forEach { modifierData ->
-        if (modifierData.max_selected == 1) {
-            // Drink will have the default "[0]" option saved for single modifier choices
-
-            // WORKING ITEM NEEDS TO BE CLONED, IT STILL REFERNCES THE CURRENT PRODUCT
-            //modifierData.choices = mutableListOf(modifierData.choices[0])
-        } else {
-            // Drink will have no checkbox options selected
-            //modifierData.choices = mutableListOf()
-        }
-    }
-    */
 
     println("DBG: Working Item: " + appViewModel.workingItem?.modifiers?.data + appViewModel.workingItem?.modifiers?.data?.size)
     println("DBG: Current Product: " + appViewModel.currentProduct?.modifiers?.data + appViewModel.currentProduct?.modifiers?.data?.size)
@@ -135,7 +115,7 @@ fun ProductPage(
             var price = DisplayPrice(navController, appViewModel)
 
             //Display product image
-            DisplayProductImage(navController, appViewModel)
+            DisplayProductImage(appViewModel)
 
             //Display options
             appViewModel.currentProduct?.modifiers?.data?.forEachIndexed { modidx, modifierData ->
@@ -181,8 +161,6 @@ fun ProductPage(
                         ) {
                             Text(
                                 dropDownText.value, //standard option in the dropdown box (100% ice, whole milk, etc)
-                                //fontSize = 20.sp,
-                                //fontWeight = FontWeight.Bold,
                                 fontFamily = FontFamily.SansSerif
                             )
                             Image(
@@ -212,16 +190,9 @@ fun ProductPage(
                                         }
                                     },
                                     onClick = {
-                                        //println("working item before click: " +  userMods.toString() + " " + userMods.size)
                                         dropDownText.value = choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
                                         dropExpand.value = false
                                         position.value = choiceidx
-                                        /*appViewModel.workingItem?.price?.high_with_modifiers =
-                                            appViewModel.workingItem?.price?.high_with_modifiers?.plus(
-                                                choiceData.price
-                                            )!!*/
-
-                                        //appViewModel.workingItem?.price?.high_with_modifiers = price.value!!
 
                                         println("DBG: Price" + appViewModel.workingItem?.price?.high_with_modifiers)
 
@@ -299,155 +270,6 @@ fun resetWorkingItem(
     appViewModel.currentProduct?.let { appViewModel.setProduct(it) }
 }
 
-/*@Composable
-fun MultipleChoiceCheckBox(
-    navController: NavController,
-    appViewModel: AppViewModel,
-    modifierData: ModifierData, choices: MutableList<String>) {
-    Column {
-        Text(
-            modifierData.name, //Display name of modification type (Ex.: "Toppings", "Sugar Level", "Ice Level", "Milk")
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.SansSerif
-        )
-        modifierData.choices.forEachIndexed { index, choiceData ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                var checked by remember {
-                    mutableStateOf(false)
-                }
-
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = { isChecked ->
-                        checked = isChecked
-
-                        if(isChecked){
-                            choices.add(choiceData.name)
-                            println(choices + " " + choices.size)
-                            //price.value += choiceData.price
-                        }
-                        /*
-                        workingItem?.modifiers?.data?.forEachIndexed { wiModIdx, wiMod ->
-                            if (wiModIdx == modidx) {
-                                if (isChecked) {
-                                    //wiMod.choices.add(choiceData)
-                                } else {
-                                    //wiMod.choices.remove(choiceData)
-                                }
-                            }
-                        }
-
-                         */
-                    }
-                )
-                Text(
-                    choiceData.name + " - " + "$%.2f".format(choiceData.price), //next to box show name and price of mod
-                    fontFamily = FontFamily.SansSerif
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ColumnScope.OneChoiceDropDown(
-    navController: NavController,
-    appViewModel: AppViewModel,
-    modifierData: ModifierData,
-    choices: MutableList<String>
-) {
-    val dropExpand = remember {
-        mutableStateOf(false)
-    }
-    val dropDownText = remember {
-        mutableStateOf(modifierData.choices[0].name)
-    }
-
-    val position = remember {
-        mutableStateOf(0)
-    }
-    Column(
-        horizontalAlignment = AbsoluteAlignment.Left,
-    ) {
-        Text(
-            modifierData.name, //Display Modification name (Ice Level, Sugar Level, Milk, etc.)
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.SansSerif
-        )
-    }
-
-    Box(
-        modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-    ) {
-        Row(
-            modifier = Modifier.clickable {
-                dropExpand.value = true
-            }
-                .padding(0.dp, 20.dp, 0.dp, 20.dp),
-        ) {
-            Text(
-                dropDownText.value, //standard option in the dropdown box (100% ice, whole milk, etc)
-                //fontSize = 20.sp,
-                //fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif
-            )
-            Image(
-                imageVector =  Icons.Default.ArrowDropDown,
-                contentDescription = "DropDown Arrow",
-            )
-        }
-        DropdownMenu(
-            expanded = dropExpand.value,
-            onDismissRequest = {
-                dropExpand.value = false
-            }
-        ) {
-            val choiceMade = "";
-            modifierData.choices.forEachIndexed { choiceidx, choiceData ->
-                DropdownMenuItem(
-                    text = {
-                        if (choiceData.price != 0.0f) { //if the mod is an extra cost, display that cost
-                            Text(
-                                choiceData.name + " - " + "$%.2f".format(choiceData.price),
-                                fontFamily = FontFamily.SansSerif
-                            )
-                        } else { //else just show the name
-                            Text(
-                                choiceData.name,
-                                fontFamily = FontFamily.SansSerif
-                            )
-                        }
-                    },
-                    onClick = {
-                        dropDownText.value = choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
-                        dropExpand.value = false
-                        position.value = choiceidx
-                        choices.add(choiceData.name)
-                        println(choices + " " + choices.size)
-                        //price.value += choiceData.price
-                        //appViewModel.setPrice(price.value)
-
-                        /*
-                        // wokingItem updated
-                        workingItem?.modifiers?.data?.forEachIndexed { wiModIdx, wiMod ->
-                            if (wiModIdx == modidx) {
-                                //wiMod.choices = mutableListOf(choiceData)
-                            }
-                        }
-                         */
-                    }
-                )
-            }
-        }
-    }
-}
- */
-
 @Composable
 fun ColumnScope.DisplayName(
     navController: NavController,
@@ -484,22 +306,16 @@ fun ColumnScope.DisplayPrice(
                     itemSubtotal += choice.price
                 }
             }
-
-            if (itemSubtotal != null) {
-                appViewModel.workingItem?.price?.high_with_modifiers = appViewModel.currentProduct?.price?.high_with_modifiers?.plus(
-                    itemSubtotal.sum()
-                )!!
-            }
-
-
-            price.value = appViewModel.workingItem?.price?.high_with_modifiers
-
-            println("DBG: " + itemSubtotal.toString())
-
-
         }
 
     }
+    println("DBG: " + itemSubtotal.toString())
+    if (itemSubtotal != null) {
+        appViewModel.workingItem?.price?.high_with_modifiers = appViewModel.currentProduct?.price?.high_with_modifiers?.plus(
+            itemSubtotal.sum()
+        )!!
+    }
+    price.value = appViewModel.workingItem?.price?.high_with_modifiers
     Text(
         "$%.2f".format(price.value),
         fontSize = 20.sp,
@@ -514,7 +330,6 @@ fun ColumnScope.DisplayPrice(
 
 @Composable
 fun ColumnScope.DisplayProductImage(
-    navController: NavController,
     appViewModel: AppViewModel,
 ){
     val itemHeight = 350
