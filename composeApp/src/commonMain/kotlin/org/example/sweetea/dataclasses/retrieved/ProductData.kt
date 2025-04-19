@@ -65,7 +65,7 @@ data class ProductData (
     val modifiers: Data<MutableList<ModifierData>>,
     val categories: Data<List<BasicCategoryData>>,
     //val discounts: Data<List<String>>,
-){
+): Comparable<ProductData>{
     constructor(productData: ProductData) : this(
         id = productData.id,
         site_product_id = productData.site_product_id,
@@ -84,6 +84,10 @@ data class ProductData (
         modifiers = Data(productData.modifiers.data.map { ModifierData(it.copy()) }.toMutableList()),                  //COPIER
         categories = Data(productData.categories.data.map { BasicCategoryData( it.copy()) }),                //COPIER
     )
+
+    override fun compareTo(other: ProductData): Int {
+        return id.compareTo(other.id)
+    }
 }
 
 data class ProductTypeDetails(

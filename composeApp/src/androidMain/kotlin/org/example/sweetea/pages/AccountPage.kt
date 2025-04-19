@@ -12,13 +12,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -27,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.amplifyframework.core.Amplify
 import org.example.sweetea.LogOut
 import org.example.sweetea.Login
 import org.example.sweetea.R
@@ -65,6 +75,8 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
             onClick = {openLink("https://www.instagram.com/sweeteaus")},
         ),
     )
+
+    var signOutDialog by remember { mutableStateOf(false) }
 
     BearPageTemplate(
         modifier = modifier,
@@ -143,11 +155,35 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
         Button(
             elevation = ButtonDefaults.elevatedButtonElevation(),
             onClick = {
-                navController.navigate(LogOut.route)
+                signOutDialog = true
+                //navController.navigate(LogOut.route)
             }
         ) {
             Text(
                 text = "Log Out"
+            )
+        }
+        if(signOutDialog){
+            AlertDialog(
+                icon = {Icon(Icons.Default.Warning, "Logout Warning")},
+                title = { Text("Log Out") },
+                text = { Text("Are you sure you want to sign out?") },
+                onDismissRequest = {},
+                confirmButton = { TextButton(
+                        onClick = {
+                            signOutDialog = false
+                            Amplify.Auth.signOut() {}
+                        }
+                    ) {
+                        Text("Yes")
+                    }},
+                dismissButton =  { TextButton(
+                    onClick = {
+                        signOutDialog = false
+                    }
+                ) {
+                    Text("No")
+                }},
             )
         }
     }

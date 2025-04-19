@@ -16,8 +16,7 @@ import org.example.sweetea.viewmodel.NavigationViewModel
 //navhost function of Navigation
 @Composable
 fun SweetTeaNavHost(
-    viewModel: AppViewModel,
-    navViewModel: NavigationViewModel? = null,
+    appViewModel: AppViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     enterTransition: () -> EnterTransition,
@@ -32,8 +31,7 @@ fun SweetTeaNavHost(
         BaseDestinations.forEach { destination ->
             if(destination.subPages == null) {
                 composable(route = destination.route ) {
-                    navViewModel?.navigateToHead(destination.route)
-                    destination.page(modifier, navController, viewModel)
+                    destination.page(modifier, navController, appViewModel)
                 }
             } else {
                 navigation(
@@ -41,14 +39,12 @@ fun SweetTeaNavHost(
                     route = destination.pageRoute,
                 ){
                     composable(destination.route){
-                        navViewModel?.navigateToHead(destination.route)
-                        destination.page(modifier, navController, viewModel)
+                        destination.page(modifier, navController, appViewModel)
                     }
                     destination.subPages.forEach{
                             subpage ->
                         composable(subpage.route){
-                            navViewModel?.navigateSubPage(destination.route)
-                            subpage.page(modifier, navController, viewModel)
+                            subpage.page(modifier, navController, appViewModel)
                         }
                     }
                 }

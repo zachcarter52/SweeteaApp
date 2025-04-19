@@ -224,8 +224,7 @@ fun LogOutPage (modifier: Modifier, navController: NavController){
     ) {
 
         Button(onClick = {
-            Amplify.Auth.signOut() {
-            }
+            Amplify.Auth.signOut(){}
             navController.navigate("account")
         }) {
             Text("Log Out")

@@ -85,7 +85,8 @@ class AuthViewModel : ViewModel() {
                 { attributes ->
                     username.value =
                         attributes.find { it.key.keyString == "preferred_username" }?.value
-                            ?: "Unknown"
+                            ?: ""
+                    isUserLoggedIn.value = username.value != ""
                     Log.e("AuthViewModel", "Username updated to: ${username.value}")
                 },
                 { error -> Log.e("AuthViewModel", "Failed to fetch attributes", error) }

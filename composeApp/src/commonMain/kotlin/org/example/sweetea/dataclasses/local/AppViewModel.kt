@@ -37,13 +37,19 @@ class AppViewModel: ViewModel() {
     // when a custom choice is selected, change the workingItem choice to match var workingItem: ProductData? by mutableStateOf(null)
     var workingItem: ProductData? by mutableStateOf(null)
 
+    private val _favoriteDrinks = mutableStateListOf<ProductData>()
+    var favoriteDrinks: MutableList<ProductData> = _favoriteDrinks
     private val _shoppingCart = mutableStateListOf<ProductData>()
     var shoppingCart: MutableList<ProductData> = _shoppingCart
+    private val _shoppingCartQuantities = mutableStateListOf<Int>()
+    var shoppingCartQuantities: MutableList<Int> = _shoppingCartQuantities
 
     var categoryMap: MutableMap<String, CategoryData> = mutableMapOf()
         private set
     private var productMapLocation: LocationData? by mutableStateOf(null)
-    var productMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
+    var productIDMap: MutableMap<String, ProductData> = mutableMapOf()
+        private set
+    var productCategoryMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
         private set
 
     suspend fun updateInfo(){
@@ -57,12 +63,14 @@ class AppViewModel: ViewModel() {
         currentCategory = category
     }
 
-    fun setProduct(product: ProductData){
+    fun setProduct(product: ProductData, modifiedProductData: ProductData? = null){
         currentProduct = product
         workingItem = ProductData(currentProduct!!)
 
-        workingItem?.modifiers?.data?.forEach { modifierData ->
-            if (modifierData.max_selected == 1) {
+        workingItem?.modifiers?.data?.forEachIndexed { idx, modifierData ->
+            if(modifiedProductData != null){
+                modifierData.choices = modifiedProductData.modifiers.data[idx].choices
+            } else if (modifierData.max_selected == 1) {
                 // Drink will have the default "[0]" option saved for single modifier choices
                 modifierData.choices = mutableListOf(ChoiceData(modifierData.choices[0]))
             } else {
@@ -135,11 +143,12 @@ class AppViewModel: ViewModel() {
                     _productList.value = products
                     productMapLocation = currentLocation
                     _productList.value.forEach { product ->
-                        if (productMap[product.categories.data[0].site_category_id] == null) {
-                            productMap[product.categories.data[0].site_category_id] = arrayListOf()
+                        productIDMap[product.id] = product
+                        if (productCategoryMap[product.categories.data[0].site_category_id] == null) {
+                            productCategoryMap[product.categories.data[0].site_category_id] = arrayListOf()
                         }
-                        if (productMap[product.categories.data[0].site_category_id]?.indexOf(product) == -1) {
-                            productMap[product.categories.data[0].site_category_id]?.add(product)
+                        if (productCategoryMap[product.categories.data[0].site_category_id]?.indexOf(product) == -1) {
+                            productCategoryMap[product.categories.data[0].site_category_id]?.add(product)
                         }
                     }
                 }

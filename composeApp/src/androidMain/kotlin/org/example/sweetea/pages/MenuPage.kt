@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +41,8 @@ import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMapNotNull
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
+import com.android.volley.toolbox.ImageRequest
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.R
@@ -85,30 +88,6 @@ fun FeaturedItem(
     }
 }
 
-open class LabeledImage(
-    val imageID: Int,
-    val itemName: String,
-)
-
-val featuredItems = listOf(
-    LabeledImage(
-        imageID = R.drawable.flaming_tiger_pearl_milk,
-        itemName= "Flaming Tiger Pearl Milk Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.thai_milk_tea,
-        itemName = "Thai Milk Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.taro_milk_tea,
-        itemName= "Taro Milk Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.oreo_smoothie,
-        itemName = "Oreo Smoothie"
-    )
-)
-
 @Composable
 fun MenuPage(
     modifier: Modifier = Modifier,
@@ -125,7 +104,6 @@ fun MenuPage(
 
     val itemHeight = 120
 
-    val imageCache = remember { mutableStateMapOf<Int, Painter>() }
     var searchTerms by remember { mutableStateOf("") }
 
     val menuCategoryState by appViewModel.categoryList.collectAsState()
@@ -143,16 +121,6 @@ fun MenuPage(
         searchResult.second
     }.map{ searchResult: Pair<ProductData, Int> ->
         searchResult.first
-    }
-
-    @Composable
-    fun cachedImage(id: Int): Painter{
-        var returnImage = imageCache[id]
-        if(returnImage == null){
-            returnImage = painterResource(id = id)
-            imageCache[id] = returnImage
-        }
-        return returnImage
     }
 
     BearPageTemplate(
@@ -186,17 +154,29 @@ fun MenuPage(
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
         ){
-            featuredItems.forEach{
-                FeaturedItem(
-                    image =
-                    {Image(
-                        painter = cachedImage(it.imageID),
-                        contentDescription = it.itemName,
-                        contentScale = ContentScale.FillHeight
-                    )},
-                    itemName = it.itemName,
-                    imageHeight = itemHeight
-                )
+            if(appViewModel.favoriteDrinks.size > 0) {
+                appViewModel.favoriteDrinks.forEach { favoriteDrink ->
+                    val url = "${favoriteDrink.images.data[0].url}?height=${3*itemHeight}"
+                    FeaturedItem(
+                        image = {
+                            MenuDisplayImage(
+                                imageHeight = itemHeight,
+                                url = url,
+                                contentDescription = favoriteDrink.name,
+                                contentScale = ContentScale.FillHeight
+                            )
+                        },
+                        itemName = favoriteDrink.name,
+                        imageHeight = itemHeight,
+                        onClick = {
+                            appViewModel.productIDMap[favoriteDrink.id]?.let {
+                                appViewModel.setProduct(it, favoriteDrink)
+                            }
+                            navController.navigate(ProductCustomPage.route)
+                        }
+                    )
+                }
+
             }
         }
         HorizontalDivider()

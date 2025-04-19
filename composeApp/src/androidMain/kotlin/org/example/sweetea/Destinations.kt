@@ -36,6 +36,16 @@ Describes a basic destination within the NavController,
 allowing for configuration of the visible navigation elements
  */
 private val headerTextPadding = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp)
+@Composable
+fun HeaderText(
+    text: String
+){
+    Text(
+        text,
+        modifier = headerTextPadding,
+        style = MaterialTheme.typography.headlineMedium
+    )
+}
 open class BasicDestination (
     val route: String,
     val page: @Composable (
@@ -46,7 +56,7 @@ open class BasicDestination (
     val subPages: List<BasicDestination>? = null,
     val topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     val hideLocation: Boolean = false,
-    val hideTopBarHeader: Boolean = false,
+    val hideTopBarHeader: Boolean = topBarHeaderText == null,
     var index: Int = -1,
 )
 
@@ -68,7 +78,7 @@ open class Destination (
     subPages: List<BasicDestination>? = null,
     topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
     hideLocation: Boolean = false,
-    hideTopBarHeader: Boolean = false
+    hideTopBarHeader: Boolean = topBarHeaderText == null
 ) : BasicDestination(
     route, page, subPages, topBarHeaderText, hideLocation, hideTopBarHeader
 )
@@ -80,6 +90,7 @@ object Home : Destination(
     route = "home",
     pageRoute = "homepage",
     page = {modifier, navController, appViewModel -> HomePage(modifier, navController, appViewModel, viewModel()) },
+    hideTopBarHeader = false
 )
 
 object Menu : Destination(
@@ -93,11 +104,7 @@ object Menu : Destination(
         ProductCustomPage,
     ),
     topBarHeaderText = {
-        Text(
-            "Featured Menu Items",
-            modifier = headerTextPadding,
-            style = MaterialTheme.typography.headlineMedium
-        )
+        HeaderText("Featured Menu Items")
     }
 )
 
@@ -107,24 +114,16 @@ object Checkout : Destination(
     route = "checkout",
     pageRoute = "checkoutPage",
     page = { modifier, navController, appViewModel -> CheckoutPage(modifier, navController, appViewModel )},
-    topBarHeaderText = {Text("Checkout Page", fontSize = 28.sp, fontWeight = FontWeight.Bold)}
+    topBarHeaderText = {HeaderText("Checkout Page")}
 )
 object ProductCustomPage : BasicDestination(
     route = "productPage",
     page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },
-    topBarHeaderText = {
-        viewModel ->
-        Text("")
-    }
 )
 
 object SubMenu : BasicDestination(
     route = "subMenu",
     page = { modifier, navController, appViewModel -> SubMenuPage(modifier, navController, appViewModel) },
-    topBarHeaderText = {
-        viewModel ->
-        Text("")
-    }
 )
 
 object Rewards : Destination(
@@ -135,11 +134,7 @@ object Rewards : Destination(
     page = {modifier, navController, appViewModel -> RewardsPage(modifier, navController, appViewModel) },
     hideLocation = true,
     topBarHeaderText = {
-        Text(
-            "Rewards Program",
-            modifier = headerTextPadding,
-            style = MaterialTheme.typography.headlineMedium
-            )
+        HeaderText("Rewards Program")
     }
 )
 
@@ -156,19 +151,17 @@ object Account : Destination(
         Verification,
         LogOut
     ),
-    hideLocation = true,
+    hideTopBarHeader = false
 )
 
 object Login : BasicDestination(
     route = "login",
     page = { modifier, navController, _ -> LoginPage(modifier, navController, {}, viewModel()) },
-    hideTopBarHeader = true,
 )
 
 object SignUp : BasicDestination(
     route = "signup",
     page = { modifier, navController, _ -> SignupPage(modifier, navController, {}, viewModel())  },
-    hideTopBarHeader = true,
 )
 
 object ForgotPassword : BasicDestination(
@@ -177,7 +170,6 @@ object ForgotPassword : BasicDestination(
         val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
            ForgotPasswordPage(modifier, navController)
     },
-    hideTopBarHeader = true,
 )
 
 object Verification : BasicDestination(
@@ -185,13 +177,11 @@ object Verification : BasicDestination(
     page = { modifier, navController, _ ->
         val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
         VerificationPage(modifier, navController, email) },
-    hideTopBarHeader = true,
 )
 
 object LogOut : BasicDestination(
     route = "logout",
     page = {modifier, navController, _ -> LogOutPage(modifier, navController) },
-    hideTopBarHeader = true,
 )
 
 val BaseDestinations = listOf(

@@ -5,11 +5,12 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,13 +18,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -107,7 +113,6 @@ fun CheckoutPage(
             text = "Order",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-
         )
 
         val itemSubtotal = MutableList(appViewModel.shoppingCart.size){ 0.0f }
@@ -143,7 +148,7 @@ fun CheckoutPage(
                     )
                 )
 
-                itemSubtotal[idx] += cartItem.price.high_with_modifiers
+                itemSubtotal[idx] += appViewModel.shoppingCartQuantities[idx] * cartItem.price.high_with_modifiers
 
                 val url = "${cartItem.images.data[0].url}?height=${3 * itemHeight}"
                 CheckoutItem(
@@ -152,7 +157,7 @@ fun CheckoutPage(
                     cartItem = cartItem,
                     contentScale = ContentScale.FillHeight,
                     index = idx,
-                    appViewModel = appViewModel
+                    appViewModel = appViewModel,
                 )
             }
         } else {
@@ -223,7 +228,7 @@ fun CheckoutItem(
     cartItem: ProductData,
     contentScale: ContentScale,
     index : Int,
-    appViewModel: AppViewModel
+    appViewModel: AppViewModel,
 ){
     val textPadding = 24.dp
     val itemTextSize = 24.sp
@@ -276,10 +281,67 @@ fun CheckoutItem(
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                    Box(
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.TopEnd
+                        horizontalArrangement = Arrangement.End
                     ) {
+                        var isFavorite = appViewModel.favoriteDrinks.indexOf(appViewModel.shoppingCart[index]) != -1
+                        Button(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
+                                if(isFavorite){
+                                    appViewModel.favoriteDrinks.remove(appViewModel.shoppingCart[index])
+                                } else {
+                                    appViewModel.favoriteDrinks.add(appViewModel.shoppingCart[index])
+                                }
+                                isFavorite = !isFavorite
+                            },
+                            contentPadding = PaddingValues(2.dp)
+                        ) {
+                            Icon(
+                                imageVector = if(isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                contentDescription = "Favorite",
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
+                                appViewModel.shoppingCartQuantities[index]--
+                                if(appViewModel.shoppingCartQuantities[index] == 0){
+                                    appViewModel.shoppingCart.removeAt(index)
+                                    appViewModel.shoppingCartQuantities.removeAt(index)
+                                }
+                            },
+                            contentPadding = PaddingValues(2.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.KeyboardArrowDown,
+                                contentDescription = "Decrease Quantity",
+
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        Text(
+                            modifier = Modifier.padding(4.dp, 0.dp),
+                            text = appViewModel.shoppingCartQuantities[index].toString()
+                        )
+                        Button(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
+                                appViewModel.shoppingCartQuantities[index]++
+                            },
+                            contentPadding = PaddingValues(2.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.KeyboardArrowUp,
+                                contentDescription = "Increase Quantity",
+
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        /*
                         Button(
                             modifier = Modifier.size(24.dp),
                             onClick = {
@@ -293,6 +355,7 @@ fun CheckoutItem(
                                 modifier = Modifier.size(18.dp)
                             )
                         }
+                         */
                     }
 
                 }

@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.toRoute
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.BaseDestinations
+import org.example.sweetea.HeaderText
 import org.example.sweetea.Menu
 import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
@@ -54,7 +55,7 @@ fun AppHeader(
     val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val username by authViewModel.username.collectAsState()
 
-    LaunchedEffect(isLoggedIn, username) {
+    LaunchedEffect(Unit) {
         if (isLoggedIn && username.isBlank()) {
             authViewModel.fetchUsername()
             Log.e("AuthDebug", "User logged in, fetching username")
@@ -104,12 +105,7 @@ fun AppHeader(
                 if(headerText != null){
                     headerText(viewModel)
                 } else {
-                    Text(
-                        modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
-                        text = if (isLoggedIn) "Welcome, $username" else "Welcome",
-                        fontSize = 34.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    HeaderText(if (isLoggedIn) "Welcome, $username" else "Welcome")
                 }
             }
         }

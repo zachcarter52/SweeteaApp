@@ -277,6 +277,7 @@ fun SweeteaApp(
     cacheDir: File
 ){
     LaunchedEffect(Unit){
+        authViewModel.fetchUsername()
         viewModel.updateInfo()
     }
 
@@ -425,7 +426,7 @@ fun SweeteaApp(
                 }
             ) { padding ->
                 SweetTeaNavHost(
-                    viewModel = viewModel,
+                    appViewModel = viewModel,
                     navController = navController,
                     modifier = Modifier.padding(padding),
                     enterTransition = enterTransition,

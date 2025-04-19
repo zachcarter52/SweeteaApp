@@ -80,11 +80,11 @@ fun ProductPage(
 
     Column(
         modifier = modifier.fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState()).padding(0.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
-            modifier = modifier.fillMaxWidth(.9f),
+            modifier = Modifier.fillMaxWidth(.9f),
             horizontalAlignment = Alignment.Start
         ) {
             //Display Product name
@@ -98,6 +98,7 @@ fun ProductPage(
                     Button(
                         onClick = {
                             appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                            appViewModel.shoppingCartQuantities.add(1)
                             println("DBG: Shopping Cart" + appViewModel.shoppingCart)
                             resetWorkingItem(appViewModel)
                             navController.popBackStack()
@@ -115,7 +116,10 @@ fun ProductPage(
                         onClick =
                             {
                                 //appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                                appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                                appViewModel.shoppingCartQuantities.add(1)
                                 println("DBG: Shopping Cart" + appViewModel.shoppingCart)
+                                resetWorkingItem(appViewModel)
                                 navController.navigate(Checkout.route)
                             },
                     ) {
@@ -141,8 +145,14 @@ fun ProductPage(
                     val dropExpand = remember {
                         mutableStateOf(false)
                     }
+                    modifierData.choices.forEach {
+                        println("modifierData choices: [$modidx] ${it}")
+                    }
                     val dropDownText = remember {
                         mutableStateOf(modifierData.choices[0].name)
+                    }
+                    appViewModel.workingItem?.modifiers?.data?.get(modidx)?.choices?.get(0)?.let {
+                        dropDownText.value = it.name
                     }
 
                     val position = remember {
@@ -246,14 +256,15 @@ fun ProductPage(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 var checked by remember {
-                                    mutableStateOf(false)
+                                    println("[$index] ptrToChoices.indexOf(choiceData) : ${ptrToChoices?.indexOf(choiceData)!!}")
+                                    mutableStateOf(ptrToChoices.indexOf(choiceData) > -1)
                                 }
 
                                 Checkbox(
                                     checked = checked,
                                     onCheckedChange = { isChecked ->
                                         checked = isChecked
-                                        if(checkedChoicesCounter >= 3){
+                                        if(checkedChoicesCounter >= maxChoicesChecked){
                                             checked = false
                                         }
 

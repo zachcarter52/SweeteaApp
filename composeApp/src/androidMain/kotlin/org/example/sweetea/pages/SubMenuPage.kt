@@ -19,7 +19,7 @@ fun SubMenuPage(
     val itemHeight = 120
 
     val currentCategory = appViewModel.currentCategory
-    val productMap = appViewModel.productMap
+    val productMap = appViewModel.productCategoryMap
     val currentCategoryProducts = productMap[currentCategory?.site_category_id]
     BearPageTemplate(
         modifier = modifier,
