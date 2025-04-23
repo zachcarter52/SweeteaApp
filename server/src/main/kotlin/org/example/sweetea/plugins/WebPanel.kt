@@ -10,9 +10,6 @@ import org.example.sweetea.database.model.RewardRepository
 import org.thymeleaf.templateresolver.*
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import org.example.sweetea.database.eventSchema
-import org.example.sweetea.database.getSelectedEvent
-import org.example.sweetea.database.rewardSchema
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 import org.thymeleaf.templateresolver.FileTemplateResolver
 

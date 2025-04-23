@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.android.volley.toolbox.ImageRequest
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
+import org.example.sweetea.Favorites
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.R
 import org.example.sweetea.SubMenu
@@ -151,11 +152,12 @@ fun MenuPage(
                 shape = RectangleShape
             )
         }
+        /*
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
         ){
-            if(appViewModel.favoriteDrinks.size > 0) {
-                appViewModel.favoriteDrinks.forEach { favoriteDrink ->
+            if(appViewModel.favoriteProducts.size > 0) {
+                appViewModel.favoriteProducts.forEach { favoriteDrink ->
                     val url = "${favoriteDrink.images.data[0].url}?height=${3*itemHeight}"
                     FeaturedItem(
                         image = {
@@ -179,9 +181,25 @@ fun MenuPage(
 
             }
         }
+        */
         HorizontalDivider()
         Column(Modifier.fillMaxWidth()) {
             if(searchTerms.isEmpty()) {
+                if(appViewModel.favoriteProducts.size > 0){
+                    val url = "${appViewModel.favoriteProducts[0].images.data[0].url}?height=${3*itemHeight}"
+                    MenuItem(
+                        url = url,
+                        contentDescription = "Favorites",
+                        contentScale = ContentScale.FillHeight,
+                        itemName = "Favorites",
+                        imageHeight = itemHeight,
+                        onClick = {
+                            //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
+                            navController.navigate(Favorites.route)
+                        }
+                    )
+                    HorizontalDivider()
+                }
                 menuCategoryState.forEachIndexed { index, menuCategory ->
                     val url = "${menuCategory.images.data[0].url}?height=${3 * itemHeight}"
                     MenuItem(

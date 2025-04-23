@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.CheckoutPage
+import org.example.sweetea.pages.FavoritesPage
 import org.example.sweetea.pages.ForgotPasswordPage
 import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LogOutPage
@@ -102,9 +103,10 @@ object Menu : Destination(
     pageRoute = "menupage",
     page = {modifier, navController, appViewModel -> MenuPage(modifier, navController, appViewModel) },
     subPages = listOf(
+        Favorites,
         SubMenu,
         ProductCustomPage,
-        PrepPage
+        PrepPage,
     ),
     topBarHeaderText = {
         HeaderText("Featured Menu Items")
@@ -129,6 +131,11 @@ object PrepPage : BasicDestination(
 object ProductCustomPage : BasicDestination(
     route = "productPage",
     page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },
+)
+
+object Favorites : BasicDestination(
+    route = "favorites",
+    page = { modifier, navController, appviewModel -> FavoritesPage(modifier, navController, appviewModel)}
 )
 
 object SubMenu : BasicDestination(

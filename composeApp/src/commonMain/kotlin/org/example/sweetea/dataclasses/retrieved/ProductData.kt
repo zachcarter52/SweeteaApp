@@ -1,6 +1,8 @@
 package org.example.sweetea.dataclasses.retrieved
 
 import kotlinx.serialization.Serializable
+import org.example.sweetea.ModifiedProduct
+import org.example.sweetea.Modifier
 
 /*
 Describes the json response to the products query
@@ -86,7 +88,27 @@ data class ProductData (
     )
 
     override fun compareTo(other: ProductData): Int {
-        return id.compareTo(other.id)
+        val idCompare = id.compareTo(other.id)
+        if(idCompare != 0) return idCompare
+        modifiers.data.forEachIndexed { modIndex, modifier ->
+            modifier.choices.forEachIndexed { choiceIndex, choice ->
+                val choiceCompare = choice.id.compareTo(other.modifiers.data[modIndex].choices[choiceIndex].id)
+                if(choiceCompare != 0 ) return choiceCompare
+            }
+        }
+        return 0
+    }
+
+    fun toModifiedProduct(): ModifiedProduct{
+        return ModifiedProduct(
+            productID = id,
+            modifiers = modifiers.data.map{ modifierData ->
+                Modifier(
+                    modifierID = modifierData.id,
+                    choiceID = modifierData.choices[0].id
+                )
+            }
+        )
     }
 }
 

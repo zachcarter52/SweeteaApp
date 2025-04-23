@@ -1,6 +1,7 @@
 package org.example.sweetea.database
 
 import org.example.sweetea.Constants
+import org.example.sweetea.database.RewardSchema.Rewards.emailAddress
 import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.database.model.RewardRepository
 import org.jetbrains.exposed.sql.Database
@@ -13,31 +14,30 @@ import org.jetbrains.exposed.sql.update
 
 class RewardSchema(database: Database): RewardRepository, DatabaseSchema() {
     object Rewards: Table(){
-        val id = integer("rewardID").autoIncrement()
+        val emailAddress = varchar("emailAddress", 255)
         val value = integer("value")
-
-        override val primaryKey = PrimaryKey(id)
+        override val primaryKey = PrimaryKey(emailAddress)
     }
     init{
         transaction(database) {
             SchemaUtils.create(Rewards)
             if(Rewards.selectAll().singleOrNull() == null){
                 Rewards.insert{
-                    it[id]= 1
+                    it[emailAddress] = ""
                     it[value] = Constants.DEFAULT_BEAR_VALUE
                 }
             }
         }
     }
 
-    override suspend fun getBearValue(): Int {
+    override suspend fun getBearValue(emailAddress: String): Int {
         return dbQuery {
-            Rewards.selectAll().map{it[Rewards.value]}.first()
+            Rewards.selectAll().where{Rewards.emailAddress eq emailAddress}.map{it[Rewards.value]}.first()
         }
     }
-    override suspend fun setBearValue(value: Int) {
+    override suspend fun setBearValue(emailAddress: String, value: Int) {
         return dbQuery {
-            Rewards.update({Rewards.id eq 1}){
+            Rewards.update({Rewards.emailAddress eq emailAddress}){
                 it[Rewards.value] = value
             }
             Rewards.selectAll().map{it[Rewards.value]}.first()

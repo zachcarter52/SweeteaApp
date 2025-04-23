@@ -420,6 +420,7 @@ fun SweeteaApp(
                     AppBottomBar(
                         navController = navController,
                         selectedItem = selectedItem,
+                        viewModel = viewModel,
                     )
                 }
             ) { padding ->

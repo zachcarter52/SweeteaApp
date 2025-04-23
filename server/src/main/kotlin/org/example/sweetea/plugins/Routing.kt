@@ -58,7 +58,7 @@ fun Application.configureRouting(
             authenticate("admin-auth-session"){
                 put("/{value}") {
                     val newBearValue = call.parameters["value"]!!.toInt()
-                    rewardSchema.setBearValue(newBearValue)
+                    rewardSchema.setBearValue(value = newBearValue)
                     call.respond(HttpStatusCode.OK)
                 }
             }

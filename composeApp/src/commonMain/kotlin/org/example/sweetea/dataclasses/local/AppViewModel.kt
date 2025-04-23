@@ -37,8 +37,8 @@ class AppViewModel: ViewModel() {
     // when a custom choice is selected, change the workingItem choice to match var workingItem: ProductData? by mutableStateOf(null)
     var workingItem: ProductData? by mutableStateOf(null)
 
-    private val _favoriteDrinks = mutableStateListOf<ProductData>()
-    var favoriteDrinks: MutableList<ProductData> = _favoriteDrinks
+    private val _favoriteProducts = mutableStateListOf<ProductData>()
+    var favoriteProducts: MutableList<ProductData> = _favoriteProducts
     private val _shoppingCart = mutableStateListOf<ProductData>()
     var shoppingCart: MutableList<ProductData> = _shoppingCart
     private val _shoppingCartQuantities = mutableStateListOf<Int>()

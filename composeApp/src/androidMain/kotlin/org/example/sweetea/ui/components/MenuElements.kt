@@ -28,7 +28,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @Composable
 fun MenuDisplayImage(
     image:@Composable () -> Unit,
-    imageHeight: Int
+    imageHeight: Int,
 ){
     val imageRatio = 0.92f
     ElevatedCard(
@@ -46,7 +46,7 @@ fun MenuDisplayImage(
     imageHeight: Int,
     url: String,
     contentDescription: String,
-    contentScale: ContentScale
+    contentScale: ContentScale,
 ){
     val placeholder = painterResource(R.drawable.pearl_milk_tea)
     MenuDisplayImage(
@@ -62,7 +62,7 @@ fun MenuDisplayImage(
             fallback = placeholder,
             error = placeholder,
         )},
-        imageHeight = imageHeight
+        imageHeight = imageHeight,
     )
 }
 
@@ -74,7 +74,7 @@ fun MenuItem(
     contentScale: ContentScale,
     itemName: String,
     price: Float? = null,
-    onClick: (() -> Unit)? = {},
+    onClick: (() -> Unit) = {},
 ){
     val isHeader = price == null
     val textPadding = if(isHeader) {
@@ -90,7 +90,7 @@ fun MenuItem(
 
     Row(
         modifier = Modifier.fillMaxWidth()
-            .clickable{onClick!!()},
+            .clickable{onClick()},
     ) {
         Row(
             modifier = Modifier.padding(10.dp)

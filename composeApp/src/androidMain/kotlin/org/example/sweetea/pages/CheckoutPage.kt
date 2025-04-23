@@ -40,6 +40,8 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -54,31 +56,7 @@ import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.MenuDisplayImage
 import org.example.sweetea.PrepPage
-
-@JsonClass(generateAdapter = true)
-data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
-    val price: Float,
-    val quantity: String = 1.toString(),
-    @Json(name = "name")
-    val productName: String,
-    val productId: String,
-    val siteProductId: String,
-    val productModifiers: MutableList<CartItemChoiceDetails>,
-    val basePriceMoney: CartItemPriceDetails
-)
-
-@JsonClass(generateAdapter = true)
-data class CartItemChoiceDetails(
-    val choiceName: String,
-    val choiceId: String,
-    val price: Float
-)
-
-@JsonClass(generateAdapter = true)
-data class CartItemPriceDetails(
-    val amount: Float,
-    val currency: String = "USD"
-)
+import org.example.sweetea.ui.components.ModifiedProductItem
 
 @JsonClass(generateAdapter = true)
 data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
@@ -177,12 +155,8 @@ fun CheckoutPage(
 
                 itemSubtotal[idx] += appViewModel.shoppingCartQuantities[idx] * cartItem.price.high_with_modifiers
 
-                val url = "${cartItem.images.data[0].url}?height=${3 * itemHeight}"
                 CheckoutItem(
-                    imageHeight = itemHeight,
-                    url = url,
                     cartItem = cartItem,
-                    contentScale = ContentScale.FillHeight,
                     index = idx,
                     appViewModel = appViewModel,
                 )
@@ -249,144 +223,69 @@ fun CheckoutPage(
 
 @Composable
 fun CheckoutItem(
-    imageHeight: Int,
-    url: String,
     cartItem: ProductData,
-    contentScale: ContentScale,
     index : Int,
     appViewModel: AppViewModel,
 ){
-    val textPadding = 24.dp
-    val itemTextSize = 24.sp
-
-    HorizontalDivider()
-    Row(
-        modifier = Modifier.fillMaxWidth(),
+    ModifiedProductItem(
+        cartItem = cartItem,
+        quantity = appViewModel.shoppingCartQuantities[index],
     ) {
-        Row(
-            modifier = Modifier.padding(10.dp),
-            //.height(imageHeight.dp),
-            verticalAlignment = Alignment.CenterVertically
+        var isFavorite = appViewModel.favoriteProducts.indexOf(appViewModel.shoppingCart[index]) != -1
+        Button(
+            modifier = Modifier.size(24.dp),
+            onClick = {
+                if(isFavorite){
+                    appViewModel.favoriteProducts.remove(appViewModel.shoppingCart[index])
+                } else {
+                    appViewModel.favoriteProducts.add(appViewModel.shoppingCart[index])
+                }
+                isFavorite = !isFavorite
+            },
+            contentPadding = PaddingValues(2.dp)
         ) {
-            MenuDisplayImage(
-                imageHeight = imageHeight,
-                url = url,
-                contentDescription = cartItem.name,
-                contentScale = contentScale,
+            Icon(
+                imageVector = if(isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                contentDescription = "Favorite",
+                modifier = Modifier.size(18.dp)
             )
-            Column(
-                modifier = Modifier.padding(textPadding, 0.dp)
-            ) {
-                Text(
-                    text = cartItem.name,
-                    fontSize = itemTextSize,
-                )
-                appViewModel.shoppingCart[index].modifiers.data.forEach { modifier ->
-                    modifier.choices.forEach { choice ->
-                        if(choice.price > 0) {
-                            Text(
-                                text = choice.name + " + " + "$%.2f".format(choice.price),
-                                fontSize = 16.sp
-                            )
-                        } else {
-                            Text(
-                                text = choice.name,
-                                fontSize = 16.sp
-                            )
-                        }
-                    }
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+            modifier = Modifier.size(24.dp),
+            onClick = {
+                appViewModel.shoppingCartQuantities[index]--
+                if(appViewModel.shoppingCartQuantities[index] == 0){
+                    appViewModel.shoppingCart.removeAt(index)
+                    appViewModel.shoppingCartQuantities.removeAt(index)
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(0.5f),
-                    ) {
-                        Text(
-                            text = "$%.2f".format(cartItem.price.high_with_modifiers),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        var isFavorite = appViewModel.favoriteDrinks.indexOf(appViewModel.shoppingCart[index]) != -1
-                        Button(
-                            modifier = Modifier.size(24.dp),
-                            onClick = {
-                                if(isFavorite){
-                                    appViewModel.favoriteDrinks.remove(appViewModel.shoppingCart[index])
-                                } else {
-                                    appViewModel.favoriteDrinks.add(appViewModel.shoppingCart[index])
-                                }
-                                isFavorite = !isFavorite
-                            },
-                            contentPadding = PaddingValues(2.dp)
-                        ) {
-                            Icon(
-                                imageVector = if(isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                                contentDescription = "Favorite",
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Button(
-                            modifier = Modifier.size(24.dp),
-                            onClick = {
-                                appViewModel.shoppingCartQuantities[index]--
-                                if(appViewModel.shoppingCartQuantities[index] == 0){
-                                    appViewModel.shoppingCart.removeAt(index)
-                                    appViewModel.shoppingCartQuantities.removeAt(index)
-                                }
-                            },
-                            contentPadding = PaddingValues(2.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.KeyboardArrowDown,
-                                contentDescription = "Decrease Quantity",
+            },
+            contentPadding = PaddingValues(2.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Decrease Quantity",
 
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                        Text(
-                            modifier = Modifier.padding(4.dp, 0.dp),
-                            text = appViewModel.shoppingCartQuantities[index].toString()
-                        )
-                        Button(
-                            modifier = Modifier.size(24.dp),
-                            onClick = {
-                                appViewModel.shoppingCartQuantities[index]++
-                            },
-                            contentPadding = PaddingValues(2.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.KeyboardArrowUp,
-                                contentDescription = "Increase Quantity",
+                modifier = Modifier.size(18.dp)
+            )
+        }
+        Text(
+            modifier = Modifier.padding(4.dp, 0.dp),
+            text = appViewModel.shoppingCartQuantities[index].toString()
+        )
+        Button(
+            modifier = Modifier.size(24.dp),
+            onClick = {
+                appViewModel.shoppingCartQuantities[index]++
+            },
+            contentPadding = PaddingValues(2.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowUp,
+                contentDescription = "Increase Quantity",
 
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                        /*
-                        Button(
-                            modifier = Modifier.size(24.dp),
-                            onClick = {
-                                appViewModel.shoppingCart.remove(cartItem)
-                            },
-                            contentPadding = PaddingValues(2.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = "Remove from Cart",
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                         */
-                    }
-
-                }
-            }
+                modifier = Modifier.size(18.dp)
+            )
         }
     }
-    HorizontalDivider()
 }
