@@ -8,7 +8,6 @@ data class Modifier(
     val modifiedProductID: ULong = 0UL,
     val modifierID: String,
     val choiceID: String,
-    val popularity: Int = 1,
 ): Comparable<Modifier>{
     override fun compareTo(other: Modifier): Int {
         if(databaseModifierID == 0UL || other.databaseModifierID == 0UL){

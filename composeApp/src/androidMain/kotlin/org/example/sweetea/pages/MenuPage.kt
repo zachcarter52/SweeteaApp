@@ -1,15 +1,11 @@
 package org.example.sweetea.pages
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.HorizontalDivider
@@ -23,30 +19,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMapNotNull
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import coil3.compose.AsyncImage
-import com.android.volley.toolbox.ImageRequest
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
-import org.example.sweetea.Favorites
+import org.example.sweetea.AuthViewModel
+import org.example.sweetea.FavoritesPage
 import org.example.sweetea.ProductCustomPage
-import org.example.sweetea.R
 import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
@@ -94,12 +84,10 @@ fun MenuPage(
     modifier: Modifier = Modifier,
     navController: NavController,
     appViewModel: AppViewModel,
+    authViewModel: AuthViewModel
 ){
-    LaunchedEffect(Unit){
-        appViewModel.updateInfo()
-    }
-
     val configuration = LocalConfiguration.current
+    val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val screenHeight = configuration.screenHeightDp
     println("ScreenHeight $screenHeight")
 
@@ -185,7 +173,7 @@ fun MenuPage(
         HorizontalDivider()
         Column(Modifier.fillMaxWidth()) {
             if(searchTerms.isEmpty()) {
-                if(appViewModel.favoriteProducts.size > 0){
+                if(isLoggedIn && appViewModel.favoriteProducts.size > 0){
                     val url = "${appViewModel.favoriteProducts[0].images.data[0].url}?height=${3*itemHeight}"
                     MenuItem(
                         url = url,
@@ -195,7 +183,7 @@ fun MenuPage(
                         imageHeight = itemHeight,
                         onClick = {
                             //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
-                            navController.navigate(Favorites.route)
+                            navController.navigate(FavoritesPage.route)
                         }
                     )
                     HorizontalDivider()

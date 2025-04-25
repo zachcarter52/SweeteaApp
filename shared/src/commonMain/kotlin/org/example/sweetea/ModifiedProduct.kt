@@ -6,9 +6,7 @@ import kotlinx.serialization.Serializable
 open class ModifiedProduct (
     val modifiedProductID: ULong = 0UL,
     val productID: String,
-    //Modifier format is "ModifierID:ChoiceID"
     val modifiers: List<Modifier>,
-    val popularity: Int = 1,
 ): Comparable<ModifiedProduct>{
     override fun compareTo(other: ModifiedProduct): Int {
         val drinkIDComp = productID.compareTo(other.productID)

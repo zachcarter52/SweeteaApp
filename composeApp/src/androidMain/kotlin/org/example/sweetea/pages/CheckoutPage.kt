@@ -29,6 +29,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +51,7 @@ import com.google.gson.Gson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.example.sweetea.AuthViewModel
 import org.example.sweetea.CardEntryActivity
 import org.example.sweetea.Menu
 import org.example.sweetea.dataclasses.local.AppViewModel
@@ -88,8 +91,10 @@ fun CheckoutPage(
     modifier: Modifier = Modifier,
     navController: NavController,
     appViewModel: AppViewModel,
+    authViewModel: AuthViewModel
 ){
     val intent = LocalContext.current
+    val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val lineItems = mutableListOf<LineItem>()
 
     val paymentLauncher = rememberLauncherForActivityResult(
@@ -159,6 +164,8 @@ fun CheckoutPage(
                     cartItem = cartItem,
                     index = idx,
                     appViewModel = appViewModel,
+                    authViewModel = authViewModel,
+                    isLoggedIn = isLoggedIn
                 )
             }
         } else {
@@ -226,31 +233,42 @@ fun CheckoutItem(
     cartItem: ProductData,
     index : Int,
     appViewModel: AppViewModel,
+    authViewModel: AuthViewModel,
+    isLoggedIn: Boolean
 ){
     ModifiedProductItem(
         cartItem = cartItem,
         quantity = appViewModel.shoppingCartQuantities[index],
     ) {
-        var isFavorite = appViewModel.favoriteProducts.indexOf(appViewModel.shoppingCart[index]) != -1
-        Button(
-            modifier = Modifier.size(24.dp),
-            onClick = {
-                if(isFavorite){
-                    appViewModel.favoriteProducts.remove(appViewModel.shoppingCart[index])
-                } else {
-                    appViewModel.favoriteProducts.add(appViewModel.shoppingCart[index])
-                }
-                isFavorite = !isFavorite
-            },
-            contentPadding = PaddingValues(2.dp)
-        ) {
-            Icon(
-                imageVector = if(isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                contentDescription = "Favorite",
-                modifier = Modifier.size(18.dp)
-            )
+
+        if(isLoggedIn) {
+            var isFavorite =
+                appViewModel.getIsFavorite(appViewModel.shoppingCart[index])
+            Button(
+                modifier = Modifier.size(24.dp),
+                onClick = {
+                    if (isFavorite) {
+                        appViewModel.removeFavorite(
+                            authViewModel.emailAddress.value,
+                            appViewModel.shoppingCart[index])
+                    } else {
+                        appViewModel.addFavorite(
+                            authViewModel.emailAddress.value,
+                            appViewModel.shoppingCart[index]
+                        )
+                    }
+                    isFavorite = !isFavorite
+                },
+                contentPadding = PaddingValues(2.dp)
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    contentDescription = "Favorite",
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
         }
-        Spacer(modifier = Modifier.width(8.dp))
         Button(
             modifier = Modifier.size(24.dp),
             onClick = {

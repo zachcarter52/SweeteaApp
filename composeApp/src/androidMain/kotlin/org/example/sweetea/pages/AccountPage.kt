@@ -24,6 +24,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.amplifyframework.core.Amplify
+import org.example.sweetea.AuthViewModel
 import org.example.sweetea.LogOut
 import org.example.sweetea.Login
 import org.example.sweetea.R
@@ -51,7 +53,11 @@ open class AccountPageCard(
 )
 
 @Composable
-fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
+fun AccountPage(
+    modifier: Modifier=Modifier,
+    navController: NavController,
+    authViewModel: AuthViewModel
+){
     val uriHandler = LocalUriHandler.current
     val openLink = {link: String -> uriHandler.openUri(link)}
     val cards = listOf(
@@ -76,6 +82,7 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
         ),
     )
 
+    val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     var signOutDialog by remember { mutableStateOf(false) }
 
     BearPageTemplate(
@@ -85,20 +92,34 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ){
-            Button(
-                elevation = ButtonDefaults.elevatedButtonElevation(),
-                onClick = {
-                    navController.navigate(Login.route)
+            if(!isLoggedIn){
+                Button(
+                    elevation = ButtonDefaults.elevatedButtonElevation(),
+                    onClick = {
+                        navController.navigate(Login.route)
+                    }
+                ) {
+                    Text("Log In")
                 }
-            ) {
-                Text("Log In")
-            }
-            ElevatedButton(
-                onClick = {
-                    navController.navigate(SignUp.route)
+                ElevatedButton(
+                    onClick = {
+                        navController.navigate(SignUp.route)
+                    }
+                ) {
+                    Text("Sign Up")
                 }
-            ) {
-                Text("Sign Up")
+            } else {
+                Button(
+                    elevation = ButtonDefaults.elevatedButtonElevation(),
+                    onClick = {
+                        signOutDialog = true
+                        //navController.navigate(LogOut.route)
+                    }
+                ) {
+                    Text(
+                        text = "Log Out"
+                    )
+                }
             }
         }
         val columnCount = 2
@@ -152,37 +173,34 @@ fun AccountPage(modifier: Modifier=Modifier, navController: NavController){
                 }
             }
         }
-        Button(
-            elevation = ButtonDefaults.elevatedButtonElevation(),
-            onClick = {
-                signOutDialog = true
-                //navController.navigate(LogOut.route)
-            }
-        ) {
-            Text(
-                text = "Log Out"
-            )
-        }
         if(signOutDialog){
             AlertDialog(
                 icon = {Icon(Icons.Default.Warning, "Logout Warning")},
                 title = { Text("Log Out") },
-                text = { Text("Are you sure you want to sign out?") },
+                text = { Text("Are you sure you want to sign out?", fontSize = 18.sp) },
                 onDismissRequest = {},
                 confirmButton = { TextButton(
                         onClick = {
                             signOutDialog = false
-                            Amplify.Auth.signOut() {}
+                            Amplify.Auth.signOut{
+                                authViewModel.signOut()
+                            }
                         }
                     ) {
-                        Text("Yes")
+                        Text(
+                            "Yes",
+                            fontSize = 20.sp
+                        )
                     }},
                 dismissButton =  { TextButton(
                     onClick = {
                         signOutDialog = false
                     }
                 ) {
-                    Text("No")
+                    Text(
+                        "No",
+                        fontSize = 20.sp
+                    )
                 }},
             )
         }

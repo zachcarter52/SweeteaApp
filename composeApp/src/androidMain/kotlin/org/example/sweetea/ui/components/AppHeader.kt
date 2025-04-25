@@ -51,6 +51,7 @@ fun AppHeader(
     val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val username by authViewModel.username.collectAsState()
 
+    /*
     LaunchedEffect(Unit) {
         if (isLoggedIn && username.isBlank()) {
             authViewModel.fetchUsername()
@@ -59,6 +60,8 @@ fun AppHeader(
             Log.d("AuthDebug", "User not logged in or username is blank")
         }
     }
+
+     */
 
     Log.e("HeaderDebug", "Recomposing. isLoggedIn: $isLoggedIn, username: $username")
 

@@ -12,9 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 //import com.google.android.libraries.places.api.model.SubDestination
@@ -54,7 +52,8 @@ open class BasicDestination (
     val page: @Composable (
         modifier: Modifier,
         navController: NavController,
-        appViewModel: AppViewModel
+        appViewModel: AppViewModel,
+        authViewModel: AuthViewModel
         ) -> Unit,
     val subPages: List<BasicDestination>? = null,
     val topBarHeaderText: @Composable ((viewModel: AppViewModel) -> Unit)? = null,
@@ -75,7 +74,8 @@ open class Destination (
     page: @Composable (
         modifier: Modifier,
         navController: NavController,
-        appViewModel: AppViewModel
+        appViewModel: AppViewModel,
+        authViewModel: AuthViewModel
     ) -> Unit,
     val onClick: (() -> Unit)? = {},
     subPages: List<BasicDestination>? = null,
@@ -92,7 +92,7 @@ object Home : Destination(
     label = "Home",
     route = "home",
     pageRoute = "homepage",
-    page = {modifier, navController, appViewModel -> HomePage(modifier, navController, appViewModel, viewModel()) },
+    page = {modifier, navController, appViewModel, _ -> HomePage(modifier, navController, appViewModel, viewModel()) },
     hideTopBarHeader = false
 )
 
@@ -101,9 +101,9 @@ object Menu : Destination(
     label = "Menu",
     route = "menu",
     pageRoute = "menupage",
-    page = {modifier, navController, appViewModel -> MenuPage(modifier, navController, appViewModel) },
+    page = {modifier, navController, appViewModel, authViewModel -> MenuPage(modifier, navController, appViewModel, authViewModel) },
     subPages = listOf(
-        Favorites,
+        FavoritesPage,
         SubMenu,
         ProductCustomPage,
         PrepPage,
@@ -118,29 +118,29 @@ object Checkout : Destination(
     label="Cart",
     route = "checkout",
     pageRoute = "checkoutPage",
-    page = { modifier, navController, appViewModel -> CheckoutPage(modifier, navController, appViewModel )},
+    page = { modifier, navController, appViewModel, authViewModel -> CheckoutPage(modifier, navController, appViewModel, authViewModel)},
     topBarHeaderText = {HeaderText("Checkout Page")}
 )
 
 object PrepPage : BasicDestination(
     route = "prepPage",
-    page = { modifier, navController, appViewModel -> OrderPrepPage(modifier, navController, appViewModel )},
+    page = { modifier, navController, appViewModel, _ -> OrderPrepPage(modifier, navController, appViewModel )},
     topBarHeaderText = {Text("")}
 )
 
 object ProductCustomPage : BasicDestination(
     route = "productPage",
-    page = { modifier, navController, appViewModel -> ProductPage(modifier, navController, appViewModel) },
+    page = { modifier, navController, appViewModel, authViewModel -> ProductPage(modifier, navController, appViewModel, authViewModel) },
 )
 
-object Favorites : BasicDestination(
+object FavoritesPage : BasicDestination(
     route = "favorites",
-    page = { modifier, navController, appviewModel -> FavoritesPage(modifier, navController, appviewModel)}
+    page = { modifier, navController, appViewModel, authViewModel -> FavoritesPage(modifier, navController, appViewModel, authViewModel)}
 )
 
 object SubMenu : BasicDestination(
     route = "subMenu",
-    page = { modifier, navController, appViewModel -> SubMenuPage(modifier, navController, appViewModel) },
+    page = { modifier, navController, appViewModel, _ -> SubMenuPage(modifier, navController, appViewModel) },
 )
 
 object Rewards : Destination(
@@ -148,7 +148,7 @@ object Rewards : Destination(
     label = "Rewards",
     route = "rewards",
     pageRoute = "rewardspage",
-    page = {modifier, navController, appViewModel -> RewardsPage(modifier, navController, appViewModel) },
+    page = {modifier, navController, appViewModel, _ -> RewardsPage(modifier, navController, appViewModel) },
     hideLocation = true,
     topBarHeaderText = {
         HeaderText("Rewards Program")
@@ -160,7 +160,7 @@ object Account : Destination(
     label = "Account",
     route = "account",
     pageRoute = "accountpage",
-    page = { modifier, navController, _ -> AccountPage(modifier, navController) },
+    page = { modifier, navController, _, authViewModel -> AccountPage(modifier, navController, authViewModel) },
     subPages = listOf(
         Login,
         SignUp,
@@ -173,17 +173,17 @@ object Account : Destination(
 
 object Login : BasicDestination(
     route = "login",
-    page = { modifier, navController, _ -> LoginPage(modifier, navController, {}, viewModel()) },
+    page = { modifier, navController, _, _ -> LoginPage(modifier, navController, {}, viewModel()) },
 )
 
 object SignUp : BasicDestination(
     route = "signup",
-    page = { modifier, navController, _ -> SignupPage(modifier, navController, {}, viewModel())  },
+    page = { modifier, navController, _, _ -> SignupPage(modifier, navController, {}, viewModel())  },
 )
 
 object ForgotPassword : BasicDestination(
     route = "forgotpassword/{email}",
-    page = { modifier, navController, _ ->
+    page = { modifier, navController, _, _ ->
         val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
            ForgotPasswordPage(modifier, navController)
     },
@@ -191,14 +191,14 @@ object ForgotPassword : BasicDestination(
 
 object Verification : BasicDestination(
     route = "verification/{email}",
-    page = { modifier, navController, _ ->
+    page = { modifier, navController, _, _ ->
         val email = navController.currentBackStackEntry?.arguments?.getString("email") ?: ""
         VerificationPage(modifier, navController, email) },
 )
 
 object LogOut : BasicDestination(
     route = "logout",
-    page = {modifier, navController, _ -> LogOutPage(modifier, navController) },
+    page = {modifier, navController, _, _ -> LogOutPage(modifier, navController) },
 )
 
 val BaseDestinations = listOf(

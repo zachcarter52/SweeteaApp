@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +55,7 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.notifications.Notifications
@@ -303,13 +305,9 @@ fun SweeteaApp(
         dynamicColor = false
     ){
 
-        val NavHost = @Composable {
-
-        }
         val navController = rememberNavController()
         val navEntries = navController.visibleEntries.collectAsState()
-        print("[DEBUGLOG] navEntries [${navEntries.value.size}]:")
-        println(navEntries.value)
+        val coroutineScope = rememberCoroutineScope()
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         var currentRoute by remember{mutableStateOf("")}
@@ -317,15 +315,15 @@ fun SweeteaApp(
         var selectedItem by remember { mutableIntStateOf(0) }
         var oldSelectedItem by remember { mutableIntStateOf(0) }
 
-        val navPageRoute = navBackStackEntry?.id
-        print("[DEBUGLOG] currentDistination.parent:")
-        println(navController.currentDestination?.parent)
         val navRoute = navBackStackEntry?.destination?.route
         var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
-        println(currentRouteObject)
         if(navRoute != null && navRoute != currentRoute){
             currentRoute = navRoute
-            val curRouteObj = destMap( navRoute )
+            val curRouteObj = destMap(navRoute)
+            if(curRouteObj != currentRouteObject){
+                authViewModel.fetchUsername()
+                viewModel.updateInfo()
+            }
             if(curRouteObj != null && curRouteObj.index >= 0 ){
                 currentRouteObject = curRouteObj
                 oldSelectedItem = selectedItem
@@ -426,6 +424,7 @@ fun SweeteaApp(
             ) { padding ->
                 SweetTeaNavHost(
                     appViewModel = viewModel,
+                    authViewModel = authViewModel,
                     navController = navController,
                     modifier = Modifier.padding(padding),
                     enterTransition = enterTransition,

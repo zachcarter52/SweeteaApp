@@ -5,15 +5,13 @@ import kotlinx.datetime.*
 
 @Serializable
 open class ProductOrder(
-    val orderID: ULong = 0UL,
+    val orderID: ULong,
     val emailAddress: String,
-    val modifiedProducts: List<ModifiedProduct?>,
-    val quantities: List<Int>,
-    val prices: List<String>,
+    val orderedProducts: List<OrderedProduct>,
     val date: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
 ): Comparable<ProductOrder>{
     val modifiedProductIDs: List<ULong>
-        get() = modifiedProducts.map { it -> it?.modifiedProductID ?: 0UL }
+        get() = orderedProducts.map {it.modifiedProduct.modifiedProductID}
     override fun compareTo(other: ProductOrder): Int {
         return orderID.compareTo(other.orderID)
     }

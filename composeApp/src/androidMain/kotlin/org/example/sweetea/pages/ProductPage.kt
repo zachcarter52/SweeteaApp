@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -37,6 +40,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import org.example.sweetea.AuthViewModel
 import org.example.sweetea.Checkout
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.dataclasses.local.AppViewModel
@@ -61,9 +66,9 @@ import org.example.sweetea.dataclasses.retrieved.ChoiceData
 fun ProductPage(
     modifier: Modifier = Modifier,
     navController: NavController,
-    appViewModel: AppViewModel
+    appViewModel: AppViewModel,
+    authViewModel: AuthViewModel
 ) {
-
     println("DBG: Working Item: " + appViewModel.workingItem?.modifiers?.data + appViewModel.workingItem?.modifiers?.data?.size)
     println("DBG: Current Product: " + appViewModel.currentProduct?.modifiers?.data + appViewModel.currentProduct?.modifiers?.data?.size)
 

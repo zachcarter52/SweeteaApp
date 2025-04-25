@@ -1,12 +1,10 @@
 package org.example.sweetea.database
 
 import org.example.sweetea.Modifier
-import org.example.sweetea.database.ModifiedProductSchema.ModifiedProducts
 import org.example.sweetea.database.ModifierSchema.Modifiers.choiceID
 import org.example.sweetea.database.ModifierSchema.Modifiers.databaseModifierID
 import org.example.sweetea.database.ModifierSchema.Modifiers.modifiedProductID
 import org.example.sweetea.database.ModifierSchema.Modifiers.modifierID
-import org.example.sweetea.database.ModifierSchema.Modifiers.popularity
 import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.database.model.ModifierRepository
 import org.jetbrains.exposed.sql.Database
@@ -18,7 +16,6 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
     object Modifiers: Table(){
@@ -26,7 +23,6 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
         val modifiedProductID = ulong("modifiedProductID")
         val modifierID = varchar("modifierID", 24)
         val choiceID = varchar("choiceID", 24)
-        val popularity = integer("popularity")
 
         override val primaryKey = PrimaryKey(databaseModifierID)
     }
@@ -47,7 +43,6 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
                     it[Modifiers.modifiedProductID],
                     it[modifierID],
                     it[choiceID],
-                    it[popularity]
                 )
             }
         }
@@ -63,31 +58,33 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
                     it[modifiedProductID],
                     it[modifierID],
                     it[choiceID],
-                    it[popularity]
                 )
             }.single()
         }
     }
 
-    override suspend fun getExistingDatabaseModifierID(modifier: Modifier): ULong{
+    override suspend fun getIdenticalModifierIDs(modifier: Modifier): List<ULong> {
         return dbQuery {
-            val existingModifierID = Modifiers.selectAll().where{
+            return@dbQuery Modifiers.selectAll().where {
+                (modifierID eq modifier.modifierID) and
+                        (choiceID eq modifier.choiceID)
+            }.map { it[databaseModifierID] }
+        }
+    }
+
+    override suspend fun getDatabaseModifierID(modifier: Modifier): ULong?{
+        return dbQuery {
+            return@dbQuery Modifiers.selectAll().where{
+                (modifiedProductID eq modifier.modifiedProductID)
                 (modifierID eq modifier.modifierID) and
                         (choiceID eq modifier.choiceID)
             }.map{ it[databaseModifierID] }.singleOrNull()
-            return@dbQuery existingModifierID ?: 0UL
         }
     }
 
     override suspend fun addModifier(modifier: Modifier): ULong{
-        val existingDatabaseModifierID = getExistingDatabaseModifierID(modifier)
-        if(existingDatabaseModifierID != 0UL) {
-            val existingModifier = getModifier(existingDatabaseModifierID)
-            dbQuery {
-                Modifiers.update({ Modifiers.databaseModifierID eq existingDatabaseModifierID}) {
-                    it[popularity] = existingModifier.popularity + 1
-                }
-            }
+        val existingDatabaseModifierID = getDatabaseModifierID(modifier)
+        if(existingDatabaseModifierID != 0UL && existingDatabaseModifierID != null) {
             return existingDatabaseModifierID
         }
         return dbQuery {
@@ -99,10 +96,11 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
         }
     }
 
-    override suspend fun removeModifier(modifier: Modifier): Boolean {
-        if(modifier.databaseModifierID == 0UL) return false
+    override suspend fun removeProductModifiers(modifiedProductID: ULong): Boolean {
         return dbQuery {
-           Modifiers.deleteWhere { databaseModifierID eq modifier.databaseModifierID } == 1
+           return@dbQuery Modifiers.deleteWhere {
+               Modifiers.modifiedProductID eq modifiedProductID
+           } > 0
         }
 
     }

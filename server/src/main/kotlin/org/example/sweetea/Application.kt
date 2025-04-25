@@ -16,11 +16,12 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import kotlinx.serialization.json.Json
 import org.example.sweetea.database.AdminAccountSchema
 import org.example.sweetea.database.EventSchema
-import org.example.sweetea.database.FavoritesSchema
+import org.example.sweetea.database.FavoriteProductSchema
 import org.example.sweetea.database.ModifiedProductSchema
 import org.example.sweetea.database.ModifierSchema
-import org.example.sweetea.database.OrderedProductSchema
+import org.example.sweetea.database.OrderSchema
 import org.example.sweetea.database.RewardSchema
+import org.example.sweetea.database.model.OrderedProductSchema
 import org.example.sweetea.plugins.configureWebPanel
 import org.jetbrains.exposed.sql.Database
 
@@ -61,7 +62,8 @@ fun Application.module() {
     val modifierSchema = ModifierSchema(database)
     val modifiedProductSchema = ModifiedProductSchema(database, modifierSchema)
     val orderedProductSchema = OrderedProductSchema(database, modifiedProductSchema)
-    val favoritesSchema = FavoritesSchema(database, modifiedProductSchema)
+    val productOrderSchema = OrderSchema(database, orderedProductSchema)
+    val favoritesSchema = FavoriteProductSchema(database, modifierSchema, modifiedProductSchema)
     configureSecurity(
         adminAccountSchema
     )
@@ -69,7 +71,7 @@ fun Application.module() {
         adminAccountSchema,
         eventSchema,
         modifiedProductSchema,
-        orderedProductSchema,
+        productOrderSchema,
         favoritesSchema
     )
     configureSerialization()

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
 
+val emptyLambda = {}
 @Composable
 fun ModifiedProductItem(
     cartItem: ProductData,
@@ -24,11 +25,12 @@ fun ModifiedProductItem(
     textPadding: Dp = 24.dp,
     itemTextSize: TextUnit = 24.sp,
     quantity: Int = 1,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit = emptyLambda,
     buttons: @Composable () -> Unit
 ){
+    val rowModifier = Modifier.fillMaxWidth()
     Row(
-        modifier = Modifier.fillMaxWidth().clickable{onClick()},
+        modifier = if(onClick != emptyLambda) rowModifier.clickable{onClick()} else rowModifier
     ) {
         Row(
             modifier = Modifier.padding(10.dp),

@@ -1,5 +1,6 @@
 package org.example.sweetea.ui.components
 
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -11,12 +12,15 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import org.example.sweetea.AuthViewModel
 import org.example.sweetea.R
+import org.example.sweetea.dataclasses.local.AppViewModel
 
 @Composable
 fun BearPageTemplate(
@@ -24,7 +28,7 @@ fun BearPageTemplate(
     verticalArrangement: Arrangement.Vertical? = null,
     horizontalAlignment: Alignment.Horizontal? = null,
     showBear: Boolean = true,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ){
     val logo = if (!isSystemInDarkTheme()){
         painterResource(id = R.drawable.sweetealogo_homepage_light)

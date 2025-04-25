@@ -6,7 +6,6 @@ import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
-import io.ktor.server.plugins.CannotTransformContentToTypeException
 import io.ktor.server.request.contentType
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
@@ -20,15 +19,14 @@ import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
 import org.jetbrains.exposed.sql.*
-import org.example.sweetea.Constants
 import org.example.sweetea.ModifiedProduct
+import org.example.sweetea.ProductOrder
 import org.example.sweetea.ResponseClasses.Event
 import org.example.sweetea.database.model.AdminAccountRepository
 import org.example.sweetea.database.model.EventRepository
-import org.example.sweetea.database.model.FavoritesRepository
+import org.example.sweetea.database.model.FavoriteProductsRepository
 import org.example.sweetea.database.model.ModifiedProductRepository
 import org.example.sweetea.database.model.OrderRepository
-import org.example.sweetea.database.model.RewardRepository
 import java.io.File
 
 fun Application.configureDatabases(
@@ -36,7 +34,7 @@ fun Application.configureDatabases(
     eventRepository: EventRepository,
     modifiedProductRepository: ModifiedProductRepository,
     orderRepository: OrderRepository,
-    favoritesRepository: FavoritesRepository,
+    favoritesRepository: FavoriteProductsRepository,
 ) {
     val l: String = File.separator
     routing {
@@ -58,11 +56,7 @@ fun Application.configureDatabases(
                 val emailAddress = call.parameters["emailAddress"]
                 if(!emailAddress.isNullOrBlank()){
                     val favorites = favoritesRepository.getFavorites(emailAddress)
-                    if(favorites != null) {
-                        call.respond(HttpStatusCode.OK, favorites)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
+                    call.respond(HttpStatusCode.OK, favorites)
                 } else {
                     call.respond(HttpStatusCode.BadRequest)
                 }
@@ -71,9 +65,9 @@ fun Application.configureDatabases(
                 val emailAddress = call.parameters["emailAddress"]
                 val modifiedProduct = call.receive<ModifiedProduct>()
                 if(!emailAddress.isNullOrBlank()){
-                    val modifiedFavorites = favoritesRepository.addFavorite(emailAddress, modifiedProduct)
-                    if(modifiedFavorites.isFavorited(modifiedProduct)){
-                        call.respond(HttpStatusCode.OK)
+                    val newID = favoritesRepository.addFavoriteProduct(emailAddress, modifiedProduct)
+                    if(newID > 0UL){
+                        call.respond(HttpStatusCode.OK, newID)
                     } else {
                         call.respond(HttpStatusCode.NotFound)
                     }
@@ -94,6 +88,23 @@ fun Application.configureDatabases(
                     call.respond(HttpStatusCode.BadRequest)
                 }
             }
+        }
+        route("/orders"){
+            post("/{emailAddress}"){
+                val emailAddress = call.parameters["emailAddress"]
+                val order = call.receive<ProductOrder>()
+                if(!emailAddress.isNullOrBlank()){
+                    val newID = orderRepository.addOrder(order) > 0UL
+                    if(newID){
+                        call.respond(HttpStatusCode.OK, newID)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+
         }
         authenticate("admin-auth-session") {
             route("/events") {

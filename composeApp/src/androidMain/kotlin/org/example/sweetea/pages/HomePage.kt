@@ -39,9 +39,6 @@ fun HomePage(
     appViewModel: AppViewModel,
     authViewModel: AuthViewModel
 ) {
-    LaunchedEffect(Unit){
-        appViewModel.updateInfo()
-    }
 
     val featuredItemsImage = painterResource(id = R.drawable.featured_items)
     var clicked by remember { mutableStateOf(false) }

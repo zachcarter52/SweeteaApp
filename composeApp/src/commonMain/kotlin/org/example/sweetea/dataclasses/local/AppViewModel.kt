@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.example.sweetea.Constants
+import org.example.sweetea.ModifiedProduct
 import org.example.sweetea.ResponseClasses.AppStatus
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
@@ -37,8 +38,8 @@ class AppViewModel: ViewModel() {
     // when a custom choice is selected, change the workingItem choice to match var workingItem: ProductData? by mutableStateOf(null)
     var workingItem: ProductData? by mutableStateOf(null)
 
-    private val _favoriteProducts = mutableStateListOf<ProductData>()
-    var favoriteProducts: MutableList<ProductData> = _favoriteProducts
+    private val _favoriteProducts = MutableStateFlow<MutableList<ProductData>>(mutableListOf())
+    var favoriteProducts: MutableStateFlow<MutableList<ProductData>> = _favoriteProducts
     private val _shoppingCart = mutableStateListOf<ProductData>()
     var shoppingCart: MutableList<ProductData> = _shoppingCart
     private val _shoppingCartQuantities = mutableStateListOf<Int>()
@@ -52,7 +53,7 @@ class AppViewModel: ViewModel() {
     var productCategoryMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
         private set
 
-    suspend fun updateInfo(){
+    fun updateInfo(){
         getAppStatus()
         if(currentLocation == null) getLocations()
         if(currentCategory == null) getCategories()
@@ -157,5 +158,58 @@ class AppViewModel: ViewModel() {
                 //throw e
             }
         }
+    }
+
+    private fun getFavorites(emailAddress: String){
+        viewModelScope.launch {
+            try{
+                println("Getting Favorites")
+                val favorites = serverRepository.getFavorites(emailAddress)
+                if(favorites != null) {
+                    _favoriteProducts.value = favorites.modifiedProducts.mapNotNull{it?.toProductData()}.toMutableList()
+                    _categoryList.value.forEach { category ->
+                        categoryMap[category.site_category_id] = category
+                    }
+                }
+            } catch (e: Exception){
+                println("Unable to get categories, ${e}")
+                //throw e
+            }
+        }
+    }
+
+    private fun ModifiedProduct.toProductData(): ProductData? {
+        val productIndex = _productList.value.map { it.id }.indexOf(this.productID)
+        if (productIndex > 0) {
+            val product = _productList.value[productIndex].copy()
+            this.modifiers.forEach { modifier ->
+                val modifierIndex =
+                    product.modifiers.data.map { it.id }.indexOf(modifier.modifierID)
+                if (modifierIndex > 0) {
+                    val choiceIndex = product.modifiers.data[modifierIndex].choices.map { it.id }
+                        .indexOf(modifier.choiceID)
+                    if (choiceIndex > 0) {
+                        val choice =
+                            product.modifiers.data[modifierIndex].choices[choiceIndex].copy()
+                        product.modifiers.data[modifierIndex].choices.clear()
+                        product.modifiers.data[modifierIndex].choices.set(0, choice)
+                    }
+                }
+            }
+            return product
+        }
+        return null
+    }
+
+    fun getIsFavorite(product: ProductData): Boolean{
+        return favoriteProducts.value.indexOf(product) != -1
+    }
+
+    fun addFavorite(emailAddress: String, newFavorite: ProductData){
+        _favoriteProducts.value.add(newFavorite)
+    }
+
+    fun removeFavorite(emailAddress: String, oldFavorite: ProductData){
+        _favoriteProducts.value.remove(oldFavorite)
     }
 }

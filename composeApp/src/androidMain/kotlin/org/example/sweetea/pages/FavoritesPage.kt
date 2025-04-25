@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.example.sweetea.AuthViewModel
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
@@ -35,6 +36,7 @@ fun FavoritesPage(
     modifier: Modifier = Modifier,
     navController: NavController,
     appViewModel: AppViewModel,
+    authViewModel: AuthViewModel
 ){
     BearPageTemplate(
         modifier = modifier,
@@ -55,7 +57,10 @@ fun FavoritesPage(
                Button(
                    modifier = Modifier.size(24.dp),
                    onClick = {
-                           appViewModel.favoriteProducts.remove(product)
+                       appViewModel.removeFavorite(authViewModel.emailAddress.value, product)
+                       if(appViewModel.favoriteProducts.size == 0){
+                           navController.popBackStack()
+                       }
                    },
                    contentPadding = PaddingValues(2.dp)
                ) {
