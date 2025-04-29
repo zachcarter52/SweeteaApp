@@ -158,8 +158,8 @@ dependencies {
     implementation(libs.play.services.location)
 
     testImplementation("junit:junit:4.13.2")
-    configurations.all {
-        exclude(group = "org.hamcrest", module = "hamcrest-core")
-    }
+    testImplementation("org.hamcrest:hamcrest:2.2")
+    testImplementation ("io.mockk:mockk:1.13.5")
+
 }
 

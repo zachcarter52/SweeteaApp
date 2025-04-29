@@ -33,6 +33,7 @@ ktor-tests = "2.3.9"
 
 mapsCompose = "2.11.4"
 material = "1.4.3"
+mockk = "1.13.8"
 navigation-compose = "2.8.3"
 exposed = "0.53.0"
 mariadb = "3.5.0"
@@ -46,6 +47,7 @@ aws-kotlin = "1.4.16"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.1.0"
 playServicesMapsVersion = "18.0.0"
+robolectric = "4.10.3"
 squareSdkVersion = "2.0.0-beta5"
 core-splashscreen = "1.0.1"
 
@@ -71,12 +73,14 @@ androidx-ui-v143 = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places"}
 
 #cognito
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
-auth-cognito = { module = "com.amplifyframework:auth-cognito", version.ref = "authCognito" }
 authenticator = { module = "com.amplifyframework.ui:authenticator", version.ref = "authenticator" }
 aws-http = { module = "aws.sdk.kotlin:aws-http-jvm", version.ref = "aws-kotlin"}
 aws-amplify-core = { module = "com.amplifyframework:core", version.ref = "amplify-core" }

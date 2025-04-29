@@ -5,6 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amplifyframework.auth.AuthCategory
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.auth.result.step.AuthSignInStep
@@ -15,7 +16,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.lang.reflect.Modifier
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(
+    private val authCategory: AuthCategory = Amplify.Auth // default to real Amplify.Auth
+) : ViewModel(
+
+) {
     private val authRepository: AuthRepository = CognitoAuthRepository()
     var isUserLoggedIn = MutableStateFlow(false)
         private set
@@ -24,9 +29,9 @@ class AuthViewModel : ViewModel() {
     val usernameState: StateFlow<String> = username.asStateFlow()
     //var username = mutableStateOf("") // Stores username across UI screens
 
-    init {
+    /*init {
         checkUserLoginStatus() // check login status when the ViewModel is initialized
-    }
+    }*/
 
     fun signUpUser(email: String, password: String, username: String, onResult: (Boolean, String?) -> Unit) {
         val options = AuthSignUpOptions.builder()
@@ -34,10 +39,10 @@ class AuthViewModel : ViewModel() {
             .userAttribute(AuthUserAttributeKey.preferredUsername(), username) // Store username
             .build()
 
-        Amplify.Auth.signUp(email, password, options,
+        authCategory.signUp(email, password, options,
             { result -> onResult(true,null)
                 // Handle successful sign-up
-                Log.i("Amplify", "Sign up successful!")
+                //Log.i("Amplify", "Sign up successful!")
             },
             { error -> onResult(false, error.message)
                 Log.e("Amplify", "Sign up failed: $error")
