@@ -2,14 +2,13 @@ package org.example.sweetea.pages
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,10 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -42,27 +41,25 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.serialization.ExperimentalSerializationApi
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.CardEntryActivity
 import org.example.sweetea.Menu
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.OrderedProduct
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.navigateSingleTopTo
-import org.example.sweetea.ui.components.MenuDisplayImage
 import org.example.sweetea.PrepPage
+import org.example.sweetea.ProductOrder
 import org.example.sweetea.ui.components.ModifiedProductItem
 
 @JsonClass(generateAdapter = true)
-data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
+data class LineItem (
     val price: Float,
     val quantity: String = 1.toString(),
     @Json(name = "name")
@@ -104,7 +101,13 @@ fun CheckoutPage(
         println("DBG: Result Code " + result.resultCode)
         println("DBG: Result Data " + result.data)
         if(result.resultCode == Activity.RESULT_OK){
-            navController.navigate(PrepPage.route)
+            if(isLoggedIn) {
+                val order = appViewModel.orderCart()
+                println(order.encodeToString())
+                appViewModel.saveOrder(order)
+                appViewModel.getAppStatus()
+            }
+            navController.navigateSingleTopTo(PrepPage.route)
             val data = result.data
             println("Data" + data)
         }
@@ -201,7 +204,7 @@ fun CheckoutPage(
         )
 
         Button(
-            onClick = { navController.navigate(Menu.route) },
+            onClick = { navController.navigateSingleTopTo(Menu.route) },
             modifier = Modifier.padding(bottom = 20.dp)
                 .size(height = 48.dp, width = 360.dp)
         ) { Text(
@@ -242,8 +245,9 @@ fun CheckoutItem(
     ) {
 
         if(isLoggedIn) {
-            var isFavorite =
-                appViewModel.getIsFavorite(appViewModel.shoppingCart[index])
+            var isFavorite by remember{
+                mutableStateOf(appViewModel.getIsFavorite(appViewModel.shoppingCart[index]))
+            }
             Button(
                 modifier = Modifier.size(24.dp),
                 onClick = {

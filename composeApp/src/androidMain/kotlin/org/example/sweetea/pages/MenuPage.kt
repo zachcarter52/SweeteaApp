@@ -16,9 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,7 +38,8 @@ import org.example.sweetea.AuthViewModel
 import org.example.sweetea.FavoritesPage
 import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.SubMenu
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.dataclasses.retrieved.CategoryData
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.MenuDisplayImage
@@ -96,6 +97,7 @@ fun MenuPage(
     var searchTerms by remember { mutableStateOf("") }
 
     val menuCategoryState by appViewModel.categoryList.collectAsState()
+    val favoriteProducts by appViewModel.favoriteProducts.collectAsStateWithLifecycle()
     val menuProductState by appViewModel.productList.collectAsStateWithLifecycle()
     println("Menu Categories $menuCategoryState")
 
@@ -173,8 +175,8 @@ fun MenuPage(
         HorizontalDivider()
         Column(Modifier.fillMaxWidth()) {
             if(searchTerms.isEmpty()) {
-                if(isLoggedIn && appViewModel.favoriteProducts.size > 0){
-                    val url = "${appViewModel.favoriteProducts[0].images.data[0].url}?height=${3*itemHeight}"
+                if(isLoggedIn && favoriteProducts.isNotEmpty()){
+                    val url = "${favoriteProducts[0].images.data[0].url}?height=${3*itemHeight}"
                     MenuItem(
                         url = url,
                         contentDescription = "Favorites",

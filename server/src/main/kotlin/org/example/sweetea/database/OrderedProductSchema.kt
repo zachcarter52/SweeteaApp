@@ -1,11 +1,14 @@
-package org.example.sweetea.database.model
+package org.example.sweetea.database
 
 import org.example.sweetea.OrderedProduct
-import org.example.sweetea.database.model.OrderedProductSchema.OrderedProducts.modifiedProductID
-import org.example.sweetea.database.model.OrderedProductSchema.OrderedProducts.orderID
-import org.example.sweetea.database.model.OrderedProductSchema.OrderedProducts.orderedProductID
-import org.example.sweetea.database.model.OrderedProductSchema.OrderedProducts.price
-import org.example.sweetea.database.model.OrderedProductSchema.OrderedProducts.quantity
+import org.example.sweetea.database.OrderedProductSchema.OrderedProducts.modifiedProductID
+import org.example.sweetea.database.OrderedProductSchema.OrderedProducts.orderID
+import org.example.sweetea.database.OrderedProductSchema.OrderedProducts.orderedProductID
+import org.example.sweetea.database.OrderedProductSchema.OrderedProducts.price
+import org.example.sweetea.database.OrderedProductSchema.OrderedProducts.quantity
+import org.example.sweetea.database.model.DatabaseSchema
+import org.example.sweetea.database.model.ModifiedProductRepository
+import org.example.sweetea.database.model.OrderedProductRepository
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -53,8 +56,9 @@ class OrderedProductSchema(
 
     override suspend fun saveProduct(product: OrderedProduct): ULong {
         return dbQuery {
-            val modifiedProductID = if(product.modifiedProduct.modifiedProductID == 0UL){
+            val modifiedProductID = if(product.modifiedProduct.modifiedProductID == 0UL) {
                 modifiedProductRepository.getModifiedProduct(product.modifiedProduct)?.modifiedProductID
+                    ?: modifiedProductRepository.saveProduct(product.modifiedProduct)
             } else {
                 product.modifiedProduct.modifiedProductID
             }

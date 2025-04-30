@@ -1,46 +1,34 @@
 package org.example.sweetea.pages
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,16 +38,18 @@ import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import org.example.sweetea.AuthViewModel
-import org.example.sweetea.Checkout
-import org.example.sweetea.ProductCustomPage
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
 
 @Composable
@@ -309,10 +299,10 @@ fun ProductPage(
                         )
 
                         val ptrToChoices = appViewModel.workingItem?.modifiers?.data?.get(modidx)?.choices
-                        val maxChoicesChecked = 3
                         var checkedChoicesCounter by remember {
                             mutableIntStateOf(0)
                         }
+                        val maxCheckChoices = if(modifierData.max_selected == 0) 3 else modifierData.max_selected
 
                         modifierData.choices.forEachIndexed { index, choiceData ->
                             Row(
@@ -327,7 +317,7 @@ fun ProductPage(
                                     checked = checked,
                                     onCheckedChange = { isChecked ->
                                         checked = isChecked
-                                        if(checkedChoicesCounter >= maxChoicesChecked){
+                                        if(checkedChoicesCounter >= maxCheckChoices){
                                             checked = false
                                         }
 
@@ -343,7 +333,22 @@ fun ProductPage(
                                     }
                                 )
                                 Text(
-                                    choiceData.name + " - " + "$%.2f".format(choiceData.price), //next to box show name and price of mod
+                                    text = buildAnnotatedString{
+                                        withLink(
+                                            LinkAnnotation.Clickable(
+                                                tag = "toggleClickedIfPossible",
+                                                linkInteractionListener = {
+                                                    if(checkedChoicesCounter < maxCheckChoices || checked){
+                                                        checked = !checked
+                                                    }
+                                                }
+                                            )
+                                        ){
+                                            append(
+                                                choiceData.name + " - " + "$%.2f".format(choiceData.price), //next to box show name and price of mod
+                                            )
+                                        }
+                                    },
                                     fontFamily = FontFamily.SansSerif
                                 )
                             }

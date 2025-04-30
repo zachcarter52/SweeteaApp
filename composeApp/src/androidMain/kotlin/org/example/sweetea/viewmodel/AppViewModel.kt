@@ -1,23 +1,35 @@
-package org.example.sweetea.dataclasses.local
+package org.example.sweetea.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import aws.smithy.kotlin.runtime.collections.push
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.example.sweetea.AuthViewModel
 import org.example.sweetea.Constants
 import org.example.sweetea.ModifiedProduct
+import org.example.sweetea.OrderedProduct
+import org.example.sweetea.ProductOrder
 import org.example.sweetea.ResponseClasses.AppStatus
+import org.example.sweetea.dataclasses.local.ServerRepository
+import org.example.sweetea.dataclasses.local.SquareRepository
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
+import org.example.sweetea.dataclasses.retrieved.Data
 import org.example.sweetea.dataclasses.retrieved.LocationData
+import org.example.sweetea.dataclasses.retrieved.ModifierData
 import org.example.sweetea.dataclasses.retrieved.ProductData
+import org.example.sweetea.model.Order
 
-class AppViewModel: ViewModel() {
+class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
 
     private val serverRepository = ServerRepository()
     private val squareRepository = SquareRepository()
@@ -28,7 +40,7 @@ class AppViewModel: ViewModel() {
     val categoryList: StateFlow<List<CategoryData>> = _categoryList
     private val _productList = MutableStateFlow<List<ProductData>>(listOf())
     val productList: StateFlow<List<ProductData>> = _productList
-    private val _appStatus = MutableStateFlow(AppStatus.DefaultStatus)
+    private val _appStatus = MutableStateFlow(AppStatus())
     val appStatus: StateFlow<AppStatus> = _appStatus
     var currentLocation: LocationData? by mutableStateOf(null)
     var currentCategory: CategoryData? by mutableStateOf(null)
@@ -38,12 +50,17 @@ class AppViewModel: ViewModel() {
     // when a custom choice is selected, change the workingItem choice to match var workingItem: ProductData? by mutableStateOf(null)
     var workingItem: ProductData? by mutableStateOf(null)
 
-    private val _favoriteProducts = MutableStateFlow<MutableList<ProductData>>(mutableListOf())
-    var favoriteProducts: MutableStateFlow<MutableList<ProductData>> = _favoriteProducts
+    private val _orders = MutableStateFlow<List<ProductOrder>>(mutableListOf())
+    val orders: StateFlow<List<ProductOrder>> = _orders
+
+    private val _favoriteProducts = MutableStateFlow<List<ProductData>>(mutableListOf())
+    val favoriteProducts: StateFlow<List<ProductData>> = _favoriteProducts
+
     private val _shoppingCart = mutableStateListOf<ProductData>()
     var shoppingCart: MutableList<ProductData> = _shoppingCart
     private val _shoppingCartQuantities = mutableStateListOf<Int>()
     var shoppingCartQuantities: MutableList<Int> = _shoppingCartQuantities
+    val emailAddress: StateFlow<String> by mutableStateOf(authViewModel.emailAddress)
 
     var categoryMap: MutableMap<String, CategoryData> = mutableMapOf()
         private set
@@ -58,6 +75,10 @@ class AppViewModel: ViewModel() {
         if(currentLocation == null) getLocations()
         if(currentCategory == null) getCategories()
         if(currentLocation != null) getProducts(currentLocation!!.id)
+        if(emailAddress.value.isNotBlank() ) {
+            if(favoriteProducts.value.isEmpty()) getFavorites()
+            if(orders.value.isEmpty()) getOrders()
+        }
     }
 
     fun setCategory(category: CategoryData){
@@ -69,7 +90,7 @@ class AppViewModel: ViewModel() {
         workingItem = ProductData(currentProduct!!)
 
         workingItem?.modifiers?.data?.forEachIndexed { idx, modifierData ->
-            if(modifiedProductData != null){
+            if(modifiedProductData != null && modifiedProductData.modifiers.data.size < idx){
                 modifierData.choices = modifiedProductData.modifiers.data[idx].choices
             } else if (modifierData.max_selected == 1) {
                 // Drink will have the default "[0]" option saved for single modifier choices
@@ -81,12 +102,17 @@ class AppViewModel: ViewModel() {
         }
     }
     
-    private fun getAppStatus(){
+    fun getAppStatus(){
         viewModelScope.launch{
             try{
                 println("Getting Current appStatus")
-                _appStatus.value = serverRepository.getAppStatus() ?: AppStatus.DefaultStatus
-                //println("currentEvent:{name: ${getAppStatus.value.eventName}, url:${getAppStatus.value.eventImageURL}}")
+                if(emailAddress.value.isNotBlank()){
+                    val newStatus = serverRepository.getAppStatus(emailAddress.value)
+                    if(newStatus != null) _appStatus.value = newStatus
+                } else {
+                    _appStatus.value = serverRepository.getAppStatus() ?: AppStatus()
+                    //println("currentEvent:{name: ${getAppStatus.value.eventName}, url:${getAppStatus.value.eventImageURL}}")
+                }
             } catch (e: Exception){
                 println("Unable to get App Status, ${e}")
                 println("Url : ${Constants.SERVER_URL}:${Constants.SERVER_PORT}${Constants.APP_STATUS_ENDPOINT}")
@@ -160,43 +186,83 @@ class AppViewModel: ViewModel() {
         }
     }
 
-    private fun getFavorites(emailAddress: String){
+    fun getFavorites(){
         viewModelScope.launch {
             try{
                 println("Getting Favorites")
-                val favorites = serverRepository.getFavorites(emailAddress)
+                val favorites = serverRepository.getFavorites(emailAddress.value)
                 if(favorites != null) {
-                    _favoriteProducts.value = favorites.modifiedProducts.mapNotNull{it?.toProductData()}.toMutableList()
-                    _categoryList.value.forEach { category ->
-                        categoryMap[category.site_category_id] = category
-                    }
+                    _favoriteProducts.value = favorites.modifiedProducts.mapNotNull{toProductData(it!!)}
                 }
             } catch (e: Exception){
-                println("Unable to get categories, ${e}")
+                println("Unable to get favorites, ${e}")
                 //throw e
             }
         }
     }
 
-    private fun ModifiedProduct.toProductData(): ProductData? {
-        val productIndex = _productList.value.map { it.id }.indexOf(this.productID)
-        if (productIndex > 0) {
-            val product = _productList.value[productIndex].copy()
-            this.modifiers.forEach { modifier ->
-                val modifierIndex =
-                    product.modifiers.data.map { it.id }.indexOf(modifier.modifierID)
-                if (modifierIndex > 0) {
-                    val choiceIndex = product.modifiers.data[modifierIndex].choices.map { it.id }
-                        .indexOf(modifier.choiceID)
-                    if (choiceIndex > 0) {
-                        val choice =
-                            product.modifiers.data[modifierIndex].choices[choiceIndex].copy()
-                        product.modifiers.data[modifierIndex].choices.clear()
-                        product.modifiers.data[modifierIndex].choices.set(0, choice)
+    private fun getOrders(){
+        viewModelScope.launch {
+            try{
+                println("Getting Orders")
+                val orders = serverRepository.getOrders(emailAddress.value)
+                if(orders != null) {
+                    _orders.value = orders
+                }
+            } catch (e: Exception){
+                println("Unable to get orders, ${e}")
+                //throw e
+            }
+        }
+    }
+
+    fun orderCart() = ProductOrder(
+        emailAddress = emailAddress.value,
+        restaurantName = currentLocation!!.nickname,
+        orderedProducts = shoppingCart.mapIndexed{ index, productData ->
+            OrderedProduct(
+                modifiedProduct = productData.toModifiedProduct(),
+                quantity = shoppingCartQuantities[index],
+                price = productData.price.high_with_modifiers
+            )
+        }
+    )
+
+
+    fun toProductData(product: ModifiedProduct): ProductData? {
+        productIDMap[product.productID]?.let{ prod ->
+            val productData = prod.copy(modifiers = Data(mutableListOf()))
+            val productModifiers = prod.modifiers.copy()
+            //val modMap = mapOf(this.modifiers.map{it.modifierID} to this.modifiers.map{it.choiceID})
+            product.modifiers.forEach{ modifier ->
+                val modifierIndex = productModifiers.data.map { it.id }.indexOf(modifier.modifierID)
+                if (modifierIndex > -1) {
+                    productData.modifiers.data.add(productModifiers.data[modifierIndex])
+                    var choice = productModifiers.data[modifierIndex].choices[0]
+                    val choiceIndex = productModifiers.data[modifierIndex].choices.map { it.id }.indexOf(modifier.choiceID)
+                    if (choiceIndex > -1) {
+                        choice = productModifiers.data[modifierIndex].choices[choiceIndex]
+                    }
+                    productData.modifiers.data[productData.modifiers.data.size - 1].choices = mutableListOf(ChoiceData(choice))
+                }
+            }
+            /*
+            product.modifiers.data.forEach {
+                val maxChoices = if(it.max_selected == 0) 3 else it.max_selected
+                if(it.choices.size > maxChoices){
+                    if(it.min_selected == 0){
+                        it.choices = mutableListOf()
+                    } else {
+                        val newChoices = mutableListOf<ChoiceData>()
+                        for(i in 0..maxChoices){
+                            newChoices.add(it.choices[i])
+                        }
+                        it.choices = newChoices
                     }
                 }
             }
-            return product
+             */
+            return productData
         }
         return null
     }
@@ -205,11 +271,36 @@ class AppViewModel: ViewModel() {
         return favoriteProducts.value.indexOf(product) != -1
     }
 
+    fun saveOrder(order: ProductOrder){
+        viewModelScope.launch {
+            val newID = serverRepository.saveOrder(order)
+            if(newID != null && newID > 0UL) {
+                shoppingCart.clear()
+                shoppingCartQuantities.clear()
+                getOrders()
+            }
+        }
+
+    }
+
     fun addFavorite(emailAddress: String, newFavorite: ProductData){
-        _favoriteProducts.value.add(newFavorite)
+        viewModelScope.launch {
+            val newID = serverRepository.addFavorite(emailAddress, newFavorite.toModifiedProduct())
+            if(newID != null && newID > 0UL) {
+                getFavorites()
+            }
+        }
     }
 
     fun removeFavorite(emailAddress: String, oldFavorite: ProductData){
-        _favoriteProducts.value.remove(oldFavorite)
+        viewModelScope.launch {
+            serverRepository.removeFavorite(emailAddress, oldFavorite.toModifiedProduct())
+            getFavorites()
+        }
+    }
+
+    class AppViewModelFactory(private val authViewModel: AuthViewModel):
+        ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = AppViewModel(authViewModel) as T
     }
 }

@@ -10,8 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import org.example.sweetea.dataclasses.local.AppViewModel
-import org.example.sweetea.viewmodel.NavigationViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 
 //navhost function of Navigation
 @Composable

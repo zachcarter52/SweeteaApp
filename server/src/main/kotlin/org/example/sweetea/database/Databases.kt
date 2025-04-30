@@ -90,12 +90,21 @@ fun Application.configureDatabases(
             }
         }
         route("/orders"){
+            get("/{emailAddress}"){
+                val emailAddress = call.parameters["emailAddress"]
+                if(!emailAddress.isNullOrBlank()){
+                    val orders = orderRepository.allOrders(emailAddress)
+                    call.respond(HttpStatusCode.OK, orders)
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
             post("/{emailAddress}"){
                 val emailAddress = call.parameters["emailAddress"]
                 val order = call.receive<ProductOrder>()
                 if(!emailAddress.isNullOrBlank()){
-                    val newID = orderRepository.addOrder(order) > 0UL
-                    if(newID){
+                    val newID = orderRepository.addOrder(order)
+                    if(newID > 0UL){
                         call.respond(HttpStatusCode.OK, newID)
                     } else {
                         call.respond(HttpStatusCode.NotFound)

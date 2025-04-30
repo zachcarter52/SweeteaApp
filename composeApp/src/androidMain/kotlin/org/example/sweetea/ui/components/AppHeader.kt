@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.LinkAnnotation
@@ -26,12 +29,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import org.example.sweetea.Account
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.BaseDestinations
+import org.example.sweetea.FavoritesPage
 import org.example.sweetea.HeaderText
 import org.example.sweetea.Menu
+import org.example.sweetea.Orders
+import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.SubMenu
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.navigateSingleTopTo
 
 @Composable
@@ -51,23 +58,11 @@ fun AppHeader(
     val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val username by authViewModel.username.collectAsState()
 
-    /*
-    LaunchedEffect(Unit) {
-        if (isLoggedIn && username.isBlank()) {
-            authViewModel.fetchUsername()
-            Log.e("AuthDebug", "User logged in, fetching username")
-        } else if (!isLoggedIn) {
-            Log.d("AuthDebug", "User not logged in or username is blank")
-        }
-    }
-
-     */
-
     Log.e("HeaderDebug", "Recomposing. isLoggedIn: $isLoggedIn, username: $username")
 
     Column(modifier = modifier.fillMaxWidth(1f)) {
         Row(
-            modifier = Modifier.height(30.dp)
+            modifier = Modifier.height(40.dp)
                 .align(Alignment.End),
             verticalAlignment = Alignment.Bottom
         ) {
@@ -79,12 +74,19 @@ fun AppHeader(
                 Text(
                     text = buildAnnotatedString {
                         append("location: ")
-                        withStyle(
-                            style = SpanStyle(color = MaterialTheme.colorScheme.primary)
-                        ) {
+                        withLink(
+                            LinkAnnotation.Url(
+                                url = "test",
+                                styles = TextLinkStyles(SpanStyle(color = MaterialTheme.colorScheme.primary)),
+                                linkInteractionListener = {
+                                    navController.navigateSingleTopTo(Menu.route)
+                                }
+                            )
+                        ){
                             append("4010 Foothills Blvd #101, Roseville, CA 95747")
                         }
                     },
+                    //style = SpanStyle(color = MaterialTheme.colorScheme.primary),
                     fontSize = 10.sp,
                     lineHeight = 14.sp,
                     modifier = Modifier.fillMaxWidth(0.6f),
@@ -113,7 +115,30 @@ fun AppHeader(
                 navController.currentBackStackEntry?.destination?.route?.let {
                     if(BaseDestinations.map { dest -> dest.route }.indexOf(it) == -1){
                         when(it){
-                            "subMenu" -> {
+                            FavoritesPage.route -> {
+                                Text(
+                                    modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
+                                    text = buildAnnotatedString {
+                                        withLink(
+                                            LinkAnnotation.Url(
+                                                url=Menu.route,
+                                                styles = TextLinkStyles(
+                                                    style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                                    hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
+                                                ),
+                                                linkInteractionListener = {
+                                                    navController.navigate(Menu.route)
+                                                }
+                                            )
+                                        ) {
+                                            append("Menu")
+                                        }
+                                        append(" > ")
+                                        append("Favorites")
+                                    }
+                                )
+                            }
+                            SubMenu.route -> {
                                 Text(
                                     modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
                                     text = buildAnnotatedString {
@@ -136,7 +161,7 @@ fun AppHeader(
                                     }
                                 )
                             }
-                            "productPage" -> {
+                            ProductCustomPage.route -> {
                                 Text(
                                     modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
                                     text = buildAnnotatedString {
@@ -152,25 +177,66 @@ fun AppHeader(
                                                 }
                                             )
                                         ) {
-                                            append("Menu")
+                                            append(Menu.label)
                                         }
                                         append(" > ")
+                                        if(viewModel.currentCategory != null) {
+                                            withLink(
+                                                LinkAnnotation.Url(
+                                                    url = SubMenu.route,
+                                                    styles = TextLinkStyles(
+                                                        style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                                        hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
+                                                    ),
+                                                    linkInteractionListener = {
+                                                        navController.navigate(SubMenu.route)
+                                                    }
+                                                )
+                                            ) {
+                                                append(viewModel.currentCategory?.name)
+                                            }
+                                        } else {
+                                            withLink(
+                                                LinkAnnotation.Url(
+                                                    url = FavoritesPage.route,
+                                                    styles = TextLinkStyles(
+                                                        style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                                        hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
+                                                    ),
+                                                    linkInteractionListener = {
+                                                        navController.navigate(FavoritesPage.route)
+                                                    }
+                                                )
+                                            ) {
+                                                append("Favorites")
+                                            }
+
+                                        }
+                                        append(" > ")
+                                        append(viewModel.currentProduct?.name)
+                                    }
+                                )
+                            }
+                            Orders.route ->{
+                                Text(
+                                    modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
+                                    text = buildAnnotatedString {
                                         withLink(
                                             LinkAnnotation.Url(
-                                                url = SubMenu.route,
+                                                url= Account.route,
                                                 styles = TextLinkStyles(
                                                     style = SpanStyle(color = MaterialTheme.colorScheme.primary),
                                                     hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)
                                                 ),
                                                 linkInteractionListener = {
-                                                    navController.navigate(SubMenu.route)
+                                                    navController.navigateSingleTopTo(Account.route)
                                                 }
                                             )
                                         ) {
-                                            append(viewModel.currentCategory?.name)
+                                            append(Account.label)
                                         }
                                         append(" > ")
-                                        append(viewModel.currentProduct?.name)
+                                        append("My Orders")
                                     }
                                 )
                             }

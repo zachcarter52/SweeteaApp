@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 //import com.google.android.libraries.places.api.model.SubDestination
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.pages.AccountPage
 import org.example.sweetea.pages.CheckoutPage
 import org.example.sweetea.pages.FavoritesPage
@@ -25,6 +25,7 @@ import org.example.sweetea.pages.HomePage
 import org.example.sweetea.pages.LogOutPage
 import org.example.sweetea.pages.LoginPage
 import org.example.sweetea.pages.MenuPage
+import org.example.sweetea.pages.OrderHistoryPage
 import org.example.sweetea.pages.ProductPage
 import org.example.sweetea.pages.RewardsPage
 import org.example.sweetea.pages.SignupPage
@@ -131,6 +132,9 @@ object PrepPage : BasicDestination(
 object ProductCustomPage : BasicDestination(
     route = "productPage",
     page = { modifier, navController, appViewModel, authViewModel -> ProductPage(modifier, navController, appViewModel, authViewModel) },
+    topBarHeaderText = { appViewModel ->
+        HeaderText(appViewModel.currentProduct!!.name)
+    }
 )
 
 object FavoritesPage : BasicDestination(
@@ -141,6 +145,13 @@ object FavoritesPage : BasicDestination(
 object SubMenu : BasicDestination(
     route = "subMenu",
     page = { modifier, navController, appViewModel, _ -> SubMenuPage(modifier, navController, appViewModel) },
+    topBarHeaderText = { appViewModel ->
+        if(appViewModel.currentCategory == null){
+           HeaderText("Favorites")
+        } else {
+            HeaderText(appViewModel.currentCategory!!.name)
+        }
+    }
 )
 
 object Rewards : Destination(
@@ -166,7 +177,8 @@ object Account : Destination(
         SignUp,
         ForgotPassword,
         Verification,
-        LogOut
+        LogOut,
+        Orders
     ),
     hideTopBarHeader = false
 )
@@ -199,6 +211,14 @@ object Verification : BasicDestination(
 object LogOut : BasicDestination(
     route = "logout",
     page = {modifier, navController, _, _ -> LogOutPage(modifier, navController) },
+)
+
+object Orders: BasicDestination(
+    route = "orders",
+    page = {modifier, navController, appViewModel, authViewModel -> OrderHistoryPage(modifier, navController, appViewModel, authViewModel ) },
+    topBarHeaderText = {
+        HeaderText("My Orders")
+    }
 )
 
 val BaseDestinations = listOf(

@@ -51,7 +51,6 @@ class AuthViewModel : ViewModel() {
                     AuthSignInStep.DONE -> {
                         Log.e("AuthDebug", "Login DONE - updating state")
                         _isUserLoggedIn.value = true
-                        _emailAddress.value = email
                         fetchUsername()
                         onResult(true, "Sign in succeeded")
                     }
@@ -96,6 +95,9 @@ class AuthViewModel : ViewModel() {
                 { attributes ->
                     _username.value =
                         attributes.find { it.key.keyString == "preferred_username" }?.value
+                            ?: ""
+                    _emailAddress.value =
+                        attributes.find { it.key.keyString == "email" }?.value
                             ?: ""
                     _isUserLoggedIn.value = _username.value != ""
                     Log.e("AuthViewModel", "Username updated to: ${_username.value}")

@@ -10,13 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 
 @Composable
 fun OrderPrepPage(
     modifier: Modifier = Modifier,
     navController: NavController,
-    appViewModel: AppViewModel){
+    appViewModel: AppViewModel
+){
     Column(
         verticalArrangement =  Arrangement.Center,
         modifier = modifier.padding(8.dp)

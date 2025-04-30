@@ -127,6 +127,7 @@ kotlin {
 
             implementation(libs.multiplatform.paths)
             implementation(libs.sublime.fuzzy.search)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

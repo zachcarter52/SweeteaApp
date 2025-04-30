@@ -1,7 +1,9 @@
 package org.example.sweetea.database
 
 import org.example.sweetea.Constants
-import org.example.sweetea.database.RewardSchema.Rewards.emailAddress
+import org.example.sweetea.RewardValues
+import org.example.sweetea.database.RewardSchema.Rewards.earnedDrinks
+import org.example.sweetea.database.RewardSchema.Rewards.value
 import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.database.model.RewardRepository
 import org.jetbrains.exposed.sql.Database
@@ -16,31 +18,74 @@ class RewardSchema(database: Database): RewardRepository, DatabaseSchema() {
     object Rewards: Table(){
         val emailAddress = varchar("emailAddress", 255)
         val value = integer("value")
+        val earnedDrinks = integer("earnedDrinks")
+
         override val primaryKey = PrimaryKey(emailAddress)
     }
     init{
         transaction(database) {
             SchemaUtils.create(Rewards)
-            if(Rewards.selectAll().singleOrNull() == null){
+            if(Rewards.selectAll().where{Rewards.emailAddress eq ""}.singleOrNull() == null){
                 Rewards.insert{
                     it[emailAddress] = ""
                     it[value] = Constants.DEFAULT_BEAR_VALUE
+                    it[earnedDrinks] = 0
                 }
             }
         }
     }
 
-    override suspend fun getBearValue(emailAddress: String): Int {
+    override suspend fun getBearValue(): Int {
         return dbQuery {
-            Rewards.selectAll().where{Rewards.emailAddress eq emailAddress}.map{it[Rewards.value]}.first()
+            Rewards.selectAll().where{Rewards.emailAddress eq ""}.map{ it[value]}.first()
         }
     }
-    override suspend fun setBearValue(emailAddress: String, value: Int) {
-        return dbQuery {
-            Rewards.update({Rewards.emailAddress eq emailAddress}){
-                it[Rewards.value] = value
+
+    override suspend fun getRewards(emailAddress: String): RewardValues {
+        return dbQuery{
+            val existingRewards = Rewards.selectAll().where{Rewards.emailAddress eq emailAddress}.map{
+                RewardValues(
+                    it[value],
+                    it[earnedDrinks]
+                )
+            }.singleOrNull()
+            if(existingRewards == null){
+                Rewards.insert{
+                    it[Rewards.emailAddress] = emailAddress
+                    it[Rewards.value] = 0
+                    it[Rewards.earnedDrinks] = 0
+                }
+                RewardValues()
+            } else {
+                existingRewards
             }
-            Rewards.selectAll().map{it[Rewards.value]}.first()
+        }
+
+
+    }
+
+    override suspend fun updateBearValue(emailAddress: String, value: Int) {
+        return dbQuery {
+            if(emailAddress != ""){
+                val currentBearValue = getBearValue()
+                var currentValue = getRewards(emailAddress)
+                if(currentValue == null){
+                    Rewards.insert{
+                        it[Rewards.emailAddress] = emailAddress
+                        it[Rewards.value] = 0
+                        it[Rewards.earnedDrinks] = 0
+                    }
+                    currentValue = RewardValues()
+                }
+                Rewards.update({ Rewards.emailAddress eq emailAddress }) {
+                    it[Rewards.value] = (currentValue.bears + value) % currentBearValue
+                    it[earnedDrinks] = currentValue.freeDrinks + ((currentValue.bears + value) / currentBearValue)
+                }
+            } else {
+                Rewards.update({ Rewards.emailAddress eq emailAddress }) {
+                    it[Rewards.value] = value
+                }
+            }
         }
     }
 

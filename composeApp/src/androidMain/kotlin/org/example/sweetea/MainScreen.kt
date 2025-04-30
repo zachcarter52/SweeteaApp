@@ -41,6 +41,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
@@ -55,9 +56,8 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.notifications.Notifications
 import org.example.sweetea.ui.components.AppBottomBar
 import org.example.sweetea.ui.components.AppHeader
@@ -67,7 +67,6 @@ import java.io.File
 
 
 class MainScreen : ComponentActivity(){
-    private val appViewModel: AppViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var orderViewModel: OrderViewModel
     private var userLocation: Location? = null
@@ -95,6 +94,7 @@ class MainScreen : ComponentActivity(){
         installSplashScreen()
 
         setContent {
+            val appViewModel: AppViewModel = viewModel(factory = AppViewModel.AppViewModelFactory(authViewModel))
             var locationPermissionGranted by remember {
                 mutableStateOf(areLocationPermissionsAlreadyGranted())
             }
@@ -276,9 +276,14 @@ fun SweeteaApp(
     authViewModel: AuthViewModel,
     cacheDir: File
 ){
+    var isFirstRun by remember { mutableStateOf(true) }
     LaunchedEffect(Unit){
         authViewModel.fetchUsername()
         viewModel.updateInfo()
+        if(isFirstRun){
+            viewModel.getFavorites()
+            isFirstRun = false
+        }
     }
 
     setSingletonImageLoaderFactory { context ->

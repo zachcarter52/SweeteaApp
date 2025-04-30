@@ -100,14 +100,22 @@ data class ProductData (
     }
 
     fun toModifiedProduct(): ModifiedProduct{
-        return ModifiedProduct(
-            productID = id,
-            modifiers = modifiers.data.map{ modifierData ->
-                Modifier(
-                    modifierID = modifierData.id,
-                    choiceID = modifierData.choices[0].id
-                )
+        val modifiers = mutableListOf<Modifier>()
+        this.modifiers.data.forEach{ modifierData ->
+            if(modifierData.choices.size > 0){
+                modifierData.choices.forEach { choiceData ->
+                    modifiers.add(
+                        Modifier(
+                            modifierID = modifierData.id,
+                            choiceID = choiceData.id
+                        )
+                    )
+                }
             }
+        }
+        return ModifiedProduct(
+            productID = this.id,
+            modifiers = modifiers
         )
     }
 }

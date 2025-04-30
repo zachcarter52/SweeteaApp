@@ -22,7 +22,7 @@ class ModifiedProductSchema(
 ) : ModifiedProductRepository, DatabaseSchema(){
     object ModifiedProducts: Table(){
         val modifiedProductID = ulong("modifiedProductID").autoIncrement()
-        val productID = varchar("drinkID", 24)
+        val productID = varchar("drinkID", 32)
 
         override val primaryKey = PrimaryKey(modifiedProductID)
     }

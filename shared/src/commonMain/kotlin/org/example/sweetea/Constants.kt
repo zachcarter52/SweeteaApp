@@ -8,7 +8,8 @@ object Constants {
     const val SERVER_HOST = "localhost"
     const val SERVER_URL = "http://${SERVER_HOST}"
     const val APP_STATUS_ENDPOINT = "/status"
-    const val FAVORITES_ENDPOINT = "/favorites"
+    const val FAVORITES_ENDPOINT = "/favorites/"
+    const val ORDERS_ENDPOINT = "/orders/"
     const val IMAGES_ENDPOINT = "/uploads/"
     const val SERVER_PORT = 8080
     const val DEFAULT_BEAR_VALUE = 75

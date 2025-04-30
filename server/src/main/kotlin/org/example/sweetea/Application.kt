@@ -21,7 +21,7 @@ import org.example.sweetea.database.ModifiedProductSchema
 import org.example.sweetea.database.ModifierSchema
 import org.example.sweetea.database.OrderSchema
 import org.example.sweetea.database.RewardSchema
-import org.example.sweetea.database.model.OrderedProductSchema
+import org.example.sweetea.database.OrderedProductSchema
 import org.example.sweetea.plugins.configureWebPanel
 import org.jetbrains.exposed.sql.Database
 
@@ -62,7 +62,7 @@ fun Application.module() {
     val modifierSchema = ModifierSchema(database)
     val modifiedProductSchema = ModifiedProductSchema(database, modifierSchema)
     val orderedProductSchema = OrderedProductSchema(database, modifiedProductSchema)
-    val productOrderSchema = OrderSchema(database, orderedProductSchema)
+    val productOrderSchema = OrderSchema(database, orderedProductSchema, rewardSchema)
     val favoritesSchema = FavoriteProductSchema(database, modifierSchema, modifiedProductSchema)
     configureSecurity(
         adminAccountSchema

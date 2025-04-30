@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +24,8 @@ import coil3.request.ImageRequest
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.Menu
 import org.example.sweetea.R
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.ResponseClasses
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.HomeCard
@@ -50,7 +50,7 @@ fun HomePage(
     BearPageTemplate(
         modifier = modifier,
     ) {
-        if(appStatus.currentEvents.isEmpty()) {
+        if(appStatus.currentEvents.indexOf(ResponseClasses.EventResponse()) == 0) {
             HomeCard(
                 image = {
                     Image(

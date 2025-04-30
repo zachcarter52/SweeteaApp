@@ -13,9 +13,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
 
+val defaultPriceText = @Composable { price: Float, quantity: Int ->
+    Text(
+        text =
+        "$%.2f".format(price) + if (quantity > 1) " (${"$%.2f".format(price * quantity)})" else "",
+        color = MaterialTheme.colorScheme.primary
+    )
+}
 val emptyLambda = {}
 @Composable
 fun ModifiedProductItem(
@@ -25,6 +31,7 @@ fun ModifiedProductItem(
     textPadding: Dp = 24.dp,
     itemTextSize: TextUnit = 24.sp,
     quantity: Int = 1,
+    priceText:  @Composable (price: Float, quantity: Int) -> Unit = defaultPriceText,
     onClick: () -> Unit = emptyLambda,
     buttons: @Composable () -> Unit
 ){
@@ -66,22 +73,13 @@ fun ModifiedProductItem(
                         }
                     }
                 }
+                priceText(cartItem.price.high_with_modifiers, quantity)
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row() {
-                        Text(
-                            text = "$%.2f".format(cartItem.price.high_with_modifiers)
-                             + if(quantity > 1) " (${"$%.2f".format(cartItem.price.high_with_modifiers * quantity)})" else "",
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        buttons()
-                    }
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.End
+                ){
+                    buttons()
                 }
             }
         }

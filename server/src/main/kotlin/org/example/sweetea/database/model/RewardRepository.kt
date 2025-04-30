@@ -1,6 +1,9 @@
 package org.example.sweetea.database.model
 
+import org.example.sweetea.RewardValues
+
 interface RewardRepository {
-    suspend fun getBearValue(emailAddress: String = ""): Int
-    suspend fun setBearValue(emailAddress: String = "", value: Int)
+    suspend fun getBearValue(): Int
+    suspend fun getRewards(emailAddress: String): RewardValues?
+    suspend fun updateBearValue(emailAddress: String = "", value: Int)
 }

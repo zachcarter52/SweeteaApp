@@ -21,8 +21,8 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
     object Modifiers: Table(){
         val databaseModifierID = ulong("databaseModifierID").autoIncrement()
         val modifiedProductID = ulong("modifiedProductID")
-        val modifierID = varchar("modifierID", 24)
-        val choiceID = varchar("choiceID", 24)
+        val modifierID = varchar("modifierID", 32)
+        val choiceID = varchar("choiceID", 32)
 
         override val primaryKey = PrimaryKey(databaseModifierID)
     }
@@ -40,7 +40,7 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
             }.map{
                 Modifier(
                     it[databaseModifierID],
-                    it[Modifiers.modifiedProductID],
+                    modifiedProductID,
                     it[modifierID],
                     it[choiceID],
                 )
@@ -54,7 +54,7 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
                 Modifiers.databaseModifierID eq databaseModifierID
             }.map{
                 Modifier(
-                    it[Modifiers.databaseModifierID],
+                    databaseModifierID,
                     it[modifiedProductID],
                     it[modifierID],
                     it[choiceID],
@@ -68,7 +68,7 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
             return@dbQuery Modifiers.selectAll().where {
                 (modifierID eq modifier.modifierID) and
                         (choiceID eq modifier.choiceID)
-            }.map { it[databaseModifierID] }
+            }.map { it[modifiedProductID] }
         }
     }
 
@@ -83,10 +83,6 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
     }
 
     override suspend fun addModifier(modifier: Modifier): ULong{
-        val existingDatabaseModifierID = getDatabaseModifierID(modifier)
-        if(existingDatabaseModifierID != 0UL && existingDatabaseModifierID != null) {
-            return existingDatabaseModifierID
-        }
         return dbQuery {
             Modifiers.insert{
                 it[modifiedProductID] = modifier.modifiedProductID
