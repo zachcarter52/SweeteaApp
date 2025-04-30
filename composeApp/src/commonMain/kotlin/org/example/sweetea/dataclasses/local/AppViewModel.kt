@@ -1,5 +1,7 @@
 package org.example.sweetea.dataclasses.local
 
+
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +47,17 @@ class AppViewModel: ViewModel() {
     private var productMapLocation: LocationData? by mutableStateOf(null)
     var productMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
         private set
+
+    var selectedStore by mutableStateOf<Stores?>(null)
+        private set
+
+    fun updateSelectedStore(store: Stores) {
+        selectedStore = store
+    }
+    fun retrieveSelectedStore(): Stores? {
+        return selectedStore
+    }
+
 
     suspend fun updateInfo(){
         getAppStatus()

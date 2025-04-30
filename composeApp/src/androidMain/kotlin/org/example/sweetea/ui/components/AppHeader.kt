@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,9 +34,11 @@ import androidx.navigation.toRoute
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.BaseDestinations
 import org.example.sweetea.Menu
+import org.example.sweetea.StoreSelection
 import org.example.sweetea.SubMenu
 import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.navigateSingleTopTo
+import org.example.sweetea.pages.StoreSelectionPage
 
 @Composable
 fun AppHeader(
@@ -68,7 +71,7 @@ fun AppHeader(
     Column(modifier = modifier.fillMaxWidth(1f)) {
         Row(
             modifier = Modifier.height(30.dp)
-                .align(Alignment.End),
+                .align(Alignment.End).padding(top = 16.dp, end = 16.dp),
             verticalAlignment = Alignment.Bottom
         ) {
             AnimatedVisibility(
@@ -76,18 +79,32 @@ fun AppHeader(
                 enter = enterTransition(),
                 exit = exitTransition(),
             ) {
+
                 Text(
                     text = buildAnnotatedString {
-                        append("location: ")
-                        withStyle(
-                            style = SpanStyle(color = MaterialTheme.colorScheme.primary)
-                        ) {
-                            append("4010 Foothills Blvd #101, Roseville, CA 95747")
+                        val selectedStore = viewModel.retrieveSelectedStore()
+                        if (selectedStore != null) {
+                            append("Location: ")
+                            withLink( LinkAnnotation.Url (
+                                url = StoreSelection.route,
+                                styles = TextLinkStyles(
+                                    style = SpanStyle(color = MaterialTheme.colorScheme.primary),
+                                    hoveredStyle = SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)),
+                                linkInteractionListener = {
+                                    navController.navigateSingleTopTo(StoreSelection.route)
+                                }
+
+                            )) {
+                                append(selectedStore.name)
+                            }
+
                         }
                     },
                     fontSize = 10.sp,
                     lineHeight = 14.sp,
-                    modifier = Modifier.fillMaxWidth(0.6f),
+                    modifier = Modifier.fillMaxWidth(0.6f).padding(80.dp, 4.dp, 20.dp, 0.dp) // No padding on top-left, but padding on top-right (end)
+
+
                 )
             }
         }
