@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.pages.StoreSelectionPage
 import org.example.sweetea.viewmodel.NavigationViewModel
 
 //navhost function of Navigation

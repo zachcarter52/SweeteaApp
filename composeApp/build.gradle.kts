@@ -128,6 +128,7 @@ kotlin {
 
             implementation(libs.multiplatform.paths)
             implementation(libs.sublime.fuzzy.search)
+
         }
     }
 }
@@ -191,6 +192,7 @@ dependencies {
 
     implementation(libs.androidx.ui.test.junit4.android)
     implementation(libs.androidx.lifecycle.viewmodel.android)
+    implementation(libs.play.services.maps)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.ui.test.junit4)
@@ -209,6 +211,7 @@ dependencies {
   //  implementation(libs.maps.compose)
    // implementation(libs.play.services.maps)
 //    implementation(libs.play.services.location)
+    implementation (libs.play.services.maps.v1810)
 
     testImplementation("junit:junit:4.13.2")
     configurations.all {

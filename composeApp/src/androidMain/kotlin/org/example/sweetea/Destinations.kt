@@ -32,6 +32,7 @@ import org.example.sweetea.pages.SignupPage
 import org.example.sweetea.pages.SubMenuPage
 import org.example.sweetea.pages.VerificationPage
 import org.example.sweetea.pages.OrderPrepPage
+import org.example.sweetea.pages.StoreSelectionPage
 
 /*
 Describes a basic destination within the NavController,
@@ -93,7 +94,8 @@ object Menu : Destination(
     subPages = listOf(
         SubMenu,
         ProductCustomPage,
-        PrepPage
+        PrepPage,
+        StoreSelection
     ),
     topBarHeaderText = {
         Text(
@@ -202,6 +204,15 @@ object LogOut : BasicDestination(
     route = "logout",
     page = {modifier, navController, _ -> LogOutPage(modifier, navController) },
     hideTopBarHeader = true,
+)
+
+object StoreSelection : BasicDestination(
+    route = "storeSelection",
+    page = { modifier, navController, appViewModel ->
+        StoreSelectionPage(modifier, navController, appViewModel)
+    },
+    topBarHeaderText = { Text("Select a Store", fontSize = 28.sp, fontWeight = FontWeight.Bold) },
+    hideLocation = true
 )
 
 val BaseDestinations = listOf(

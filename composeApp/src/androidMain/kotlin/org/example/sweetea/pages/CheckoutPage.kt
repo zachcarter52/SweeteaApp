@@ -74,31 +74,6 @@ data class CartItemPriceDetails(
     val currency: String = "USD"
 )
 
-@JsonClass(generateAdapter = true)
-data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
-    val price: Float,
-    val quantity: String = 1.toString(),
-    @Json(name = "name")
-    val productName: String,
-    val productId: String,
-    val siteProductId: String,
-    val productModifiers: MutableList<CartItemChoiceDetails>,
-    val basePriceMoney: CartItemPriceDetails
-)
-
-@JsonClass(generateAdapter = true)
-data class CartItemChoiceDetails(
-    val choiceName: String,
-    val choiceId: String,
-    val price: Float
-)
-
-@JsonClass(generateAdapter = true)
-data class CartItemPriceDetails(
-    val amount: Float,
-    val currency: String = "USD"
-)
-
 @Composable
 fun CheckoutPage(
     modifier: Modifier = Modifier,
