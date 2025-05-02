@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import org.example.sweetea.BaseDestinations
 import org.example.sweetea.Checkout
@@ -56,7 +57,8 @@ fun AppBottomBar(
                 onClick = {
                     navController.navigateSingleTopTo(destination.route)
                     destination.onClick!!()
-                }
+                },
+                modifier = Modifier.testTag(destination.toString())
             )
         }
     }

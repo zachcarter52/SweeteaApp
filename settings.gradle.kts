@@ -22,7 +22,6 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
     repositories {
-        /*
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
@@ -32,7 +31,6 @@ dependencyResolutionManagement {
             }
         }
 
-         */
         google()
         mavenCentral()
         maven("https://sdk.squareup.com/public/android/")

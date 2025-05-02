@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.dataclasses.local.Stores
+import org.example.sweetea.viewmodel.AppViewModel
 
 @Composable
 fun StoreSelectionPage(

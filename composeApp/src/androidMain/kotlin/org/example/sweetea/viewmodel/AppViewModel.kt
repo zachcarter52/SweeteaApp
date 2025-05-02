@@ -29,6 +29,7 @@ import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ModifierData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.model.Order
+import org.example.sweetea.dataclasses.local.Stores
 
 class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
 
@@ -69,6 +70,9 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     var productIDMap: MutableMap<String, ProductData> = mutableMapOf()
         private set
     var productCategoryMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
+        private set
+
+    var selectedStore: Stores? by mutableStateOf(null)
         private set
 
     fun updateInfo(){
@@ -312,6 +316,14 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
             serverRepository.removeFavorite(emailAddress, oldFavorite.toModifiedProduct())
             getFavorites()
         }
+    }
+
+    fun updateSelectedStore(store: Stores) {
+        selectedStore = store
+    }
+
+    fun retrieveSelectedStore(): Stores? {
+        return selectedStore
     }
 
     class AppViewModelFactory(private val authViewModel: AuthViewModel):
