@@ -80,7 +80,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, onLoginComplete:
 
         errorMessage?.let {
             Text(text = it, color = Color.Red)
-            Text(text = "Welcome, $username!")
+
         }
 
         if (isLoggedIn && username.isNotBlank()) {
