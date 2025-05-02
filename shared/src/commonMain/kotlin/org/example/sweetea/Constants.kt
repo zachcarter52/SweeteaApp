@@ -2,7 +2,7 @@ package org.example.sweetea
 
 object Constants {
     const val PACKAGE_NAME = "org.example.sweetea"
-    const val DATABASE_HOST = "localhost"
+    const val DATABASE_HOST = PrivateConstants.DATABASE_HOST
     const val DATABASE_NAME = "SweeteaTest"
     const val TEST_URL = "http://10.0.2.2"
     const val SERVER_HOST = "localhost"

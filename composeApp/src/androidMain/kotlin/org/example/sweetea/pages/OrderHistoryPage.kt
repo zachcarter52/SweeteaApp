@@ -67,6 +67,7 @@ fun OrderHistoryPage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if(isLoggedIn){
+            if(orders.isNotEmpty()){
             orders.reversed().forEach{ order ->
                 Row(Modifier.padding(0.dp).fillMaxWidth(0.9f)) {
                     Text(
@@ -183,6 +184,17 @@ fun OrderHistoryPage(
                     }
                 }
             }
+            } else {
+                Text(
+                    text = "You have to order something before an order can show up here",
+                    modifier = Modifier.padding(0.dp, 80.dp),
+                )
+            }
+        } else {
+            Text(
+                text = "Please login to track your orders",
+                modifier = Modifier.padding(0.dp, 80.dp),
+            )
         }
     }
 

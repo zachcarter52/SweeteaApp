@@ -340,6 +340,16 @@ fun ProductPage(
                                                 linkInteractionListener = {
                                                     if(checkedChoicesCounter < maxCheckChoices || checked){
                                                         checked = !checked
+
+                                                        if(checked){
+                                                            ptrToChoices?.add(choiceData)
+                                                            checkedChoicesCounter++
+                                                        }
+
+                                                        if(!checked){
+                                                            ptrToChoices?.remove(choiceData)
+                                                            checkedChoicesCounter--
+                                                        }
                                                     }
                                                 }
                                             )

@@ -1,5 +1,6 @@
 package org.example.sweetea.viewmodel
 
+import androidx.collection.mutableFloatListOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -234,6 +235,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
             val productData = prod.copy(modifiers = Data(mutableListOf()))
             val productModifiers = prod.modifiers.copy()
             //val modMap = mapOf(this.modifiers.map{it.modifierID} to this.modifiers.map{it.choiceID})
+            val modifiersMap = mutableMapOf<String, ModifierData>()
             product.modifiers.forEach{ modifier ->
                 val modifierIndex = productModifiers.data.map { it.id }.indexOf(modifier.modifierID)
                 if (modifierIndex > -1) {
@@ -243,25 +245,38 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
                     if (choiceIndex > -1) {
                         choice = productModifiers.data[modifierIndex].choices[choiceIndex]
                     }
+                    if(modifiersMap[modifier.modifierID] == null){
+                        modifiersMap[modifier.modifierID] = productModifiers.data[modifierIndex]
+                        modifiersMap[modifier.modifierID]!!.choices = mutableListOf()
+
+                    }
+                    modifiersMap[modifier.modifierID]!!.choices.add(ChoiceData(choice))
                     productData.modifiers.data[productData.modifiers.data.size - 1].choices = mutableListOf(ChoiceData(choice))
                 }
             }
             /*
-            product.modifiers.data.forEach {
-                val maxChoices = if(it.max_selected == 0) 3 else it.max_selected
-                if(it.choices.size > maxChoices){
-                    if(it.min_selected == 0){
-                        it.choices = mutableListOf()
-                    } else {
-                        val newChoices = mutableListOf<ChoiceData>()
-                        for(i in 0..maxChoices){
-                            newChoices.add(it.choices[i])
+            modifiersMap.values.forEach{
+                productData.modifiers.data.add(it)
+            }
+             */
+
+            val itemSubtotal = MutableList(productData.modifiers.data.size){ 0.0f }
+
+            productData.modifiers.data.forEachIndexed { index, modifierData ->
+                modifierData.choices.forEach { choice ->
+                    if(modifierData.max_selected == 1){
+                        if (itemSubtotal != null) {
+                            itemSubtotal[index] = choice.price
                         }
-                        it.choices = newChoices
+                    } else {
+                        if (itemSubtotal != null) {
+                            itemSubtotal += choice.price
+                        }
                     }
                 }
             }
-             */
+
+            productData.price.high_with_modifiers += itemSubtotal.sum()
             return productData
         }
         return null

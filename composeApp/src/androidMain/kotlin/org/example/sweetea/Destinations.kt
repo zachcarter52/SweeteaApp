@@ -139,18 +139,17 @@ object ProductCustomPage : BasicDestination(
 
 object FavoritesPage : BasicDestination(
     route = "favorites",
-    page = { modifier, navController, appViewModel, authViewModel -> FavoritesPage(modifier, navController, appViewModel, authViewModel)}
+    page = { modifier, navController, appViewModel, authViewModel -> FavoritesPage(modifier, navController, appViewModel, authViewModel)},
+    topBarHeaderText = {
+        HeaderText("Favorites")
+    }
 )
 
 object SubMenu : BasicDestination(
     route = "subMenu",
     page = { modifier, navController, appViewModel, _ -> SubMenuPage(modifier, navController, appViewModel) },
     topBarHeaderText = { appViewModel ->
-        if(appViewModel.currentCategory == null){
-           HeaderText("Favorites")
-        } else {
-            HeaderText(appViewModel.currentCategory!!.name)
-        }
+        HeaderText(appViewModel.currentCategory!!.name)
     }
 )
 
