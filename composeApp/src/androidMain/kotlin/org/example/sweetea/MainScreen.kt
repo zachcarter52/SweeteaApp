@@ -156,20 +156,6 @@ class MainScreen : ComponentActivity(){
                 authViewModel = authViewModel,
                 cacheDir = cacheDir
             )
-
-            // Button to manually request location permission, should be removed
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxSize()  // Takes up the full screen size
-//                    .padding(16.dp)
-//            ) {
-//                Button(
-//                    onClick = { locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) },
-//                    modifier = Modifier.align(Alignment.Center)  // Centers button, should be removed before pushing
-//                ) {
-//                    Text("Request Location Permission")
-//                }
-//            }
         }
         // Initialize Amplify / Cognito
         try {

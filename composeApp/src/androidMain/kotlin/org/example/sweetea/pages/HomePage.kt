@@ -1,5 +1,6 @@
 package org.example.sweetea.pages
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
@@ -18,6 +19,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
@@ -26,6 +28,8 @@ import org.example.sweetea.Menu
 import org.example.sweetea.R
 import org.example.sweetea.ResponseClasses
 import org.example.sweetea.viewmodel.AppViewModel
+import org.example.sweetea.StoreSelection
+import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.HomeCard
@@ -46,6 +50,7 @@ fun HomePage(
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val calculatedPadding = with(LocalDensity.current) { (screenHeight.toPx() * 0.1f).toDp() }
+    val storeSelected = appViewModel.selectedStore != null
 
     BearPageTemplate(
         modifier = modifier,
@@ -66,10 +71,13 @@ fun HomePage(
                 imageHeader = "Featured Menu Items",
                 buttonText = "Order Now",
                 onClick = {
-                    navController.navigateSingleTopTo(
-                        Menu.route
-                    )
+                    if (storeSelected) {
+                        navController.navigateSingleTopTo(Menu.route)
+                    } else {
+                        navController.navigateSingleTopTo(StoreSelection.route)
+                    }
                 }
+
             )
         } else {
             for (event in appStatus.currentEvents.sortedBy{ it.selectionIndex }) {

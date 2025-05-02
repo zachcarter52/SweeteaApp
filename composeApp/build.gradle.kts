@@ -1,3 +1,4 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
@@ -41,7 +42,7 @@ kotlin {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
         }
-        
+
         androidMain.dependencies {
 
             implementation(compose.preview)
@@ -128,6 +129,7 @@ kotlin {
             implementation(libs.multiplatform.paths)
             implementation(libs.sublime.fuzzy.search)
             implementation(libs.kotlinx.datetime)
+
         }
     }
 }
@@ -173,8 +175,8 @@ android {
 dependencies {
 
     implementation(libs.androidx.core)
-    implementation(libs.play.services.location)
-    implementation(libs.play.services.maps)
+//    implementation(libs.play.services.location)
+    //implementation(libs.play.services.maps)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.ui.test.junit4.android)
 
@@ -192,6 +194,7 @@ dependencies {
     implementation(libs.androidx.ui.test.junit4.android)
     implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.play.services.maps)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.ui.test.junit4)
@@ -207,9 +210,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.accompanist.permissions)
 
-    implementation(libs.maps.compose)
-    implementation(libs.play.services.maps)
-    implementation(libs.play.services.location)
+  //  implementation(libs.maps.compose)
+   // implementation(libs.play.services.maps)
+//    implementation(libs.play.services.location)
+    implementation (libs.play.services.maps.v1810)
 
     testImplementation("junit:junit:4.13.2")
     configurations.all {
