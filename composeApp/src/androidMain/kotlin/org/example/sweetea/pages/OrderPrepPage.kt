@@ -7,6 +7,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -24,20 +27,50 @@ fun OrderPrepPage(
     ){
         appViewModel.currentLocation?.let {
             Text(
-                modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start),
-                text = it.nickname,
+                modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start).testTag("location"),
+                text = "Pickup Location: " + it.nickname,
                 fontSize = 24.sp,
                 lineHeight = 28.sp
             )
         }
 
         Text(
+            modifier = Modifier
+                .testTag("orderprocess"),
             text = "Your Order is Being Processed!",
             fontSize = 32.sp,
             lineHeight = 36.sp
         )
-    }
+        val itemSubtotal = MutableList(appViewModel.shoppingCart.size){ 0.0f }
+        val itemHeight = 120
 
+        appViewModel.shoppingCart.forEachIndexed { idx, cartItem ->
+            itemSubtotal[idx] += cartItem.price.high_with_modifiers
+            val url = "${cartItem.images.data[0].url}?height=${3*itemHeight}"
+            CheckoutItem(
+                cartItem = cartItem,
+                index = idx,
+                appViewModel = appViewModel,
+                authViewModel = appViewModel.authViewModel,
+                isLoggedIn = appViewModel.authViewModel.isUserLoggedIn.value
+                /*
+                imageHeight = itemHeight,
+                url = url,
+                contentDescription = cartItem.name,
+                contentScale = ContentScale.FillHeight,
+                itemName = cartItem.name,
+                price = cartItem.price.high_with_modifiers,
+                index = idx,
+                appViewModel = appViewModel
+                 */
+            )
+        }
+        Text(
+            text = "Total " + "$%.2f".format(itemSubtotal.sum()),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    }
 }
 
 /*package org.example.sweetea

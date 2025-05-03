@@ -14,13 +14,19 @@ import sqip.CardEntry
 import sqip.CardEntry.DEFAULT_CARD_ENTRY_REQUEST_CODE
 import sqip.CardEntryActivityResult
 
-class CardEntryActivity : AppCompatActivity() {
+open class CardEntryActivity : AppCompatActivity() {
     private lateinit var chargeCallFactory: ChargeCall.Factory
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val intentData = intent.getStringExtra("jsonLineItems")
+        var intentData = intent.getStringExtra("jsonLineItems")
+        println("DBG: intentData " + intentData)
+        if(intentData == null){
+            intentData = "[]"
+        };//Assign default string
+
         val lineItems = Gson().fromJson(intentData, Array<LineItem>::class.java).toList()
         println("INTENT DATA: " + lineItems.toString())
 
