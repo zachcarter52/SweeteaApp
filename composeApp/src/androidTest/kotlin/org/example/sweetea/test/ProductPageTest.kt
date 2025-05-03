@@ -265,11 +265,8 @@ class ProductPageTest {
 
     }
 
- /*   @Test//(expected = IllegalStateException::class.java)
+    @Test//(expected = IllegalStateException::class.java)
     fun testFailFavButtonAddsItemToFavs() {
-       /* val standardOut = System.out
-        val outputStreamCaptor = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStreamCaptor))*/
         var auth = AuthViewModel()
         var viewModel = AppViewModel(auth)
 
@@ -281,20 +278,9 @@ class ProductPageTest {
         viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
 
         // Simulate pressing "Add" button
-        assertFailsWith<IllegalStateException> {
-            viewModel.addFavorite(
-            viewModel.authViewModel.emailAddress.value,
-            product
-            )
-        }
-
-        //print("DBG: favs" + viewModel.getFavorites().toString())
-        //assert(viewModel.getFavorites())
-
-       /* val printed = outputStreamCaptor.toString().trim()
-        assertEquals("User must be logged in to add favorites.", printed)
-        System.setOut(standardOut)*/
-    }*/
+        viewModel.addFavorite(viewModel.authViewModel.emailAddress.value, product)
+        assertEquals(0, viewModel.favoriteProducts.value.size)
+    }
 
     @Test
     fun increaseDecrease() {
