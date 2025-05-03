@@ -163,6 +163,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+
     }
     packaging {
         resources {
@@ -230,11 +231,15 @@ dependencies {
     implementation (libs.play.services.maps.v1810)
 
     testImplementation("junit:junit:4.13.2")
+
     configurations.all {
         //exclude(group = "org.hamcrest", module = "hamcrest-core")
     }
 
+
     // Test rules and transitive dependencies:
+    implementation(project.dependencies.platform("org.jetbrains.kotlin:kotlin-bom"))
+
 
     debugImplementation(libs.androidx.ui.tooling)
 
@@ -243,6 +248,7 @@ dependencies {
     ksp(libs.com.squareup.moshi.moshi.kotlin.codegen)
     //implementation("com.squareup.moshi:moshi-kotlin-codegen")
     //ksp("com.squareup.moshi:moshi-kotlin-codegen")
+
 
     androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.rules)
@@ -260,6 +266,9 @@ dependencies {
     // Android Instrumented Test
     androidTestImplementation("io.mockk:mockk-android:1.14.2")
     androidTestImplementation("io.mockk:mockk-agent:1.14.2")
+    androidTestImplementation(libs.hamcrest)
+    androidTestImplementation(libs.androidx.navigation.testing)
+
 }
 
 

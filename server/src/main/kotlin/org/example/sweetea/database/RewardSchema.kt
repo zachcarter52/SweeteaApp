@@ -68,15 +68,7 @@ class RewardSchema(database: Database): RewardRepository, DatabaseSchema() {
         return dbQuery {
             if(emailAddress != ""){
                 val currentBearValue = getBearValue()
-                var currentValue = getRewards(emailAddress)
-                if(currentValue == null){
-                    Rewards.insert{
-                        it[Rewards.emailAddress] = emailAddress
-                        it[Rewards.value] = 0
-                        it[Rewards.earnedDrinks] = 0
-                    }
-                    currentValue = RewardValues()
-                }
+                val currentValue = getRewards(emailAddress)
                 Rewards.update({ Rewards.emailAddress eq emailAddress }) {
                     it[Rewards.value] = (currentValue.bears + value) % currentBearValue
                     it[earnedDrinks] = currentValue.freeDrinks + ((currentValue.bears + value) / currentBearValue)
