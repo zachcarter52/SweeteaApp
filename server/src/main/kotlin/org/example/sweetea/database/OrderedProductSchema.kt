@@ -20,7 +20,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class OrderedProductSchema(
     database: Database,
-    val modifiedProductRepository: ModifiedProductRepository,
+    private val modifiedProductRepository: ModifiedProductRepository,
 ): OrderedProductRepository, DatabaseSchema() {
     object OrderedProducts: Table(){
         val orderedProductID = ulong("orderedProductID").autoIncrement()

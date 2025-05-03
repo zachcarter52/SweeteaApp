@@ -12,7 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 //import com.google.android.libraries.places.api.model.SubDestination
@@ -224,7 +226,7 @@ object Orders: BasicDestination(
 
 object StoreSelection : BasicDestination(
     route = "storeSelection",
-    page = { modifier, navController, appViewModel ->
+    page = { modifier, navController, appViewModel, _ ->
         StoreSelectionPage(modifier, navController, appViewModel)
     },
     topBarHeaderText = { Text("Select a Store", fontSize = 28.sp, fontWeight = FontWeight.Bold) },

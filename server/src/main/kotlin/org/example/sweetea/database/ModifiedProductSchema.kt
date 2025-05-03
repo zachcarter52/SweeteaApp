@@ -106,7 +106,6 @@ class ModifiedProductSchema(
         }
     }
 
-
     override suspend fun allModifiedProducts(): List<ModifiedProduct> {
         return dbQuery {
             ModifiedProducts.selectAll().map{

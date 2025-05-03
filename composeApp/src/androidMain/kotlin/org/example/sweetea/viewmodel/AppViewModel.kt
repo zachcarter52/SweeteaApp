@@ -22,6 +22,7 @@ import org.example.sweetea.ProductOrder
 import org.example.sweetea.ResponseClasses.AppStatus
 import org.example.sweetea.dataclasses.local.ServerRepository
 import org.example.sweetea.dataclasses.local.SquareRepository
+import org.example.sweetea.dataclasses.local.Stores
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
 import org.example.sweetea.dataclasses.retrieved.Data
@@ -70,6 +71,16 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
         private set
     var productCategoryMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
         private set
+
+    var selectedStore by mutableStateOf<Stores?>(null)
+        private set
+
+    fun updateSelectedStore(store: Stores) {
+        selectedStore = store
+    }
+    fun retrieveSelectedStore(): Stores? {
+        return selectedStore
+    }
 
     fun updateInfo(){
         getAppStatus()

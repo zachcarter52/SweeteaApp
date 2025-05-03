@@ -63,7 +63,7 @@ fun Application.module() {
     val modifiedProductSchema = ModifiedProductSchema(database, modifierSchema)
     val orderedProductSchema = OrderedProductSchema(database, modifiedProductSchema)
     val productOrderSchema = OrderSchema(database, orderedProductSchema, rewardSchema)
-    val favoritesSchema = FavoriteProductSchema(database, modifierSchema, modifiedProductSchema)
+    val favoritesSchema = FavoriteProductSchema(database, modifiedProductSchema)
     configureSecurity(
         adminAccountSchema
     )

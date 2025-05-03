@@ -29,7 +29,6 @@ import org.example.sweetea.R
 import org.example.sweetea.ResponseClasses
 import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.StoreSelection
-import org.example.sweetea.dataclasses.local.AppViewModel
 import org.example.sweetea.navigateSingleTopTo
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.HomeCard

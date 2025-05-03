@@ -20,7 +20,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class FavoriteProductSchema(
     database: Database,
-    private val modifierRepository: ModifierRepository,
     private val modifiedProductRepository: ModifiedProductRepository,
 ): FavoriteProductsRepository, DatabaseSchema(){
 
