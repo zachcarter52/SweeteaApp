@@ -24,7 +24,7 @@ fun BearPageTemplate(
     verticalArrangement: Arrangement.Vertical? = null,
     horizontalAlignment: Alignment.Horizontal? = null,
     showBear: Boolean = true,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ){
     val logo = if (!isSystemInDarkTheme()){
         painterResource(id = R.drawable.sweetealogo_homepage_light)

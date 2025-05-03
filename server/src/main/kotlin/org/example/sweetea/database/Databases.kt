@@ -19,18 +19,21 @@ import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
 import org.jetbrains.exposed.sql.*
-import org.example.sweetea.Constants
+import org.example.sweetea.ModifiedProduct
+import org.example.sweetea.ProductOrder
 import org.example.sweetea.ResponseClasses.Event
-import org.example.sweetea.database.model.AccountRepository
 import org.example.sweetea.database.model.AdminAccountRepository
 import org.example.sweetea.database.model.EventRepository
-import org.example.sweetea.database.model.RewardRepository
-import org.example.sweetea.database.model.Account
+import org.example.sweetea.database.model.FavoriteProductsRepository
+import org.example.sweetea.database.model.ModifiedProductRepository
+import org.example.sweetea.database.model.OrderRepository
 import java.io.File
 
 fun Application.configureDatabases(
     adminAccountRepository: AdminAccountRepository,
     eventRepository: EventRepository,
+    orderRepository: OrderRepository,
+    favoritesRepository: FavoriteProductsRepository,
 ) {
     val l: String = File.separator
     routing {
@@ -46,6 +49,65 @@ fun Application.configureDatabases(
             } else {
                 call.respond(HttpStatusCode.BadRequest)
             }
+        }
+        route("/favorites"){
+            get("/{emailAddress}"){
+                val emailAddress = call.parameters["emailAddress"]
+                if(!emailAddress.isNullOrBlank()){
+                    val favorites = favoritesRepository.getFavorites(emailAddress)
+                    call.respond(HttpStatusCode.OK, favorites)
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+            put("/{emailAddress}"){
+                val emailAddress = call.parameters["emailAddress"]
+                val modifiedProduct = call.receive<ModifiedProduct>()
+                if(!emailAddress.isNullOrBlank()){
+                    val newID = favoritesRepository.addFavoriteProduct(emailAddress, modifiedProduct)
+                    if(newID > 0UL){
+                        call.respond(HttpStatusCode.OK, newID)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+            delete("/{emailAddress}"){
+                val emailAddress = call.parameters["emailAddress"]
+                val modifiedProduct = call.receive<ModifiedProduct>()
+                if(!emailAddress.isNullOrBlank()){
+                    if(favoritesRepository.removeFavorite(emailAddress, modifiedProduct)){
+                        call.respond(HttpStatusCode.OK)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+        }
+        route("/orders"){
+            get("/{emailAddress}"){
+                val emailAddress = call.parameters["emailAddress"]
+                if(!emailAddress.isNullOrBlank()){
+                    val orders = orderRepository.allOrders(emailAddress)
+                    call.respond(HttpStatusCode.OK, orders)
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+            post("/"){
+                val order = call.receive<ProductOrder>()
+                val newID = orderRepository.addOrder(order)
+                if(newID > 0UL){
+                    call.respond(HttpStatusCode.OK, newID)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            }
+
         }
         authenticate("admin-auth-session") {
             route("/events") {

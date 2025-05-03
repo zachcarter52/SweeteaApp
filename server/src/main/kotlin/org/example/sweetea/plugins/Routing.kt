@@ -22,6 +22,7 @@ import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyTo
 import org.example.sweetea.ResponseClasses.AppStatus
+import org.example.sweetea.RewardValues
 import org.example.sweetea.database.model.EventRepository
 import org.example.sweetea.database.model.RewardRepository
 import java.io.File
@@ -51,6 +52,20 @@ fun Application.configureRouting(
                 )
             )
         }
+        get("/status/{emailAddress}"){
+            val emailAddress = call.parameters["emailAddress"]
+            if(!emailAddress.isNullOrBlank()){
+                call.respond(
+                    AppStatus(
+                        eventSchema.getSelectedEvents().map{it.toEventResponse()},
+                        rewardSchema.getBearValue(),
+                        rewardSchema.getRewards(emailAddress) ?: RewardValues()
+                    )
+                )
+            } else{
+                call.respond(HttpStatusCode.BadRequest)
+            }
+        }
         route("/bear-value") {
             get("") {
                 call.respond(rewardSchema.getBearValue().toString())
@@ -58,7 +73,7 @@ fun Application.configureRouting(
             authenticate("admin-auth-session"){
                 put("/{value}") {
                     val newBearValue = call.parameters["value"]!!.toInt()
-                    rewardSchema.setBearValue(newBearValue)
+                    rewardSchema.updateBearValue(value = newBearValue)
                     call.respond(HttpStatusCode.OK)
                 }
             }

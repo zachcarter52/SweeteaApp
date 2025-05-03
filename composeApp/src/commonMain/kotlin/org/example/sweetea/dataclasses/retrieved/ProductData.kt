@@ -1,6 +1,8 @@
 package org.example.sweetea.dataclasses.retrieved
 
 import kotlinx.serialization.Serializable
+import org.example.sweetea.ModifiedProduct
+import org.example.sweetea.Modifier
 
 /*
 Describes the json response to the products query
@@ -65,7 +67,7 @@ data class ProductData (
     val modifiers: Data<MutableList<ModifierData>>,
     val categories: Data<List<BasicCategoryData>>,
     //val discounts: Data<List<String>>,
-){
+): Comparable<ProductData>{
     constructor(productData: ProductData) : this(
         id = productData.id,
         site_product_id = productData.site_product_id,
@@ -84,6 +86,38 @@ data class ProductData (
         modifiers = Data(productData.modifiers.data.map { ModifierData(it.copy()) }.toMutableList()),                  //COPIER
         categories = Data(productData.categories.data.map { BasicCategoryData( it.copy()) }),                //COPIER
     )
+
+    override fun compareTo(other: ProductData): Int {
+        val idCompare = id.compareTo(other.id)
+        if(idCompare != 0) return idCompare
+        modifiers.data.forEachIndexed { modIndex, modifier ->
+            modifier.choices.forEachIndexed { choiceIndex, choice ->
+                val choiceCompare = choice.id.compareTo(other.modifiers.data[modIndex].choices[choiceIndex].id)
+                if(choiceCompare != 0 ) return choiceCompare
+            }
+        }
+        return 0
+    }
+
+    fun toModifiedProduct(): ModifiedProduct{
+        val modifiers = mutableListOf<Modifier>()
+        this.modifiers.data.forEach{ modifierData ->
+            if(modifierData.choices.size > 0){
+                modifierData.choices.forEach { choiceData ->
+                    modifiers.add(
+                        Modifier(
+                            modifierID = modifierData.id,
+                            choiceID = choiceData.id
+                        )
+                    )
+                }
+            }
+        }
+        return ModifiedProduct(
+            productID = this.id,
+            modifiers = modifiers
+        )
+    }
 }
 
 data class ProductTypeDetails(

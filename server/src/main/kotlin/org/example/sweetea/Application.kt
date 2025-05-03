@@ -12,18 +12,20 @@ import org.example.sweetea.database.configureDatabases
 import org.example.sweetea.plugins.configureRouting
 import org.example.sweetea.plugins.configureSecurity
 import org.example.sweetea.plugins.configureSerialization
-import io.ktor.server.netty.*;
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import kotlinx.serialization.json.Json
-import org.example.sweetea.database.AccountSchema
 import org.example.sweetea.database.AdminAccountSchema
 import org.example.sweetea.database.EventSchema
+import org.example.sweetea.database.FavoriteProductSchema
+import org.example.sweetea.database.ModifiedProductSchema
+import org.example.sweetea.database.ModifierSchema
+import org.example.sweetea.database.OrderSchema
 import org.example.sweetea.database.RewardSchema
-import org.example.sweetea.database.configureDatabases
+import org.example.sweetea.database.OrderedProductSchema
 import org.example.sweetea.plugins.configureWebPanel
 import org.jetbrains.exposed.sql.Database
 
-fun main(args: Array<String>) {
+fun main(args: Array<String>? = null) {
 
     /*
     val session = Session("acme://letsencrypt.org/staging")
@@ -41,8 +43,11 @@ fun main(args: Array<String>) {
 }
 
 val json = Json{
+    isLenient = true
     ignoreUnknownKeys = true
+    coerceInputValues = true
 }
+
 
 fun Application.module() {
     install(ContentNegotiation){
@@ -57,15 +62,21 @@ fun Application.module() {
     val adminAccountSchema = AdminAccountSchema(database)
     val eventSchema = EventSchema(database)
     val rewardSchema = RewardSchema(database)
-    val accountSchema = AccountSchema(database)
+    val modifierSchema = ModifierSchema(database)
+    val modifiedProductSchema = ModifiedProductSchema(database, modifierSchema)
+    val orderedProductSchema = OrderedProductSchema(database, modifiedProductSchema)
+    val productOrderSchema = OrderSchema(database, orderedProductSchema, rewardSchema)
+    val favoritesSchema = FavoriteProductSchema(database, modifiedProductSchema)
+
     configureSecurity(
         adminAccountSchema
     )
     configureDatabases(
         adminAccountSchema,
         eventSchema,
+        productOrderSchema,
+        favoritesSchema
     )
-    configureSerialization()
     configureRouting(
         eventSchema,
         rewardSchema

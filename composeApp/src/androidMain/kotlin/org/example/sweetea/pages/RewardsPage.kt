@@ -21,13 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.CustomCircularProgressIndicator
 
 @Composable
 fun RewardsPage(modifier: Modifier, navController: NavController, appViewModel: AppViewModel){
-    var positionValue by remember {mutableIntStateOf(0)}
     val appStatus by appViewModel.appStatus.collectAsState()
     BearPageTemplate(
         modifier = modifier,
@@ -35,7 +34,6 @@ fun RewardsPage(modifier: Modifier, navController: NavController, appViewModel: 
         ElevatedCard(
             elevation = CardDefaults.cardElevation(10.dp),
             modifier = Modifier.fillMaxWidth(0.90f)
-                .clickable { positionValue++ },
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth()
@@ -55,7 +53,7 @@ fun RewardsPage(modifier: Modifier, navController: NavController, appViewModel: 
                     secondaryColor = MaterialTheme.colorScheme.secondary,
                     maxValue = appStatus.bearValue,
                     circleRadius = 230f,
-                    positionValue = positionValue,
+                    positionValue = appStatus.rewardValues.bears,
                 )
             }
         }
@@ -64,5 +62,8 @@ fun RewardsPage(modifier: Modifier, navController: NavController, appViewModel: 
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
         )
+        if(appStatus.rewardValues.freeDrinks > 0){
+            Text("You have ${appStatus.rewardValues.freeDrinks} free drinks!")
+        }
     }
 }

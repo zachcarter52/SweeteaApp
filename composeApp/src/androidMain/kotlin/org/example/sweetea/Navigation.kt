@@ -10,15 +10,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.pages.StoreSelectionPage
 import org.example.sweetea.viewmodel.NavigationViewModel
 
 //navhost function of Navigation
 @Composable
 fun SweetTeaNavHost(
-    viewModel: AppViewModel,
-    navViewModel: NavigationViewModel? = null,
+    appViewModel: AppViewModel,
+    authViewModel: AuthViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     enterTransition: () -> EnterTransition,
@@ -33,8 +33,7 @@ fun SweetTeaNavHost(
         BaseDestinations.forEach { destination ->
             if(destination.subPages == null) {
                 composable(route = destination.route ) {
-                    navViewModel?.navigateToHead(destination.route)
-                    destination.page(modifier, navController, viewModel)
+                    destination.page(modifier, navController, appViewModel, authViewModel)
                 }
             } else {
                 navigation(
@@ -42,14 +41,12 @@ fun SweetTeaNavHost(
                     route = destination.pageRoute,
                 ){
                     composable(destination.route){
-                        navViewModel?.navigateToHead(destination.route)
-                        destination.page(modifier, navController, viewModel)
+                        destination.page(modifier, navController, appViewModel, authViewModel)
                     }
                     destination.subPages.forEach{
                             subpage ->
                         composable(subpage.route){
-                            navViewModel?.navigateSubPage(destination.route)
-                            subpage.page(modifier, navController, viewModel)
+                            subpage.page(modifier, navController, appViewModel, authViewModel)
                         }
                     }
                 }

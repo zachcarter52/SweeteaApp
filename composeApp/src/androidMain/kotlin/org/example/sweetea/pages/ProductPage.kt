@@ -2,28 +2,29 @@ package org.example.sweetea.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,39 +38,43 @@ import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import org.example.sweetea.Checkout
-import org.example.sweetea.ProductCustomPage
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.AuthViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
 
 @Composable
 fun ProductPage(
     modifier: Modifier = Modifier,
     navController: NavController,
-    appViewModel: AppViewModel
+    appViewModel: AppViewModel,
+    authViewModel: AuthViewModel
 ) {
-
     println("DBG: Working Item: " + appViewModel.workingItem?.modifiers?.data + appViewModel.workingItem?.modifiers?.data?.size)
     println("DBG: Current Product: " + appViewModel.currentProduct?.modifiers?.data + appViewModel.currentProduct?.modifiers?.data?.size)
 
     Column(
         modifier = modifier.fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState()).padding(0.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
-            modifier = modifier.fillMaxWidth(.9f),
+            modifier = Modifier.fillMaxWidth(.9f),
             horizontalAlignment = Alignment.Start
         ) {
             //Display Product name
             DisplayName(navController, appViewModel)
 
+            /*
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth().padding(16.dp, 0.dp, 16.dp, 0.dp),
@@ -78,12 +83,12 @@ fun ProductPage(
                     Button(
                         onClick = {
                             appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                            appViewModel.shoppingCartQuantities.add(1)
                             println("DBG: Shopping Cart" + appViewModel.shoppingCart)
                             resetWorkingItem(appViewModel)
                             navController.popBackStack()
                         },
-
-                        ) {
+                    ) {
                         Image(
                             imageVector = Icons.Default.Add,
                             contentDescription = "Add to Shopping Cart"
@@ -95,7 +100,10 @@ fun ProductPage(
                         onClick =
                             {
                                 //appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                                appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                                appViewModel.shoppingCartQuantities.add(1)
                                 println("DBG: Shopping Cart" + appViewModel.shoppingCart)
+                                resetWorkingItem(appViewModel)
                                 navController.navigate(Checkout.route)
                             },
                     ) {
@@ -106,12 +114,93 @@ fun ProductPage(
                     }
                 }
             }
+             */
 
             //Display price
-            var price = DisplayPrice(navController, appViewModel)
+            var quantity by remember{mutableIntStateOf(1)}
+            var price = displayPrice(navController, appViewModel, quantity)
 
             //Display product image
-            DisplayProductImage(appViewModel)
+            val itemHeight = 350
+            val url = "${appViewModel.currentProduct!!.images.data[0].url}?height=${3 * itemHeight}"
+            /*
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 0.dp, 20.dp)
+                    .align(Alignment.CenterHorizontally),
+            )
+             */
+            ElevatedCard(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Box{
+                    AsyncImage(
+                        model = url,
+                        contentDescription = appViewModel.currentProduct!!.name,
+                        modifier = Modifier.height(itemHeight.dp)
+                            .width(itemHeight.dp),
+                        contentScale = ContentScale.FillHeight,
+                    )
+                    ElevatedButton(
+                        modifier = Modifier.align(Alignment.BottomEnd)
+                            .padding(0.dp, 0.dp, 5.dp, 0.dp),
+                        //border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline),
+                        //elevation = ButtonDefaults.buttonElevation(20.dp),
+                        onClick = {
+                            val indexInCart = appViewModel.shoppingCart.indexOf(appViewModel.workingItem!!)
+                            if(indexInCart == -1) {
+                                appViewModel.shoppingCart.add(appViewModel.workingItem!!)
+                                appViewModel.shoppingCartQuantities.add(quantity)
+                                println("DBG: Shopping Cart" + appViewModel.shoppingCart)
+                            } else {
+                                appViewModel.shoppingCartQuantities[indexInCart] += quantity
+                            }
+                            resetWorkingItem(appViewModel)
+                            quantity  = 1
+
+                            //navController.popBackStack()
+                        },
+                    ) {
+                        Text("Add")
+                    }
+                }
+            }
+
+            Row(
+                Modifier.padding(20.dp)
+            ){
+                Button(
+                    modifier = Modifier.size(24.dp),
+                    onClick = {
+                        if(quantity > 1) quantity--
+                    },
+                    contentPadding = PaddingValues(2.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.KeyboardArrowDown,
+                        contentDescription = "Decrease Quantity",
+
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+                Text(
+                    modifier = Modifier.padding(4.dp, 0.dp),
+                    text = quantity.toString()
+                )
+                Button(
+                    modifier = Modifier.size(24.dp),
+                    onClick = {
+                        quantity++
+                    },
+                    contentPadding = PaddingValues(2.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.KeyboardArrowUp,
+                        contentDescription = "Increase Quantity",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
 
             //Display options
             appViewModel.currentProduct?.modifiers?.data?.forEachIndexed { modidx, modifierData ->
@@ -123,6 +212,9 @@ fun ProductPage(
                     }
                     val dropDownText = remember {
                         mutableStateOf(modifierData.choices[0].name)
+                    }
+                    appViewModel.workingItem?.modifiers?.data?.get(modidx)?.choices?.get(0)?.let {
+                        dropDownText.value = it.name
                     }
 
                     val position = remember {
@@ -207,24 +299,25 @@ fun ProductPage(
                         )
 
                         val ptrToChoices = appViewModel.workingItem?.modifiers?.data?.get(modidx)?.choices
-                        val maxChoicesChecked = 3
                         var checkedChoicesCounter by remember {
                             mutableIntStateOf(0)
                         }
+                        val maxCheckChoices = if(modifierData.max_selected == 0) 3 else modifierData.max_selected
 
                         modifierData.choices.forEachIndexed { index, choiceData ->
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 var checked by remember {
-                                    mutableStateOf(false)
+                                    println("[$index] ptrToChoices.indexOf(choiceData) : ${ptrToChoices?.indexOf(choiceData)!!}")
+                                    mutableStateOf(ptrToChoices.indexOf(choiceData) > -1)
                                 }
 
                                 Checkbox(
                                     checked = checked,
                                     onCheckedChange = { isChecked ->
                                         checked = isChecked
-                                        if(checkedChoicesCounter >= 3){
+                                        if(checkedChoicesCounter >= maxCheckChoices){
                                             checked = false
                                         }
 
@@ -240,7 +333,32 @@ fun ProductPage(
                                     }
                                 )
                                 Text(
-                                    choiceData.name + " - " + "$%.2f".format(choiceData.price), //next to box show name and price of mod
+                                    text = buildAnnotatedString{
+                                        withLink(
+                                            LinkAnnotation.Clickable(
+                                                tag = "toggleClickedIfPossible",
+                                                linkInteractionListener = {
+                                                    if(checkedChoicesCounter < maxCheckChoices || checked){
+                                                        checked = !checked
+
+                                                        if(checked){
+                                                            ptrToChoices?.add(choiceData)
+                                                            checkedChoicesCounter++
+                                                        }
+
+                                                        if(!checked){
+                                                            ptrToChoices?.remove(choiceData)
+                                                            checkedChoicesCounter--
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                        ){
+                                            append(
+                                                choiceData.name + " - " + "$%.2f".format(choiceData.price), //next to box show name and price of mod
+                                            )
+                                        }
+                                    },
                                     fontFamily = FontFamily.SansSerif
                                 )
                             }
@@ -274,9 +392,10 @@ fun ColumnScope.DisplayName(
 }
 
 @Composable
-fun ColumnScope.DisplayPrice(
+fun ColumnScope.displayPrice(
     navController: NavController,
     appViewModel: AppViewModel,
+    quantity: Int,
 ): MutableState<Float?> {
     val price =
         remember { mutableStateOf(appViewModel.workingItem?.price?.high_with_modifiers) }
@@ -306,7 +425,8 @@ fun ColumnScope.DisplayPrice(
     }
     price.value = appViewModel.workingItem?.price?.high_with_modifiers
     Text(
-        "$%.2f".format(price.value),
+        text = "$%.2f".format(price.value!!)
+                + if(quantity > 1) " (${"$%.2f".format(price.value!! * quantity)})" else "",
         fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier
@@ -317,32 +437,3 @@ fun ColumnScope.DisplayPrice(
     return price
 }
 
-@Composable
-fun ColumnScope.DisplayProductImage(
-    appViewModel: AppViewModel,
-){
-    val itemHeight = 350
-    val url = "${appViewModel.currentProduct!!.images.data[0].url}?height=${3 * itemHeight}"
-    HorizontalDivider(
-        modifier = Modifier
-            .padding(0.dp, 0.dp, 0.dp, 20.dp)
-            .align(Alignment.CenterHorizontally),
-    )
-    Surface(
-        modifier = Modifier.align(Alignment.CenterHorizontally),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 10.dp
-    ) {
-        AsyncImage(
-            model = url,
-            contentDescription = appViewModel.currentProduct!!.name,
-            modifier = Modifier.height(itemHeight.dp)
-                .width(itemHeight.dp),
-            contentScale = ContentScale.FillHeight,
-        )
-    }
-    HorizontalDivider(
-        modifier = Modifier
-            .padding(0.dp, 20.dp, 0.dp, 20.dp)
-    )
-}

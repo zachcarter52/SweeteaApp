@@ -39,11 +39,8 @@ object ResponseClasses {
 
     @Serializable
     data class AppStatus(
-        val currentEvents: List<EventResponse>,
-        val bearValue: Int,
-    ){
-        companion object{
-            val DefaultStatus = AppStatus(listOf(EventResponse()), Constants.DEFAULT_BEAR_VALUE)
-        }
-    }
+        val currentEvents: List<EventResponse> = listOf(EventResponse()),
+        val bearValue: Int = Constants.DEFAULT_BEAR_VALUE,
+        val rewardValues: RewardValues = RewardValues(),
+    )
 }

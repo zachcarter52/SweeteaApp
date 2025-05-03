@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +41,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
@@ -55,7 +57,7 @@ import com.amplifyframework.core.Amplify
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.notifications.Notifications
 import org.example.sweetea.ui.components.AppBottomBar
 import org.example.sweetea.ui.components.AppHeader
@@ -65,7 +67,6 @@ import java.io.File
 
 
 class MainScreen : ComponentActivity(){
-    private val appViewModel: AppViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var orderViewModel: OrderViewModel
     private var userLocation: Location? = null
@@ -93,6 +94,7 @@ class MainScreen : ComponentActivity(){
         installSplashScreen()
 
         setContent {
+            val appViewModel: AppViewModel = viewModel(factory = AppViewModel.AppViewModelFactory(authViewModel))
             var locationPermissionGranted by remember {
                 mutableStateOf(areLocationPermissionsAlreadyGranted())
             }
@@ -260,8 +262,14 @@ fun SweeteaApp(
     authViewModel: AuthViewModel,
     cacheDir: File
 ){
+    var isFirstRun by remember { mutableStateOf(true) }
     LaunchedEffect(Unit){
+        authViewModel.fetchUsername()
         viewModel.updateInfo()
+        if(isFirstRun){
+            viewModel.getFavorites()
+            isFirstRun = false
+        }
     }
 
     setSingletonImageLoaderFactory { context ->
@@ -288,13 +296,9 @@ fun SweeteaApp(
         dynamicColor = false
     ){
 
-        val NavHost = @Composable {
-
-        }
         val navController = rememberNavController()
         val navEntries = navController.visibleEntries.collectAsState()
-        print("[DEBUGLOG] navEntries [${navEntries.value.size}]:")
-        println(navEntries.value)
+        val coroutineScope = rememberCoroutineScope()
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         var currentRoute by remember{mutableStateOf("")}
@@ -302,15 +306,15 @@ fun SweeteaApp(
         var selectedItem by remember { mutableIntStateOf(0) }
         var oldSelectedItem by remember { mutableIntStateOf(0) }
 
-        val navPageRoute = navBackStackEntry?.id
-        print("[DEBUGLOG] currentDistination.parent:")
-        println(navController.currentDestination?.parent)
         val navRoute = navBackStackEntry?.destination?.route
         var currentRouteObject by remember { mutableStateOf(destMap(Home.route)) }
-        println(currentRouteObject)
         if(navRoute != null && navRoute != currentRoute){
             currentRoute = navRoute
-            val curRouteObj = destMap( navRoute )
+            val curRouteObj = destMap(navRoute)
+            if(curRouteObj != currentRouteObject){
+                authViewModel.fetchUsername()
+                viewModel.updateInfo()
+            }
             if(curRouteObj != null && curRouteObj.index >= 0 ){
                 currentRouteObject = curRouteObj
                 oldSelectedItem = selectedItem
@@ -405,11 +409,13 @@ fun SweeteaApp(
                     AppBottomBar(
                         navController = navController,
                         selectedItem = selectedItem,
+                        viewModel = viewModel,
                     )
                 }
             ) { padding ->
                 SweetTeaNavHost(
-                    viewModel = viewModel,
+                    appViewModel = viewModel,
+                    authViewModel = authViewModel,
                     navController = navController,
                     modifier = Modifier.padding(padding),
                     enterTransition = enterTransition,

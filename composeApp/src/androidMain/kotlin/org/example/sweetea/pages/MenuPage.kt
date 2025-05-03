@@ -1,15 +1,11 @@
 package org.example.sweetea.pages
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.HorizontalDivider
@@ -20,20 +16,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -41,10 +34,12 @@ import androidx.compose.ui.util.fastMapNotNull
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
+import org.example.sweetea.AuthViewModel
+import org.example.sweetea.FavoritesPage
 import org.example.sweetea.ProductCustomPage
-import org.example.sweetea.R
 import org.example.sweetea.SubMenu
-import org.example.sweetea.dataclasses.local.AppViewModel
+import org.example.sweetea.dataclasses.retrieved.CategoryData
+import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.ui.components.BearPageTemplate
 import org.example.sweetea.ui.components.MenuDisplayImage
@@ -85,50 +80,24 @@ fun FeaturedItem(
     }
 }
 
-open class LabeledImage(
-    val imageID: Int,
-    val itemName: String,
-)
-
-val featuredItems = listOf(
-    LabeledImage(
-        imageID = R.drawable.flaming_tiger_pearl_milk,
-        itemName= "Flaming Tiger Pearl Milk Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.thai_milk_tea,
-        itemName = "Thai Milk Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.taro_milk_tea,
-        itemName= "Taro Milk Tea"
-    ),
-    LabeledImage(
-        imageID = R.drawable.oreo_smoothie,
-        itemName = "Oreo Smoothie"
-    )
-)
-
 @Composable
 fun MenuPage(
     modifier: Modifier = Modifier,
     navController: NavController,
     appViewModel: AppViewModel,
+    authViewModel: AuthViewModel
 ){
-    LaunchedEffect(Unit){
-        appViewModel.updateInfo()
-    }
-
     val configuration = LocalConfiguration.current
+    val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val screenHeight = configuration.screenHeightDp
     println("ScreenHeight $screenHeight")
 
     val itemHeight = 120
 
-    val imageCache = remember { mutableStateMapOf<Int, Painter>() }
     var searchTerms by remember { mutableStateOf("") }
 
     val menuCategoryState by appViewModel.categoryList.collectAsState()
+    val favoriteProducts by appViewModel.favoriteProducts.collectAsStateWithLifecycle()
     val menuProductState by appViewModel.productList.collectAsStateWithLifecycle()
     println("Menu Categories $menuCategoryState")
 
@@ -143,16 +112,6 @@ fun MenuPage(
         searchResult.second
     }.map{ searchResult: Pair<ProductData, Int> ->
         searchResult.first
-    }
-
-    @Composable
-    fun cachedImage(id: Int): Painter{
-        var returnImage = imageCache[id]
-        if(returnImage == null){
-            returnImage = painterResource(id = id)
-            imageCache[id] = returnImage
-        }
-        return returnImage
     }
 
     BearPageTemplate(
@@ -183,25 +142,54 @@ fun MenuPage(
                 shape = RectangleShape
             )
         }
+        /*
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
         ){
-            featuredItems.forEach{
-                FeaturedItem(
-                    image =
-                    {Image(
-                        painter = cachedImage(it.imageID),
-                        contentDescription = it.itemName,
-                        contentScale = ContentScale.FillHeight
-                    )},
-                    itemName = it.itemName,
-                    imageHeight = itemHeight
-                )
+            if(appViewModel.favoriteProducts.size > 0) {
+                appViewModel.favoriteProducts.forEach { favoriteDrink ->
+                    val url = "${favoriteDrink.images.data[0].url}?height=${3*itemHeight}"
+                    FeaturedItem(
+                        image = {
+                            MenuDisplayImage(
+                                imageHeight = itemHeight,
+                                url = url,
+                                contentDescription = favoriteDrink.name,
+                                contentScale = ContentScale.FillHeight
+                            )
+                        },
+                        itemName = favoriteDrink.name,
+                        imageHeight = itemHeight,
+                        onClick = {
+                            appViewModel.productIDMap[favoriteDrink.id]?.let {
+                                appViewModel.setProduct(it, favoriteDrink)
+                            }
+                            navController.navigate(ProductCustomPage.route)
+                        }
+                    )
+                }
+
             }
         }
+        */
         HorizontalDivider()
         Column(Modifier.fillMaxWidth()) {
             if(searchTerms.isEmpty()) {
+                if(isLoggedIn && favoriteProducts.isNotEmpty()){
+                    val url = "${favoriteProducts[0].images.data[0].url}?height=${3*itemHeight}"
+                    MenuItem(
+                        url = url,
+                        contentDescription = "Favorites",
+                        contentScale = ContentScale.FillHeight,
+                        itemName = "Favorites",
+                        imageHeight = itemHeight,
+                        onClick = {
+                            //appViewModel.currentCategory = menuCategory.site_category_id.toInt()
+                            navController.navigate(FavoritesPage.route)
+                        }
+                    )
+                    HorizontalDivider()
+                }
                 menuCategoryState.forEachIndexed { index, menuCategory ->
                     val url = "${menuCategory.images.data[0].url}?height=${3 * itemHeight}"
                     MenuItem(

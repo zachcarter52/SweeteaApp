@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.ResponseClasses.Event
 import org.example.sweetea.database.model.DatabaseSchema
 import org.example.sweetea.database.model.EventRepository
