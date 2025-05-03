@@ -98,18 +98,13 @@ fun Application.configureDatabases(
                     call.respond(HttpStatusCode.BadRequest)
                 }
             }
-            post("/{emailAddress}"){
-                val emailAddress = call.parameters["emailAddress"]
+            post("/"){
                 val order = call.receive<ProductOrder>()
-                if(!emailAddress.isNullOrBlank()){
-                    val newID = orderRepository.addOrder(order)
-                    if(newID > 0UL){
-                        call.respond(HttpStatusCode.OK, newID)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
+                val newID = orderRepository.addOrder(order)
+                if(newID > 0UL){
+                    call.respond(HttpStatusCode.OK, newID)
                 } else {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.NotFound)
                 }
             }
 
