@@ -288,12 +288,16 @@ class ProductPageTest {
         val viewModel= AppViewModel(auth)
         val product = createProduct()
         viewModel.setProduct(product)
+
+        //mock adding item to shopping cart, which also increases quantity
         viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
+        viewModel.shoppingCartQuantities.add(1)
 
+        //mock clicking up arrow, which increases quantity of a specific drink
         viewModel.shoppingCartQuantities[0]++
-
         assertEquals(viewModel.shoppingCartQuantities[0], 2)
 
+        //mock pressing down arrow
         viewModel.shoppingCartQuantities[0]--
         assertEquals(viewModel.shoppingCartQuantities[0], 1)
 
