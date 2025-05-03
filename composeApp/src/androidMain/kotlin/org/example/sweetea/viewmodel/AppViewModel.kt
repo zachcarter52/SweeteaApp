@@ -11,6 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import aws.smithy.kotlin.runtime.collections.push
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,6 +23,7 @@ import org.example.sweetea.ModifiedProduct
 import org.example.sweetea.OrderedProduct
 import org.example.sweetea.ProductOrder
 import org.example.sweetea.ResponseClasses.AppStatus
+import org.example.sweetea.dataclasses.local.KtorServiceHandler
 import org.example.sweetea.dataclasses.local.ServerRepository
 import org.example.sweetea.dataclasses.local.SquareRepository
 import org.example.sweetea.dataclasses.retrieved.CategoryData
@@ -31,10 +35,12 @@ import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.model.Order
 import org.example.sweetea.dataclasses.local.Stores
 
-class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
-
+class AppViewModel(
+    val authViewModel: AuthViewModel,
+    private val squareRepository: SquareRepository = SquareRepository(KtorServiceHandler().squareService),
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
+): ViewModel() {
     private val serverRepository = ServerRepository()
-    private val squareRepository = SquareRepository()
 
     private val _locationList = MutableStateFlow<List<LocationData>>(listOf())
     val locationList: StateFlow<List<LocationData>> = _locationList
@@ -108,7 +114,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
     
     fun getAppStatus(){
-        viewModelScope.launch{
+        viewModelScope.launch(dispatcher) {
             try{
                 println("Getting Current appStatus")
                 if(emailAddress.value.isNotBlank()){
@@ -127,7 +133,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     private fun getLocations() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try {
                 println("Getting Locations")
                 val locations = squareRepository.getLocations()
@@ -149,10 +155,10 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     fun getCategories(){
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try{
                 println("Getting Categories")
-                val categories =  squareRepository.getCategories()
+                val categories = squareRepository.getCategories()
                 if(!categories.isNullOrEmpty()) {
                     _categoryList.value = categories
                     _categoryList.value.forEach { category ->
@@ -171,7 +177,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     private fun getProducts(locationID: String){
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try{
                 println("Getting products for location ${locationID}")
                 val products = squareRepository.getProducts(locationID)
@@ -196,7 +202,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     fun getFavorites(){
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try{
                 println("Getting Favorites")
                 val favorites = serverRepository.getFavorites(emailAddress.value)
@@ -211,7 +217,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     private fun getOrders(){
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try{
                 println("Getting Orders")
                 val orders = serverRepository.getOrders(emailAddress.value)
@@ -295,7 +301,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     fun saveOrder(order: ProductOrder){
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             val newID = serverRepository.saveOrder(order)
             if(newID != null && newID > 0UL) {
                 shoppingCart.clear()
@@ -307,7 +313,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     fun addFavorite(emailAddress: String, newFavorite: ProductData){
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             if(authViewModel.isUserLoggedIn.value){
                 val newID = serverRepository.addFavorite(emailAddress, newFavorite.toModifiedProduct())
                 if(newID != null && newID > 0UL) {
@@ -318,7 +324,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
     }
 
     fun removeFavorite(emailAddress: String, oldFavorite: ProductData){
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             serverRepository.removeFavorite(emailAddress, oldFavorite.toModifiedProduct())
             getFavorites()
         }

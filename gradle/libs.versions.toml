@@ -112,6 +112,11 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+mockk-agent = { module = "io.mockk:mockk-agent" }
+mockk-android = { module = "io.mockk:mockk-android" }
+mockk-mockk = { module = "io.mockk:mockk" }
+mockk-mockk-agent = { module = "io.mockk:mockk-agent" }
+mockk-mockk-android = { module = "io.mockk:mockk-android" }
 play-services-maps-v1810 = { module = "com.google.android.gms:play-services-maps", version.ref = "comGoogleAndroidGmsPlayServicesMaps" }
 play-services-maps-v1820 = { module = "com.google.android.gms:play-services-maps", version.ref = "googlePlayServicesMapsVersion" }
 sublime-fuzzy-search = { module = "com.github.android-password-store:sublime-fuzzy", version.ref = "sublime-fuzzy-search"}

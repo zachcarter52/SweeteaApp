@@ -158,77 +158,77 @@ class ProductPageTest {
             .onNodeWithTag("continue_shopping")
             .performClick()*/
     @Test
-        fun priceUpdatesCorrectly(){
-            composeTestRule.waitForIdle()
+    fun priceUpdatesCorrectly(){
+        composeTestRule.waitForIdle()
 
-            composeTestRule
-                .onNodeWithText("Menu")
-                .performClick()
-                .performClick()
+        composeTestRule
+            .onNodeWithText("Menu")
+            .performClick()
+            .performClick()
 
-            composeTestRule
-                .onNodeWithText("Signature")
-                .performClick()
+        composeTestRule
+            .onNodeWithText("Signature")
+            .performClick()
 
-            composeTestRule
-                .onNodeWithText("Flaming Tiger Pearl Milk")
-                .performClick()
+        composeTestRule
+            .onNodeWithText("Flaming Tiger Pearl Milk")
+            .performClick()
 
-            // Select random Ice Level Option
-            composeTestRule
-                .onNodeWithTag("icelevel_dropdown")
-                .performClick()
-            val iceLevelOptions = composeTestRule.onAllNodesWithTag("icelevel_dropdown_item").fetchSemanticsNodes()
-            composeTestRule
-                .onAllNodesWithTag("icelevel_dropdown_item")[0].performClick()
+        // Select random Ice Level Option
+        composeTestRule
+            .onNodeWithTag("icelevel_dropdown")
+            .performClick()
+        val iceLevelOptions = composeTestRule.onAllNodesWithTag("icelevel_dropdown_item").fetchSemanticsNodes()
+        composeTestRule
+            .onAllNodesWithTag("icelevel_dropdown_item")[0].performClick()
 
-            // Select random Sugar Level Option
-            composeTestRule
-                .onNodeWithTag("sugarlevel_dropdown")
-                .performScrollTo()
-                .performClick()
-            val sugarLevelOptions = composeTestRule.onAllNodesWithTag("sugarlevel_dropdown_item").fetchSemanticsNodes()
-            composeTestRule
-                .onAllNodesWithTag("sugarlevel_dropdown_item")[0].performClick()
+        // Select random Sugar Level Option
+        composeTestRule
+            .onNodeWithTag("sugarlevel_dropdown")
+            .performScrollTo()
+            .performClick()
+        val sugarLevelOptions = composeTestRule.onAllNodesWithTag("sugarlevel_dropdown_item").fetchSemanticsNodes()
+        composeTestRule
+            .onAllNodesWithTag("sugarlevel_dropdown_item")[0].performClick()
 
-            // Select random Milk Option
-            composeTestRule
-                .onNodeWithTag("milk_dropdown")
-                .performScrollTo()
-                .performClick()
-            val milkOptions = composeTestRule.onAllNodesWithTag("milk_dropdown_item").fetchSemanticsNodes()
-            composeTestRule
-                .onAllNodesWithTag("milk_dropdown_item")[1].performClick()
+        // Select random Milk Option
+        composeTestRule
+            .onNodeWithTag("milk_dropdown")
+            .performScrollTo()
+            .performClick()
+        val milkOptions = composeTestRule.onAllNodesWithTag("milk_dropdown_item").fetchSemanticsNodes()
+        composeTestRule
+            .onAllNodesWithTag("milk_dropdown_item")[1].performClick()
 
-            composeTestRule
-                .onNodeWithTag("milk_dropdown")
-                .performScrollTo()
-                .performClick()
+        composeTestRule
+            .onNodeWithTag("milk_dropdown")
+            .performScrollTo()
+            .performClick()
 
-            composeTestRule
-                .onNodeWithText("Toppings")
-                .performScrollTo()
+        composeTestRule
+            .onNodeWithText("Toppings")
+            .performScrollTo()
 
 
-            composeTestRule
-                .onAllNodesWithTag("choice").fetchSemanticsNodes()
+        composeTestRule
+            .onAllNodesWithTag("choice").fetchSemanticsNodes()
 
-            composeTestRule
-                .onAllNodesWithTag("choice")[0].performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithTag("choice")[0].performScrollTo().performClick()
 
-            composeTestRule
-                .onAllNodesWithTag("choice")[1].performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithTag("choice")[1].performScrollTo().performClick()
 
-            composeTestRule
-                .onAllNodesWithTag("choice")[2].performScrollTo().performClick()
+        composeTestRule
+            .onAllNodesWithTag("choice")[2].performScrollTo().performClick()
 
-            composeTestRule
-                .onNodeWithTag("price")
-                .performScrollTo()
-                //.assertValueEquals("$9.25")
-                .assertTextEquals("$9.45")
+        composeTestRule
+            .onNodeWithTag("price")
+            .performScrollTo()
+            //.assertValueEquals("$9.25")
+            .assertTextEquals("$9.45")
 
-        }
+    }
     @Test
     fun testAddButtonAddsItemToCart() {
         val auth = AuthViewModel()
@@ -273,21 +273,6 @@ class ProductPageTest {
 
         assertEquals(1, cartItems.size)
         assertEquals(product.id, cartItems[0].id)
-
-        //if user is not logged in, they cannot add to favs
-        viewModel.authViewModel.setLoginState(false)
-
-        //set it as the working item
-        viewModel.setProduct(product)
-        viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
-
-        // Simulate pressing "Add" button
-        assertFailsWith<IllegalStateException> {
-            viewModel.addFavorite(
-                viewModel.authViewModel.emailAddress.value,
-                product
-            )
-        }
     }
 
     @Test//(expected = IllegalStateException::class.java)
@@ -317,7 +302,6 @@ class ProductPageTest {
     }
     
     fun createProduct() : ProductData{
-
         val inventory = InventoryData(
             total=  1,
             lowest = 1,

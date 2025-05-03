@@ -20,7 +20,7 @@ import org.junit.Before
 import org.junit.Test
 
 
-class PaymentTestOne {
+class PaymentTest {
 
     lateinit var activity: ActivityScenario<CardEntryActivity>
 

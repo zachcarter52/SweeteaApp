@@ -250,22 +250,16 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.core)
     androidTestImplementation(libs.androidx.espresso.core)
-    testImplementation ("org.mockito:mockito-android:5.17.0")
-    androidTestImplementation("io.mockk:mockk:1.14.0")
-    androidTestImplementation ("org.mockito:mockito-android:5.17.0")
-    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
-    testImplementation ("io.mockk:mockk:1.14.0")
-    //testImplementation ("org.mockito:mockito-inline:5.2.0")
-    //androidTestImplementation ("org.mockito:mockito-inline:5.2.0")
-    testImplementation ("org.mockito:mockito-core:5.17.0")
-    //testImplementation("net.bytebuddy:byte-buddy:1.15.11")
-    //testImplementation("net.bytebuddy:byte-buddy-agent:1.15.11")
-    //testImplementation("org.objenesis:objenesis:3.3")
-    //androidTestImplementation ("org.mockito:mockito-core:5.3.1")
-    // For local unit tests on your development machine
-    //testCompile( "org.mockito:mockito-core:$mockito_version") // For instrumentation tests on Android devices and emulators
-    //androidTestCompile ("org.mockito:mockito-android:$mockito_version")
+
+    //Gradle (Kotlin DSL)
+    testImplementation("io.mockk:mockk:1.14.2")
+    testImplementation(kotlin("test"))
+    // Android Unit Test
+    testImplementation("io.mockk:mockk-android:1.14.2")
+    testImplementation("io.mockk:mockk-agent:1.14.2")
+    // Android Instrumented Test
+    androidTestImplementation("io.mockk:mockk-android:1.14.2")
+    androidTestImplementation("io.mockk:mockk-agent:1.14.2")
 }
 
 
