@@ -19,4 +19,13 @@ open class ModifiedProduct (
         }
         return 0
     }
+    fun copy(
+        newModifiedProductID: ULong = modifiedProductID,
+        newProductID: String = productID,
+        newModifiers: List<Modifier> = modifiers
+    ) = ModifiedProduct(
+        modifiedProductID = newModifiedProductID,
+        productID = newProductID,
+        modifiers = newModifiers
+    )
 }

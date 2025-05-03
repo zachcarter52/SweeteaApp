@@ -10,6 +10,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.example.sweetea.dataclasses.local.Stores
@@ -28,6 +29,13 @@ fun StoreSelectionPage(
     )
 
     Column(modifier = modifier.fillMaxSize()) {
+
+        Text(
+            text = "Selected: ${appViewModel.selectedStore?.name ?: "None"}",
+            modifier = Modifier
+                .padding(8.dp)
+                .testTag("selectedStoreText")
+        )
         stores.forEach { store ->
             StoreCard(store = store) {
                 appViewModel.updateSelectedStore(store)

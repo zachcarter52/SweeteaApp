@@ -48,7 +48,7 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
         }
     }
 
-    override suspend fun getModifier(databaseModifierID: ULong): Modifier{
+    override suspend fun getModifier(databaseModifierID: ULong): Modifier?{
         return dbQuery {
             return@dbQuery Modifiers.selectAll().where{
                 Modifiers.databaseModifierID eq databaseModifierID
@@ -59,7 +59,7 @@ class ModifierSchema(database: Database): ModifierRepository, DatabaseSchema() {
                     it[modifierID],
                     it[choiceID],
                 )
-            }.single()
+            }.singleOrNull()
         }
     }
 

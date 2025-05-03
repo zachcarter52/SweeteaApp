@@ -26,6 +26,7 @@ import org.example.sweetea.ResponseClasses.AppStatus
 import org.example.sweetea.dataclasses.local.KtorServiceHandler
 import org.example.sweetea.dataclasses.local.ServerRepository
 import org.example.sweetea.dataclasses.local.SquareRepository
+import org.example.sweetea.dataclasses.local.Stores
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
 import org.example.sweetea.dataclasses.retrieved.Data
@@ -78,8 +79,15 @@ class AppViewModel(
     var productCategoryMap: MutableMap<String, ArrayList<ProductData>> = mutableMapOf()
         private set
 
-    var selectedStore: Stores? by mutableStateOf(null)
+    var selectedStore by mutableStateOf<Stores?>(null)
         private set
+
+    fun updateSelectedStore(store: Stores) {
+        selectedStore = store
+    }
+    fun retrieveSelectedStore(): Stores? {
+        return selectedStore
+    }
 
     fun updateInfo(){
         getAppStatus()
