@@ -43,6 +43,9 @@ class AuthViewModel : ViewModel() {
             }
         )
     }
+    fun setLoginState(state: Boolean) {
+        _isUserLoggedIn.value = state
+    }
 
     fun loginUser(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
         Amplify.Auth.signIn(email, password,

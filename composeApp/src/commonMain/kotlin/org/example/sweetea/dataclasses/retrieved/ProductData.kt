@@ -13,7 +13,7 @@ relevance to the product, and in favor of a decreased memory footprint
 */
 
 @Serializable
-data class ProductData (
+data class ProductData(
     val id: String,
     //val owner_id: String,
     //val site_id: String,

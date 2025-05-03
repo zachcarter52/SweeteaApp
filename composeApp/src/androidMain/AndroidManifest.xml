@@ -18,7 +18,12 @@
         android:theme="@style/Theme.App.Starting">
 
         <activity android:name=".CardEntryActivity"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/Theme.AppCompat"
+            android:exported="true"/>
+        <activity
+            android:name="org.example.sweetea.TestLauncherActivity"
+            android:theme="@style/Theme.AppCompat"
+            android:exported="true" />
         <activity android:name=".ui.OrderDetailsActivity" />
         <activity
             android:name=".MainScreen"

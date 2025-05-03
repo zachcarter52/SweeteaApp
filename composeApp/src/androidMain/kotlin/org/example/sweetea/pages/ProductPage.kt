@@ -2,6 +2,7 @@ package org.example.sweetea.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -13,15 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -38,6 +44,7 @@ import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import org.example.sweetea.ProductCustomPage
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ChoiceData
@@ -81,6 +89,7 @@ fun ProductPage(
             ) {
                 Column {
                     Button(
+                        modifier = Modifier.testTag("add"),
                         onClick = {
                             appViewModel.shoppingCart.add(appViewModel.workingItem!!)
                             appViewModel.shoppingCartQuantities.add(1)
@@ -97,6 +106,7 @@ fun ProductPage(
                 }
                 Column {
                     Button(
+                        modifier = Modifier.testTag("cart"),
                         onClick =
                             {
                                 //appViewModel.shoppingCart.add(appViewModel.workingItem!!)
@@ -161,7 +171,10 @@ fun ProductPage(
                             //navController.popBackStack()
                         },
                     ) {
-                        Text("Add")
+                        Text("Add",
+                            modifier = Modifier
+                            .testTag("add")
+                        )
                     }
                 }
             }
@@ -239,7 +252,8 @@ fun ProductPage(
                             modifier = Modifier.clickable {
                                 dropExpand.value = true
                             }
-                                .padding(0.dp, 20.dp, 0.dp, 20.dp),
+                                .padding(0.dp, 20.dp, 0.dp, 20.dp)
+                                .testTag(modifierData.name.lowercase().replace(" ", "") + "_dropdown"),
                         ) {
                             Text(
                                 dropDownText.value, //standard option in the dropdown box (100% ice, whole milk, etc)
@@ -258,6 +272,7 @@ fun ProductPage(
                         ) {
                             modifierData.choices.forEachIndexed { choiceidx, choiceData ->
                                 DropdownMenuItem(
+                                    modifier = Modifier.testTag(modifierData.name.lowercase().replace(" ", "") + "_dropdown_item"),
                                     text = {
                                         if (choiceData.price != 0.0f) { //if the mod is an extra cost, display that cost
                                             Text(
@@ -272,6 +287,8 @@ fun ProductPage(
                                         }
                                     },
                                     onClick = {
+                                        println("DBG: " + modifierData.name.lowercase().replace(" ", "") + "_dropdown_item")
+
                                         dropDownText.value = choiceData.name //once a user clicks on a mod, replace value in dropbox with chosen mod
                                         dropExpand.value = false
                                         position.value = choiceidx
@@ -292,10 +309,12 @@ fun ProductPage(
                     //MultipleChoiceCheckBox(navController, appViewModel, modifierData, choices)
                     Column {
                         Text(
-                            modifierData.name, //Display name of modification type (Ex.: "Toppings", "Sugar Level", "Ice Level", "Milk")
+                            text = modifierData.name, //Display name of modification type (Ex.: "Toppings", "Sugar Level", "Ice Level", "Milk")
+                            modifier = Modifier
+                                .testTag(modifierData.name.lowercase() + "_choice"),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.SansSerif
+                            fontFamily = FontFamily.SansSerif,
                         )
 
                         val ptrToChoices = appViewModel.workingItem?.modifiers?.data?.get(modidx)?.choices
@@ -314,6 +333,7 @@ fun ProductPage(
                                 }
 
                                 Checkbox(
+                                    modifier = Modifier.testTag("choice"),
                                     checked = checked,
                                     onCheckedChange = { isChecked ->
                                         checked = isChecked
@@ -387,7 +407,8 @@ fun ColumnScope.DisplayName(
         style = MaterialTheme.typography.headlineMedium,
         modifier = Modifier
             .padding(0.dp, 0.dp, 0.dp, 20.dp)
-            .align(Alignment.CenterHorizontally),
+            .align(Alignment.CenterHorizontally)
+            .testTag("appViewModel.currentProduct!!.name"),
     )
 }
 
@@ -431,7 +452,8 @@ fun ColumnScope.displayPrice(
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .padding(0.dp, 0.dp, 0.dp, 20.dp)
-            .align(Alignment.CenterHorizontally),
+            .align(Alignment.CenterHorizontally)
+            .testTag("price"),
         fontFamily = FontFamily.SansSerif
     )
     return price
