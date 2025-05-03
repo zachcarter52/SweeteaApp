@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -82,7 +83,7 @@ fun FeaturedItem(
 
 @Composable
 fun MenuPage(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     navController: NavController,
     appViewModel: AppViewModel,
     authViewModel: AuthViewModel
@@ -124,7 +125,8 @@ fun MenuPage(
                 onValueChange = { searchTerms = it },
                 label = { Text("Search") },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .testTag("search"),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = MaterialTheme.colorScheme.background,
                     unfocusedContainerColor = MaterialTheme.colorScheme.background,

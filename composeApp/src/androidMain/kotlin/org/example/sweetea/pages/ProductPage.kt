@@ -407,7 +407,8 @@ fun ColumnScope.DisplayName(
         style = MaterialTheme.typography.headlineMedium,
         modifier = Modifier
             .padding(0.dp, 0.dp, 0.dp, 20.dp)
-            .align(Alignment.CenterHorizontally),
+            .align(Alignment.CenterHorizontally)
+            .testTag("appViewModel.currentProduct!!.name"),
     )
 }
 

@@ -1,34 +1,52 @@
 package org.example.sweetea.test
 
+
+import android.Manifest
+import android.content.Intent
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
-import org.example.sweetea.AuthViewModel
-import org.example.sweetea.dataclasses.local.SquareService
-import org.example.sweetea.viewmodel.AppViewModel
-import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
-import io.mockk.mockk
 import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.test.StandardTestDispatcher
+import org.example.sweetea.AuthViewModel
+import org.example.sweetea.MainScreen
+import org.example.sweetea.dataclasses.local.SquareRepository
 import org.example.sweetea.dataclasses.retrieved.Availability
 import org.example.sweetea.dataclasses.retrieved.AvailabilityData
 import org.example.sweetea.dataclasses.retrieved.CategoryData
 import org.example.sweetea.dataclasses.retrieved.CategoryImages
 import org.example.sweetea.dataclasses.retrieved.Data
-import org.example.sweetea.dataclasses.retrieved.ImageData
-import org.example.sweetea.dataclasses.retrieved.MetaData
-import org.example.sweetea.dataclasses.retrieved.PaginationData
 import org.example.sweetea.dataclasses.retrieved.ProductCountData
-import org.example.sweetea.dataclasses.retrieved.SquareApiRequest
+import org.example.sweetea.viewmodel.AppViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
 
 class MenuPageTests {
+    val intent = Intent(ApplicationProvider.getApplicationContext(), MainScreen::class.java).apply {
+        putExtra("navigate_to", "search")
+    }
+
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<MainScreen>()
+
     @Before
     fun setup() {
+
         val permissionList = listOf(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
 
         permissionList.forEach { permission ->
@@ -39,7 +57,7 @@ class MenuPageTests {
         }
     }
 
-   /* @Test
+/*   @Test
     fun myCategoryTest() {
 
         val urls = mapOf("One" to "Two")
@@ -97,29 +115,66 @@ class MenuPageTests {
              images= listCatImg,
              availability= availData
         )
-        //val auth = AuthViewModel()
-        val sqApiReq = SquareApiRequest(
-            data = listOf(category),
-            meta = MetaData (
-                pagination =  PaginationData(
-                     total= 0,
-                     count= 0,
-                     per_page= 0,
-                     current_page= 0,
-                     total_pages= 0,
-                )
-        )
-        )
 
         // Arrange
-        val mockService: SquareService = mock(SquareService::class.java)
-        val mockCategories: Result<SquareApiRequest<CategoryData>> = Result.success(sqApiReq)
+       val mockSquareRepository = mockk<SquareRepository>()
+       val mockCategories = listOf(category)
+       coEvery { mockSquareRepository.getCategories() } returns mockCategories
 
-        val mockAuthViewModel = mockk<AuthViewModel>(relaxed = true)
-        coEvery{mockService.getCategories()} returns mockCategories
+       val mockAuthViewModel = mockk<AuthViewModel>()
+       coEvery { mockAuthViewModel.emailAddress } returns MutableStateFlow("").asStateFlow()
 
-        val appViewModel = AppViewModel(mockAuthViewModel)
-        assertEquals(appViewModel.getCategories(), mockCategories)
+       val testDispatcher = StandardTestDispatcher()
+       val appViewModel = AppViewModel(
+           authViewModel = mockAuthViewModel,
+           dispatcher = testDispatcher,
+           squareRepository = mockSquareRepository
+       )
+       appViewModel.getCategories()
+       testDispatcher.scheduler.advanceUntilIdle()
+
+       assertEquals(mockCategories, appViewModel.categoryList.value)
 
     }*/
+    
+    @Test
+    fun searchBarFiltersResults() {
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithText("Menu")
+            .performClick()
+
+        // Simulate typing in search bar
+        composeTestRule
+            .onNodeWithTag("search") // or .onNodeWithText("Search...")
+            .performTextInput("Mango")
+
+        // Assert filtered result appears
+        composeTestRule
+            .onNodeWithText("Mango")
+            .assertIsDisplayed()
+
+        // Assert unrelated item is not shown
+        composeTestRule
+            .onNodeWithText("Bzdhd")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun drinkMenuTest() {
+        composeTestRule
+            .onNodeWithText("Menu")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Signature")
+            .performClick()
+
+        composeTestRule
+        val milkOptions = composeTestRule.onAllNodesWithText("Flaming Tiger Pearl Milk").fetchSemanticsNodes()
+        composeTestRule
+            .onNodeWithTag("Flaming Tiger Pearl Milk", useUnmergedTree = true)
+            .assertExists()
+
+    }
 }

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,7 +27,7 @@ fun OrderPrepPage(
     ){
         appViewModel.currentLocation?.let {
             Text(
-                modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start),
+                modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start).testTag("location"),
                 text = "Pickup Location: " + it.nickname,
                 fontSize = 24.sp,
                 lineHeight = 28.sp
@@ -34,6 +35,8 @@ fun OrderPrepPage(
         }
 
         Text(
+            modifier = Modifier
+                .testTag("orderprocess"),
             text = "Your Order is Being Processed!",
             fontSize = 32.sp,
             lineHeight = 36.sp
