@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -47,7 +48,8 @@ fun HomeCard(image: @Composable () -> Unit,
     Column() {
         Button(
             elevation = ButtonDefaults.elevatedButtonElevation(),
-            onClick = onClick
+            onClick = onClick,
+            modifier = Modifier.testTag("orderNowButton")
         ) {
             Text(buttonText)
         }

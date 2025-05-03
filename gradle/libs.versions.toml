@@ -13,7 +13,7 @@ androidx-core-ktx = "1.15.0"
 androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.2"
 androidx-material = "1.12.0"
-androidx-compose = "1.7.5"
+androidx-compose = "1.8.0"
 androidx-test-junit = "1.2.1"
 authCognito = "2.0.0"
 authenticator = "1.2.0"
@@ -25,8 +25,13 @@ coil = "3.0.4"
 converterMoshi = "2.11.0"
 desugar_jdk_libs = "2.1.2"
 googlePlayServicesMapsVersion = "18.2.0"
+hamcrest = "2.2"
 junit = "4.13.2"
 kotlin = "2.0.21"
+kotlinBomVersion = "1.8.0"
+mockk = "1.13.5"
+navigationTesting = "2.8.9"
+runner = "1.5.0"
 sublime-fuzzy-search = "2.3.4"
 
 kotlinBom = "provider"
@@ -82,11 +87,14 @@ places = "3.3.0"
 testng = "6.9.6"
 foundationLayoutAndroid = "1.7.5"
 googlePlayServicesMaps = "19.2.0"
+materialVersion = "1.12.0"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-material-v143 = { module = "androidx.compose.material:material", version.ref = "material" }
+androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationTesting" }
+androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
@@ -96,11 +104,14 @@ androidx-ui-v143 = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 card-entry = { module = "com.squareup.sdk.in-app-payments:card-entry", version.ref = "cardEntry" }
 com-squareup-moshi-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi" }
+hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "hamcrest" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
 amplify-ios = { module = "com.amplifyframework:amplify-ios", version.ref = "amplifyIos" }
+kotlin-bom-v180 = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBomVersion" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 play-services-maps-v1810 = { module = "com.google.android.gms:play-services-maps", version.ref = "comGoogleAndroidGmsPlayServicesMaps" }
 play-services-maps-v1820 = { module = "com.google.android.gms:play-services-maps", version.ref = "googlePlayServicesMapsVersion" }
 sublime-fuzzy-search = { module = "com.github.android-password-store:sublime-fuzzy", version.ref = "sublime-fuzzy-search"}
@@ -205,6 +216,7 @@ androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "l
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "googlePlayServicesMaps" }
+material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 
 
 [plugins]
