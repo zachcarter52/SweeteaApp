@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -102,7 +103,7 @@ fun AppHeader(
                     },
                     fontSize = 10.sp,
                     lineHeight = 14.sp,
-                    modifier = Modifier.fillMaxWidth(0.6f).padding(80.dp, 4.dp, 20.dp, 0.dp) // No padding on top-left, but padding on top-right (end)
+                    modifier = Modifier.fillMaxWidth(0.6f).padding(80.dp, 4.dp, 20.dp, 0.dp).testTag("selectedStore")
 
 
                 )
