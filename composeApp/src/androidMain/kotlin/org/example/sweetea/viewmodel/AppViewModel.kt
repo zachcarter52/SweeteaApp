@@ -313,8 +313,6 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
                 if(newID != null && newID > 0UL) {
                     getFavorites()
                 }
-            }else{
-                throw IllegalStateException("User must be logged in to add favorites.")
             }
         }
     }

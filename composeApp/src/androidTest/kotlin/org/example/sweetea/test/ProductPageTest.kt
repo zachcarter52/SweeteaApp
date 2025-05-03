@@ -11,6 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.platform.app.InstrumentationRegistry
+import aws.smithy.kotlin.runtime.util.length
 import junit.framework.TestCase.assertEquals
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.MainScreen
@@ -291,9 +292,6 @@ class ProductPageTest {
 
     @Test//(expected = IllegalStateException::class.java)
     fun testFailFavButtonAddsItemToFavs() {
-       /* val standardOut = System.out
-        val outputStreamCaptor = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStreamCaptor))*/
         var auth = AuthViewModel()
         var viewModel = AppViewModel(auth)
 
@@ -305,19 +303,8 @@ class ProductPageTest {
         viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
 
         // Simulate pressing "Add" button
-        assertFailsWith<IllegalStateException> {
-            viewModel.addFavorite(
-            viewModel.authViewModel.emailAddress.value,
-            product
-            )
-        }
-
-        //print("DBG: favs" + viewModel.getFavorites().toString())
-        //assert(viewModel.getFavorites())
-
-       /* val printed = outputStreamCaptor.toString().trim()
-        assertEquals("User must be logged in to add favorites.", printed)
-        System.setOut(standardOut)*/
+        viewModel.addFavorite(viewModel.authViewModel.emailAddress.value, product)
+        assertEquals(0, viewModel.favoriteProducts.value.size)
     }
 
     @Test
