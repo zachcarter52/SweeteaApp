@@ -148,7 +148,7 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
         }
     }
 
-    private fun getCategories(){
+    fun getCategories(){
         viewModelScope.launch {
             try{
                 println("Getting Categories")
@@ -164,6 +164,10 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
                 //throw e
             }
         }
+    }
+
+    fun getCurrProduct(): ProductData? {
+        return currentProduct
     }
 
     private fun getProducts(locationID: String){
@@ -304,9 +308,13 @@ class AppViewModel(val authViewModel: AuthViewModel): ViewModel() {
 
     fun addFavorite(emailAddress: String, newFavorite: ProductData){
         viewModelScope.launch {
-            val newID = serverRepository.addFavorite(emailAddress, newFavorite.toModifiedProduct())
-            if(newID != null && newID > 0UL) {
-                getFavorites()
+            if(authViewModel.isUserLoggedIn.value){
+                val newID = serverRepository.addFavorite(emailAddress, newFavorite.toModifiedProduct())
+                if(newID != null && newID > 0UL) {
+                    getFavorites()
+                }
+            }else{
+                print("User must be logged in to add favorites.")
             }
         }
     }

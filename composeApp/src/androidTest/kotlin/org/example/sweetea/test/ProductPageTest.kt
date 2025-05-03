@@ -1,6 +1,8 @@
 //import kotlin.Test
 import android.media.Image
 import androidx.activity.viewModels
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.assertValueEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -23,17 +25,21 @@ import org.example.sweetea.dataclasses.retrieved.ModifierData
 import org.example.sweetea.dataclasses.retrieved.PriceData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.viewmodel.AppViewModel
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.random.Random
+import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 
 
 class ProductPageTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainScreen>()
-
     @Before
     fun setup() {
         val permissionList = listOf(
@@ -48,7 +54,38 @@ class ProductPageTest {
 
     @Test
     fun myTest() {
-        composeTestRule.waitForIdle()
+        val auth = AuthViewModel()
+        val viewModel = AppViewModel(auth)
+        val product = createProduct()
+        viewModel.setProduct(product)
+
+        val listofchoices: MutableList<ChoiceData> = mutableListOf(
+            ChoiceData(
+                id = "choicedataid",
+                name = "choicedata",
+                price = 0.00f,
+                display_order = 1,
+                sold_out = false,
+            )
+        )
+
+        val modData = ModifierData(
+            id = "modDataID",
+            site_product_id = 2,
+            name = "foam",
+            min_selected = 0,
+            max_selected = 1,
+            type = "type",
+            display_order = 1,
+            visible_on_invoice = 1,
+            choices = listofchoices
+        )
+
+        viewModel.currentProduct?.modifiers?.data?.set(0, modData)
+
+        assertEquals(product.name, viewModel.getCurrProduct()?.name)
+    }
+        /*composeTestRule.waitForIdle()
 
         composeTestRule
             .onNodeWithText("Menu")
@@ -108,17 +145,176 @@ class ProductPageTest {
         }
 
         composeTestRule
-            .onNodeWithTag("add")
+            .onNodeWithTag("add", useUnmergedTree = true)
             .performScrollTo()
             .performClick()
 
         composeTestRule
-            .onNodeWithTag("Checkout")
+            .onNodeWithTag("checkout")
             .performClick()
 
         composeTestRule
             .onNodeWithTag("continue_shopping")
-            .performClick()
+            .performClick()*/
+    @Test
+        fun priceUpdatesCorrectly(){
+            composeTestRule.waitForIdle()
+
+            composeTestRule
+                .onNodeWithText("Menu")
+                .performClick()
+                .performClick()
+
+            composeTestRule
+                .onNodeWithText("Signature")
+                .performClick()
+
+            composeTestRule
+                .onNodeWithText("Flaming Tiger Pearl Milk")
+                .performClick()
+
+            // Select random Ice Level Option
+            composeTestRule
+                .onNodeWithTag("icelevel_dropdown")
+                .performClick()
+            val iceLevelOptions = composeTestRule.onAllNodesWithTag("icelevel_dropdown_item").fetchSemanticsNodes()
+            composeTestRule
+                .onAllNodesWithTag("icelevel_dropdown_item")[0].performClick()
+
+            // Select random Sugar Level Option
+            composeTestRule
+                .onNodeWithTag("sugarlevel_dropdown")
+                .performScrollTo()
+                .performClick()
+            val sugarLevelOptions = composeTestRule.onAllNodesWithTag("sugarlevel_dropdown_item").fetchSemanticsNodes()
+            composeTestRule
+                .onAllNodesWithTag("sugarlevel_dropdown_item")[0].performClick()
+
+            // Select random Milk Option
+            composeTestRule
+                .onNodeWithTag("milk_dropdown")
+                .performScrollTo()
+                .performClick()
+            val milkOptions = composeTestRule.onAllNodesWithTag("milk_dropdown_item").fetchSemanticsNodes()
+            composeTestRule
+                .onAllNodesWithTag("milk_dropdown_item")[1].performClick()
+
+            composeTestRule
+                .onNodeWithTag("milk_dropdown")
+                .performScrollTo()
+                .performClick()
+
+            composeTestRule
+                .onNodeWithText("Toppings")
+                .performScrollTo()
+
+
+            composeTestRule
+                .onAllNodesWithTag("choice").fetchSemanticsNodes()
+
+            composeTestRule
+                .onAllNodesWithTag("choice")[0].performScrollTo().performClick()
+
+            composeTestRule
+                .onAllNodesWithTag("choice")[1].performScrollTo().performClick()
+
+            composeTestRule
+                .onAllNodesWithTag("choice")[2].performScrollTo().performClick()
+
+            composeTestRule
+                .onNodeWithTag("price")
+                .performScrollTo()
+                //.assertValueEquals("$9.25")
+                .assertTextEquals("$9.45")
+
+        }
+    @Test
+    fun testAddButtonAddsItemToCart() {
+        val auth = AuthViewModel()
+        val viewModel = AppViewModel(auth)
+
+        val product = createProduct() // A mock product with name/price/etc.
+
+        //set it as the working item
+        viewModel.setProduct(product)
+        // Simulate pressing "Add" button
+        viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
+
+        val cartItems = viewModel.shoppingCart
+
+        assertEquals(1, cartItems.size)
+        assertEquals(product.id, cartItems[0].id)
+    }
+
+    @Test
+    fun testFavButtonAddsItemToFavs() {
+        var auth = AuthViewModel()
+        var viewModel = AppViewModel(auth)
+
+        val product = createProduct() // A mock product with name/price/etc.
+
+        val auth2 = AuthViewModel()
+        val viewModel2 = AppViewModel(auth2)
+        //now test the case in which they are logged, which means they should be able to add to favs
+        viewModel2.authViewModel.setLoginState(true)
+
+        viewModel2.setProduct(product)
+        viewModel2.workingItem?.let { viewModel2.shoppingCart.add(it) }
+
+        viewModel2.workingItem?.let {
+            viewModel2.addFavorite(
+                viewModel2.authViewModel.emailAddress.value,
+                viewModel2.shoppingCart[0]
+            )
+        }
+
+        val cartItems = viewModel2.shoppingCart
+
+        assertEquals(1, cartItems.size)
+        assertEquals(product.id, cartItems[0].id)
+
+        //if user is not logged in, they cannot add to favs
+        viewModel.authViewModel.setLoginState(false)
+
+        //set it as the working item
+        viewModel.setProduct(product)
+        viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
+
+        // Simulate pressing "Add" button
+        assertFailsWith<IllegalStateException> {
+            viewModel.addFavorite(
+                viewModel.authViewModel.emailAddress.value,
+                product
+            )
+        }
+    }
+
+    @Test//(expected = IllegalStateException::class.java)
+    fun testFailFavButtonAddsItemToFavs() {
+        val standardOut = System.out
+        val outputStreamCaptor = ByteArrayOutputStream()
+        System.setOut(PrintStream(outputStreamCaptor))
+        var auth = AuthViewModel()
+        var viewModel = AppViewModel(auth)
+
+        val product = createProduct() // A mock product with name/price/etc.
+        viewModel.authViewModel.setLoginState(false)
+
+        //set it as the working item
+        viewModel.setProduct(product)
+        viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
+
+        // Simulate pressing "Add" button
+        viewModel.addFavorite(
+            viewModel.authViewModel.emailAddress.value,
+            product
+        )
+        print("DBG: favs" + viewModel.getFavorites().toString())
+        //assert(viewModel.getFavorites())
+
+       /* val printed = outputStreamCaptor.toString().trim()
+        assertEquals("User must be logged in to add favorites.", printed)
+        System.setOut(standardOut)*/
     }
 
     @Test

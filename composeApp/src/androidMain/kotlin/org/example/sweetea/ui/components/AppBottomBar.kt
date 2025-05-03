@@ -58,7 +58,7 @@ fun AppBottomBar(
                     navController.navigateSingleTopTo(destination.route)
                     destination.onClick!!()
                 },
-                modifier = Modifier.testTag(destination.toString())
+                modifier = Modifier.testTag(destination.route)
             )
         }
     }

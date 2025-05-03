@@ -173,7 +173,8 @@ fun ProductPage(
                     ) {
                         Text("Add",
                             modifier = Modifier
-                            .testTag("add"))
+                            .testTag("add")
+                        )
                     }
                 }
             }
@@ -450,7 +451,8 @@ fun ColumnScope.displayPrice(
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .padding(0.dp, 0.dp, 0.dp, 20.dp)
-            .align(Alignment.CenterHorizontally),
+            .align(Alignment.CenterHorizontally)
+            .testTag("price"),
         fontFamily = FontFamily.SansSerif
     )
     return price
