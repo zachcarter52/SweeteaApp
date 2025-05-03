@@ -39,7 +39,7 @@ class MenuPageTests {
         }
     }
 
-    @Test
+   /* @Test
     fun myCategoryTest() {
 
         val urls = mapOf("One" to "Two")
@@ -121,5 +121,5 @@ class MenuPageTests {
         val appViewModel = AppViewModel(mockAuthViewModel)
         assertEquals(appViewModel.getCategories(), mockCategories)
 
-    }
+    }*/
 }

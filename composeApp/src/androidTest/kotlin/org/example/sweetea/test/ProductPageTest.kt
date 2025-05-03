@@ -291,9 +291,9 @@ class ProductPageTest {
 
     @Test//(expected = IllegalStateException::class.java)
     fun testFailFavButtonAddsItemToFavs() {
-        val standardOut = System.out
+       /* val standardOut = System.out
         val outputStreamCaptor = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStreamCaptor))
+        System.setOut(PrintStream(outputStreamCaptor))*/
         var auth = AuthViewModel()
         var viewModel = AppViewModel(auth)
 
@@ -305,11 +305,14 @@ class ProductPageTest {
         viewModel.workingItem?.let { viewModel.shoppingCart.add(it) }
 
         // Simulate pressing "Add" button
-        viewModel.addFavorite(
+        assertFailsWith<IllegalStateException> {
+            viewModel.addFavorite(
             viewModel.authViewModel.emailAddress.value,
             product
-        )
-        print("DBG: favs" + viewModel.getFavorites().toString())
+            )
+        }
+
+        //print("DBG: favs" + viewModel.getFavorites().toString())
         //assert(viewModel.getFavorites())
 
        /* val printed = outputStreamCaptor.toString().trim()
