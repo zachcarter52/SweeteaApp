@@ -32,7 +32,6 @@ import java.io.File
 fun Application.configureDatabases(
     adminAccountRepository: AdminAccountRepository,
     eventRepository: EventRepository,
-    modifiedProductRepository: ModifiedProductRepository,
     orderRepository: OrderRepository,
     favoritesRepository: FavoriteProductsRepository,
 ) {

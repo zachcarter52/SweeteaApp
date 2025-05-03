@@ -25,7 +25,7 @@ import org.example.sweetea.database.OrderedProductSchema
 import org.example.sweetea.plugins.configureWebPanel
 import org.jetbrains.exposed.sql.Database
 
-fun main(args: Array<String>) {
+fun main(args: Array<String>? = null) {
 
     /*
     val session = Session("acme://letsencrypt.org/staging")
@@ -43,8 +43,11 @@ fun main(args: Array<String>) {
 }
 
 val json = Json{
+    isLenient = true
     ignoreUnknownKeys = true
+    coerceInputValues = true
 }
+
 
 fun Application.module() {
     install(ContentNegotiation){
@@ -64,17 +67,16 @@ fun Application.module() {
     val orderedProductSchema = OrderedProductSchema(database, modifiedProductSchema)
     val productOrderSchema = OrderSchema(database, orderedProductSchema, rewardSchema)
     val favoritesSchema = FavoriteProductSchema(database, modifiedProductSchema)
+
     configureSecurity(
         adminAccountSchema
     )
     configureDatabases(
         adminAccountSchema,
         eventSchema,
-        modifiedProductSchema,
         productOrderSchema,
         favoritesSchema
     )
-    configureSerialization()
     configureRouting(
         eventSchema,
         rewardSchema

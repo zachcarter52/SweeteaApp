@@ -1,4 +1,4 @@
-package org.example.sweetea.database
+package org.example.sweetea.database.repository
 
 import kotlinx.datetime.*
 import org.example.sweetea.ProductOrder

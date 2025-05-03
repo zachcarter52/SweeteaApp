@@ -1,4 +1,4 @@
-package org.example.sweetea.database
+package org.example.sweetea.database.repository
 
 import org.example.sweetea.Favorites
 import org.example.sweetea.ModifiedProduct
