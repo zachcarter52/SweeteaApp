@@ -2,7 +2,19 @@
 
 # Sweetea Boba Mobile Ordering App -
 
-Sweetea is a boba company which serves high-quality boba drinks and desserts in Roseville, Fair Oaks, and Auburn. We have designed a mobile application for Android and iOS to assist with ordering operations and provide users with a seamless experience to browse, customize, and purchase their favorite drinks and desserts. Built using Kotlin and Jetpack Compose with AWS Amplify and Amazon RDS for backend services.
+Sweetea is a boba company which serves high-quality boba drinks and desserts. 
+They currently have three locations within the Greater Sacramento area: Fair Oaks, Roseville, 
+and Auburn. While they have found success within the market, they are still a relatively new 
+local business that has to compete with larger, national and international franchises. Even the Roseville
+location has 8 other boba shops within a 5-mile radius.
+
+
+As such, we have designed a mobile application for Android and iOS to assist with ordering operations and 
+provide users with a seamless experience to browse, customize, and purchase their favorite drinks 
+and desserts. This mobile application is designed to encourage repeat customers by streamlining order creation, 
+rewards account registration, and menu browsing.
+
+
 
 ## Participants
 - James McDole https://github.com/ZOrangeBandit
@@ -10,7 +22,7 @@ Sweetea is a boba company which serves high-quality boba drinks and desserts in 
 - Zach Carter https://github.com/zachcarter52
 - Chenbin Wu https://github.com/Megpoidgumi
 - Maria Flores-Rivera https://github.com/mariafloresrivera
-- Andrew Xu https://github.com/andy1xu
+- Andy Xu https://github.com/andy1xu
 - Samuel Rudey https://github.com/JesterSam
 
 ## Table of Contents
@@ -29,14 +41,21 @@ Sweetea is a boba company which serves high-quality boba drinks and desserts in 
 
 ## Features
 - User authentication (Sign Up, Log In, Log Out) via AWS Cognito.
-- Browse a variety of boba tea options with customizable toppings.
+- Browse the Sweetea menu of drinks, desserts and merchandise.
+- Customize drinks with a variety of toppings.
+- Navigate the menu smoothly with search options and a favorites bar.
+- Create and modify a checkout cart, with options to 'favorite' an item.
+- Location search for nearest stores.
 - Secure order processing and confirmation using Square and Amazon RDS.
-- Smooth menu navigation using Jetpack Compose.
+- View account order history.
+
 
 ## Technologies Used
 - **Frontend:**
   - Kotlin
+  - Swift
   - Android Studio
+  - Xcode
   - Jetpack Compose
 - **Backend:**
   - AWS Amplify / Cognito for authentication
@@ -52,10 +71,11 @@ Sweetea is a boba company which serves high-quality boba drinks and desserts in 
 ## Usage
   - Launch App
   - Sign in or Create Account
-  - Browse the menu
-  - Check promotinal offers and reward points.
-  - Customize your drink
-  - Place Order and recieve confirmation
+  - Browse and search the menu
+  - Check promotional offers and reward points.
+  - Customize and modify drink
+  - View and modify checkout cart
+  - Create payments, place order, and receive confirmation
   - Sign out
 
 ## Project Files
@@ -82,20 +102,39 @@ Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-mu
 
 
 ## Testing
+Testing the application can be done in a few steps. Note that you'll need to create a new 
+`amplifyconfiguration.json` file. Learn more [here] (https://docs.amplify.aws/gen1/android/start/project-setup/use-existing-resources/)…
+  1. Clone this GitHub repository and open using Android Studio. You can also use '> git clone https://github.com/zachcarter52/SweeteaApp.git'.
+  2. Create and configure an `amplifyconfiguration.json` file to the root directory. 
+<br>The file can be found through: composeApp > src > androidMain > res > raw 
+  3. You can run the test configurations individually or hit "All Tests" in the upper right-hand side of Android Studio, located next to the displayed AVD. By default, this will say "composeApp", 
+but you can use the drop-down menu to select the test. 
+  4. Click on the play button to build and run the the test. 
+
 
 ## Deployment
+Deployment will require setting up a few environment variables. For security, this project requires a 
+`PrivateConstants.kt` file. This will include: 
+- `DATABASE_HOST`
+- `DATABASE_PORT`
+- `DATABASE_USERNAME`
+- `DATABASE_PASSWORD`
+- `SQUARE_USER_ID`
+- `SITE_ID`
+
+This file will need to be updated under 
+`/shared` > `src` > `commonMain` > `kotlin` > `org.example.sweetea` > `Constants.kt`
+
+
 
 ## Developer Instructions
+**Prerequisites:**
+- Familiarity with Kotlin. Visit the [Kotlin Documentation] (https://kotlinlang.org/docs/home.html) for more.
 
-## Timeline
-  - 1 Oct 2024:  Project development began.
-  - 20 Oct 2024: First commits, UI started and initial database setup.
-  - 30 Oct 2024: Navigation implemented and store functionality setup.
-  - 2 Nov 2024: Login backend functionality setup.
-  - 17 Nov 2024: Further UI development including rewards page, account page, home page, menu page.
+Clone this repository and open in Android Studio. Configure a compatible Android Virtual Device. 
 
-  Future development projections
-  - Jan 2025: Fully implement up to date menu browsing, drink customizations, and order placing capabilities including communication with Square POS system.
-  - Feb 2025: Fully implement Google maps store locator and password reset capabilities. Also, creation of an admin portal for easy update of menu items and images as well as ability to 86 items that are out of stock.
-  - Mar 2025: Implement ability for users to view order history and receive updates via notifications regarding their order status. Employees should have ability to update reward and event information.
-  - Apr 2025: Focus on refining details, including consistent details in fonts and sizing for a professional experience. Deploy application.
+Sync the Gradle build files to run the application. 
+
+MacOS users can also open in Android Studio and use Xcode to check the iOS workspace. 
+The `.xcworkspace` can be found under `/iosApp`.
+See the Project Files section for more details on each portion of the development files. 
