@@ -5,8 +5,7 @@ import org.example.sweetea.dataclasses.retrieved.LocationData
 import org.example.sweetea.dataclasses.retrieved.ProductData
 
 
-class SquareRepository {
-    private val squareService = KtorServiceHandler().squareService
+class SquareRepository(private val squareService: SquareApiService){
     suspend fun getLocations(): List<LocationData>?{
         val locationResult = squareService.getLocations()
         println("Successfully got location: ${locationResult.isSuccess}")

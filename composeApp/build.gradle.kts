@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
-
 plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.kotlinMultiplatform)
@@ -129,8 +128,12 @@ kotlin {
             implementation(libs.multiplatform.paths)
             implementation(libs.sublime.fuzzy.search)
             implementation(libs.kotlinx.datetime)
+            //implementation("org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.2")
 
         }
+    }
+    sourceSets.androidInstrumentedTest.dependencies {
+        implementation(kotlin("test"))
     }
 }
 
@@ -142,6 +145,12 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.1.1"
+    }
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+            isIncludeAndroidResources = true
+        }
     }
 
     namespace = "org.example.sweetea"
@@ -159,8 +168,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -176,8 +188,8 @@ android {
 dependencies {
 
     implementation(libs.androidx.core)
-//    implementation(libs.play.services.location)
-    //implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.ui.test.junit4.android)
 
@@ -188,22 +200,24 @@ dependencies {
 
     implementation("com.android.volley:volley:1.2.1")
 
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:${libs.versions.kotlin}"))
+    implementation(libs.jetbrains.kotlin.bom)
     implementation("com.google.android.libraries.places:places:3.5.0")
-    implementation("com.google.maps.android:places-ktx:3.3.1")
+    implementation(libs.places.ktx)
 
     implementation(libs.androidx.ui.test.junit4.android)
     implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.play.services.maps)
+    implementation(libs.androidx.compiler)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.ui.test.junit4)
     // Needed for createComposeRule(), but not for createAndroidComposeRule<YourActivity>():
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    debugImplementation(libs.ui.test.manifest)
     debugImplementation(compose.uiTooling)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+    debugImplementation ("androidx.test:core:1.6.1")
 
     implementation(libs.androidx.ui.v143)
     implementation(libs.androidx.material.v143)
@@ -211,15 +225,16 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.accompanist.permissions)
 
-  //  implementation(libs.maps.compose)
-   // implementation(libs.play.services.maps)
-//    implementation(libs.play.services.location)
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
     implementation (libs.play.services.maps.v1810)
 
     testImplementation("junit:junit:4.13.2")
-//    configurations.all {
-//        exclude(group = "org.hamcrest", module = "hamcrest-core")
-//    }
+
+    configurations.all {
+        //exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
 
 
     // Test rules and transitive dependencies:
@@ -227,18 +242,33 @@ dependencies {
 
 
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     ksp(libs.com.squareup.moshi.moshi.kotlin.codegen)
     //implementation("com.squareup.moshi:moshi-kotlin-codegen")
     //ksp("com.squareup.moshi:moshi-kotlin-codegen")
+
+
     androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.compose.ui.ui.test.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.core)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    //Gradle (Kotlin DSL)
+    testImplementation("io.mockk:mockk:1.14.2")
+    testImplementation(kotlin("test"))
+    // Android Unit Test
+    testImplementation("io.mockk:mockk-android:1.14.2")
+    testImplementation("io.mockk:mockk-agent:1.14.2")
+    // Android Instrumented Test
+    androidTestImplementation("io.mockk:mockk-android:1.14.2")
+    androidTestImplementation("io.mockk:mockk-agent:1.14.2")
     androidTestImplementation(libs.hamcrest)
-    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.navigation.testing)
 
-
 }
+
 

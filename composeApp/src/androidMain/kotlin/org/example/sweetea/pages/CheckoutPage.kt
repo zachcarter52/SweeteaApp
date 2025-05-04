@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,7 +35,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -47,6 +50,7 @@ import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.example.sweetea.AuthViewModel
 import org.example.sweetea.CardEntryActivity
 import org.example.sweetea.Menu
@@ -54,12 +58,13 @@ import org.example.sweetea.OrderedProduct
 import org.example.sweetea.viewmodel.AppViewModel
 import org.example.sweetea.dataclasses.retrieved.ProductData
 import org.example.sweetea.navigateSingleTopTo
+import org.example.sweetea.ui.components.MenuDisplayImage
 import org.example.sweetea.PrepPage
 import org.example.sweetea.ProductOrder
 import org.example.sweetea.ui.components.ModifiedProductItem
 
 @JsonClass(generateAdapter = true)
-data class LineItem (
+data class LineItem @OptIn(ExperimentalSerializationApi::class) constructor(
     val price: Float,
     val quantity: String = 1.toString(),
     @Json(name = "name")
@@ -90,6 +95,7 @@ fun CheckoutPage(
     appViewModel: AppViewModel,
     authViewModel: AuthViewModel
 ){
+    println("DBG: Local Context: " + LocalContext.current.toString())
     val intent = LocalContext.current
     val isLoggedIn by authViewModel.isUserLoggedIn.collectAsState()
     val lineItems = mutableListOf<LineItem>()
@@ -199,6 +205,7 @@ fun CheckoutPage(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
         )
+
         Text(
             text = "$%.2f".format(itemSubtotal.sum())
         )
@@ -207,6 +214,7 @@ fun CheckoutPage(
             onClick = { navController.navigateSingleTopTo(Menu.route) },
             modifier = Modifier.padding(bottom = 20.dp)
                 .size(height = 48.dp, width = 360.dp)
+                .testTag("continue_shopping"),
         ) { Text(
             text ="Continue Shopping",
             fontSize = 24.sp,)
@@ -220,7 +228,8 @@ fun CheckoutPage(
                 paymentLauncher.launch(localIntent)
             },
             modifier = Modifier
-                .size(height = 48.dp, width = 360.dp),
+                .size(height = 48.dp, width = 360.dp)
+                .testTag("checkout")
 
             ){
             Text(
