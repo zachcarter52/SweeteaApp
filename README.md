@@ -31,12 +31,10 @@ rewards account registration, and menu browsing.
 3. [Setup and Installation](#setup-and-installation)
 4. [Usage](#usage)
 5. [Project Files](#project-files)
-6. [ERD](#erd)
+6. [Database Design](#database-design)
 7. [Testing](#testing)
 8. [Deployment](#deployment)
 9. [Developer Instructions](#developer-instructions)
-10. [Timeline](#timeline)
-
 
 
 ## Features
@@ -97,8 +95,8 @@ rewards account registration, and menu browsing.
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
 
-## ERD
-![image](https://github.com/user-attachments/assets/f6208f7e-51c6-4738-9cb6-a6c2a795253b)
+## Database Design
+![Database Design](https://github.com/zachcarter52/SweeteaApp/blob/main/dbDesign.png)
 
 
 ## Testing
